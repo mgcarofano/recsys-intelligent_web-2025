@@ -18,18 +18,29 @@ import 'package:flutter/material.dart';
 //	############################################################################
 //	COSTANTI E VARIABILI
 
-
-
 //	############################################################################
 //	ALTRI METODI
-
-
 
 //	############################################################################
 //	CLASSI E ROUTE
 
+class MovieRoute extends StatefulWidget {
+  final String movieId;
 
+  MovieRoute({super.key, required this.movieId});
+
+  @override
+  State<MovieRoute> createState() => _MovieRouteState();
+}
+
+class _MovieRouteState extends State<MovieRoute> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(children: [Text("Movie"), Text(widget.movieId)]),
+    );
+  }
+}
 
 //	############################################################################
 //	RIFERIMENTI
-

@@ -18,18 +18,28 @@ import 'package:flutter/material.dart';
 //	############################################################################
 //	COSTANTI E VARIABILI
 
-
+var emailController = TextEditingController();
+var passwordController = TextEditingController();
 
 //	############################################################################
 //	ALTRI METODI
 
-
-
 //	############################################################################
 //	CLASSI E ROUTE
 
+class LoginRoute extends StatefulWidget {
+  const LoginRoute({super.key});
 
+  @override
+  State<LoginRoute> createState() => _LoginRouteState();
+}
+
+class _LoginRouteState extends State<LoginRoute> {
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text("Login"));
+  }
+}
 
 //	############################################################################
 //	RIFERIMENTI
-

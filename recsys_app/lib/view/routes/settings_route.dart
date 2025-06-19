@@ -18,18 +18,25 @@ import 'package:flutter/material.dart';
 //	############################################################################
 //	COSTANTI E VARIABILI
 
-
-
 //	############################################################################
 //	ALTRI METODI
-
-
 
 //	############################################################################
 //	CLASSI E ROUTE
 
+class SettingsRoute extends StatefulWidget {
+  const SettingsRoute({super.key});
 
+  @override
+  State<SettingsRoute> createState() => _SettingsRouteState();
+}
+
+class _SettingsRouteState extends State<SettingsRoute> {
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text("Settings"));
+  }
+}
 
 //	############################################################################
 //	RIFERIMENTI
-

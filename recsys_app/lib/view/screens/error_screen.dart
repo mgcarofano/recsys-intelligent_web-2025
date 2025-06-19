@@ -1,6 +1,6 @@
 /*
 
-	user_route.dart
+	error_screen.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
 	...
@@ -24,17 +24,12 @@ import 'package:flutter/material.dart';
 //	############################################################################
 //	CLASSI E ROUTE
 
-class UserRoute extends StatefulWidget {
-  const UserRoute({super.key});
+class ErrorScreen extends StatelessWidget {
+  const ErrorScreen({super.key});
 
-  @override
-  State<UserRoute> createState() => _UserRouteState();
-}
-
-class _UserRouteState extends State<UserRoute> {
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("User"));
+    return const Center(child: Text("Error"));
   }
 }
 
