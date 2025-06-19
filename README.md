@@ -17,7 +17,8 @@ This work is the final homework for the subject Intelligent Web at "Università 
 ...
 
 ### Requirements
-To install all necessary dependencies, make sure you have both Python and Flutter set up. For the back-end, navigate to the ==recsys_backend/== directory and run:
+To install all necessary dependencies, make sure you have both Python and Flutter set up.
+For the back-end, navigate to the `recsys_backend/` directory and run:
 
 ```
 
@@ -26,8 +27,7 @@ pip install -r requirements.txt
 ```
 
 This will install all Python packages required for querying DBpedia and running the recommendation logic.
-
-Similarly, for the front-end go to the ==recsys_app/== directory and run:
+Similarly, for the front-end go to the `recsys_app/` directory and run:
 
 ```
 
@@ -35,9 +35,7 @@ flutter pub get
 
 ```
 
-This command will fetch all necessary Dart packages defined in the ==pubspec.yaml== file.
-
-After installing both sets of dependencies, the system will be ready to run.
+This command will fetch all necessary Dart packages defined in the `pubspec.yaml` file.
 
 ### References
 - [MovieLens Small Dataset](https://grouplens.org/datasets/movielens/)
