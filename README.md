@@ -16,7 +16,7 @@ This work is the final homework for the subject Intelligent Web at "Università 
 ## Datasets
 ...
 
-### Requirements
+## Requirements
 To install all necessary dependencies, make sure you have both Python and Flutter set up.
 For the back-end, navigate to the `recsys_backend/` directory and run:
 
@@ -37,6 +37,6 @@ flutter pub get
 
 This command will fetch all necessary Dart packages defined in the `pubspec.yaml` file.
 
-### References
+## References
 - [MovieLens Small Dataset](https://grouplens.org/datasets/movielens/)
 - [DBpedia SPARQL Endpoint](https://dbpedia.org/sparql)
