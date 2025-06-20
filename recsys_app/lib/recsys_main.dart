@@ -3,7 +3,11 @@
 	recsys_main.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	...
+	Questo file contiene il punto di ingresso principale del sistema di
+  raccomandazione, implementato nella funzione main(). La classe RecSysApp è il
+  widget principale che avvia l'applicazione e gestisce la configurazione del
+  tema, definito nel file "theme.dart", e della navigazione, definita nel file
+  "app_router.dart".
 
 */
 
@@ -18,6 +22,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:knowledge_recsys/services/app_router.dart';
+import 'package:knowledge_recsys/theme.dart';
 
 //	############################################################################
 //	COSTANTI E VARIABILI
@@ -49,11 +54,16 @@ class RecSysApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = View.of(context).platformDispatcher.platformBrightness;
+    TextTheme textTheme = createTextTheme(context, "DM Sans", "Oswald");
+    MaterialTheme theme = MaterialTheme(textTheme);
+
     return MaterialApp.router(
       title: 'Knowledge-based Recommender System',
       routerConfig: router,
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
+      theme: brightness == Brightness.light ? theme.light() : theme.dark(),
     );
   }
 }

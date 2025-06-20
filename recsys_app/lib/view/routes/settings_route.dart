@@ -3,7 +3,9 @@
 	settings_route.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	...
+	La classe SettingsRoute mostra le impostazioni dell'applicazione, dove
+  l'utente può modificare i parametri del sistema di raccomandazione e altre
+  opzioni legate alla personalizzazione dell'esperienza utente.
 
 */
 
@@ -14,6 +16,7 @@
 //	LIBRERIE
 
 import 'package:flutter/material.dart';
+import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 
 //	############################################################################
 //	COSTANTI E VARIABILI
@@ -34,7 +37,13 @@ class SettingsRoute extends StatefulWidget {
 class _SettingsRouteState extends State<SettingsRoute> {
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("Settings"));
+    return Scaffold(
+      appBar: const RecSysAppBar(
+        title: 'Impostazioni',
+        alignment: Alignment.topLeft,
+      ),
+      body: const Center(child: Text("Settings")),
+    );
   }
 }
 

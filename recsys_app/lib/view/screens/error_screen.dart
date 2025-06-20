@@ -3,7 +3,9 @@
 	error_screen.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	...
+	La classe ErrorScreen visualizza un messaggio di errore generico quando si
+  verifica un problema durante la navigazione o il caricamento di una schermata
+  dell'applicazione.
 
 */
 
@@ -14,6 +16,7 @@
 //	LIBRERIE
 
 import 'package:flutter/material.dart';
+import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 
 //	############################################################################
 //	COSTANTI E VARIABILI
@@ -29,7 +32,14 @@ class ErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("Error"));
+    return Scaffold(
+      appBar: const RecSysAppBar(
+        title: 'Knowledge-based Recommender System',
+        alignment: Alignment.topLeft,
+      ),
+      resizeToAvoidBottomInset: false,
+      body: const Center(child: Text("Error")),
+    );
   }
 }
 

@@ -3,7 +3,7 @@
 	main.dart
   by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-  ...
+  Questo file è un esempio di applicazione Flutter.
 
 */
 

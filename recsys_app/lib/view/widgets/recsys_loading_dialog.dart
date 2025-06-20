@@ -1,11 +1,11 @@
 /*
 
-	user_route.dart
+	recsys_loading_dialog.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	La classe UserRoute rappresenta la schermata del profilo utente, dove l'utente
-  può visualizzare e modificare le proprie informazioni personali, o gestire le
-  preferenze nel sistema di raccomandazione.
+	La classe RecSysLoadingDialog crea un widget personalizzato che mostra
+  l'animazione del caricamento di un processo in corso con un messaggio di
+  attesa.
 
 */
 
@@ -16,33 +16,28 @@
 //	LIBRERIE
 
 import 'package:flutter/material.dart';
-import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 
 //	############################################################################
-//	COSTANTI E VARIABILI
+//	COSTANTI e VARIABILI
 
 //	############################################################################
 //	ALTRI METODI
 
 //	############################################################################
-//	CLASSI E ROUTE
+//	CLASSI e ROUTE
 
-class UserRoute extends StatefulWidget {
-  const UserRoute({super.key});
+class RecSysLoadingDialog extends StatelessWidget {
+  final String alertMessage;
 
-  @override
-  State<UserRoute> createState() => _UserRouteState();
-}
+  const RecSysLoadingDialog({super.key, required this.alertMessage});
 
-class _UserRouteState extends State<UserRoute> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const RecSysAppBar(
-        title: 'Ciao, ...',
-        alignment: Alignment.topLeft,
+    return AlertDialog(
+      icon: Center(
+        child: CircularProgressIndicator(color: Theme.of(context).primaryColor),
       ),
-      body: const Center(child: Text("User")),
+      title: Text(alertMessage),
     );
   }
 }

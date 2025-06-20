@@ -3,7 +3,11 @@
 	movie_route.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	...
+	La classe MovieRoute rappresenta la schermata dei dettagli di un film, dove
+  l'utente può visualizzare le informazioni principali (e.g. titolo,
+  descrizione, anno di uscita, ...), una breve spiegazione del motivo per cui
+  il film è stato raccomandato e altri parametri più specifici propri del
+  sistema di raccomandazione.
 
 */
 
@@ -14,6 +18,7 @@
 //	LIBRERIE
 
 import 'package:flutter/material.dart';
+import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 
 //	############################################################################
 //	COSTANTI E VARIABILI
@@ -27,7 +32,7 @@ import 'package:flutter/material.dart';
 class MovieRoute extends StatefulWidget {
   final String movieId;
 
-  MovieRoute({super.key, required this.movieId});
+  const MovieRoute({super.key, required this.movieId});
 
   @override
   State<MovieRoute> createState() => _MovieRouteState();
@@ -36,8 +41,9 @@ class MovieRoute extends StatefulWidget {
 class _MovieRouteState extends State<MovieRoute> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(children: [Text("Movie"), Text(widget.movieId)]),
+    return Scaffold(
+      appBar: RecSysAppBar(title: widget.movieId, alignment: Alignment.topLeft),
+      body: Center(child: Text("Movie")),
     );
   }
 }

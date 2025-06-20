@@ -3,7 +3,8 @@
 	app_router.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-  ...
+  La classe AppRouter gestisce la navigazione dell'applicazione utilizzando il
+  pacchetto "go_router".
 
 */
 
@@ -12,6 +13,8 @@
 
 //	############################################################################
 //	LIBRERIE
+
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -44,10 +47,9 @@ class AppRouter {
   Future<GoRouter> _initRouter() async {
     String isUserLoggedIn = await storage.read(key: 'ISUSERLOGGEDIN') ?? '';
 
-    // Widget homeRoute = isUserLoggedIn == 'SI'
-    //     ? const HomeRoute()
-    //     : const LoginRoute();
-    Widget homeRoute = const HomeRoute();
+    Widget mainRoute = isUserLoggedIn == 'SI'
+        ? const HomeRoute()
+        : const LoginRoute();
 
     return GoRouter(
       initialLocation: '/',
@@ -62,12 +64,12 @@ class AppRouter {
         GoRoute(
           name: 'LOGIN',
           path: '/',
-          builder: (context, state) => const LoginRoute(),
+          builder: (context, state) => mainRoute,
         ),
         GoRoute(
           name: 'HOME',
           path: '/home',
-          builder: (context, state) => homeRoute,
+          builder: (context, state) => const HomeRoute(),
         ),
         GoRoute(
           name: 'USER',

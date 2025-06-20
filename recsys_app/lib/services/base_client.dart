@@ -3,7 +3,9 @@
 	base_client.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	...
+	La classe BaseClient implementa un client HTTP per effettuare richieste API
+  verso il server Python, utilizzando il pacchetto "Dio" per la gestione delle
+  richieste e delle risposte.
 
 */
 
