@@ -73,9 +73,9 @@ class _RecSysTextFormFieldState extends State<RecSysTextFormField> {
       border: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
-      floatingLabelStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-        color: Theme.of(context).colorScheme.onPrimary,
-      ),
+      // floatingLabelStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+      //   color: Theme.of(context).colorScheme.onPrimary,
+      // ),
       labelText: widget.labelText,
       floatingLabelBehavior: FloatingLabelBehavior.never,
       errorMaxLines: 3,

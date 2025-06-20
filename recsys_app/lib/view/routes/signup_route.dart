@@ -1,14 +1,12 @@
 /*
 
-	login_route.dart
+	signup_route.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	La classe LoginRoute rappresenta la schermata di login dell'applicazione,
-  dove l'utente può inserire le proprie credenziali per accedere al sistema.
-  La logica di autenticazione è implementata localmente e memorizza le
-  credenziali dell'utente in modo sicuro per un accesso rapido in futuro.
-  L'utente viene reindirizzato alla schermata principale dell'applicazione una
-  volta effettuato l'accesso.
+	La classe SignUpRoute definisce la schermata di registrazione dell'utente,
+  dove l'utente può inserire le proprie credenziali e altre informazioni per
+  creare un nuovo account. L'utente viene reindirizzato alla schermata
+  principale dell'applicazione una volta effettuato l'accesso.
 
 */
 
@@ -31,28 +29,31 @@ import 'package:knowledge_recsys/view/widgets/recsys_loading_dialog.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_text_form_field.dart';
 
 //	############################################################################
-//	COSTANTI E VARIABILI
+//	COSTANTI e VARIABILI
 
+var firstNameController = TextEditingController();
 var emailController = TextEditingController();
 var passwordController = TextEditingController();
+var passwordCheckController = TextEditingController();
 
 //	############################################################################
 //	ALTRI METODI
 
 //	############################################################################
-//	CLASSI E ROUTE
+//	CLASSI e ROUTE
 
-class LoginRoute extends StatefulWidget {
-  const LoginRoute({super.key});
+class SignUpRoute extends StatefulWidget {
+  const SignUpRoute({super.key});
 
   @override
-  State<LoginRoute> createState() => _LoginRouteState();
+  State<SignUpRoute> createState() => _SignUpRouteState();
 }
 
-class _LoginRouteState extends State<LoginRoute> {
+class _SignUpRouteState extends State<SignUpRoute> {
   final _loginFormKey = GlobalKey<FormState>();
 
   var _isObscured = true;
+  var _isCheckObscured = true;
   var _autovalidateMode = AutovalidateMode.disabled;
 
   _onSubmit() async {
@@ -62,13 +63,17 @@ class _LoginRouteState extends State<LoginRoute> {
       //   context: context,
       //   builder: (dialogContext) => PopScope(
       //     onPopInvokedWithResult: (didPop, _) => Future.value(false),
-      //     child: const RecSysLoadingDialog(alertMessage: 'Login in corso...'),
+      //     child: const RecSysLoadingDialog(
+      //       alertMessage: 'Registrazione in corso...',
+      //     ),
       //   ),
       // );
 
       _loginFormKey.currentState!.reset();
+      firstNameController.clear();
       emailController.clear();
       passwordController.clear();
+      passwordCheckController.clear();
 
       if (!mounted) return;
 
@@ -112,7 +117,7 @@ class _LoginRouteState extends State<LoginRoute> {
                       spacing: 5.0,
                       children: [
                         Text(
-                          "Bentornato!",
+                          "Benvenuto!",
                           style: Theme.of(
                             context,
                           ).textTheme.headlineLarge?.copyWith(),
@@ -122,13 +127,13 @@ class _LoginRouteState extends State<LoginRoute> {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: "Non hai ancora un account? ",
+                                text: "Hai già un account? ",
                                 style: Theme.of(
                                   context,
                                 ).textTheme.bodyMedium?.copyWith(),
                               ),
                               TextSpan(
-                                text: "Registrati",
+                                text: "Accedi",
                                 style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(
                                       color: Theme.of(
@@ -139,13 +144,29 @@ class _LoginRouteState extends State<LoginRoute> {
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     if (!mounted) return;
-                                    context.go('/signup');
+                                    context.go('/login');
                                   },
                               ),
                             ],
                           ),
                         ),
                       ],
+                    ),
+                    RecSysTextFormField(
+                      validator: (value) =>
+                          Validators.isEmptyValue(value as String) ==
+                              CheckTypes.emptyValue
+                          ? 'Attenzione! Il nome è obbligatorio'
+                          : null,
+                      controller: firstNameController,
+                      prefixIcon: Icons.person,
+                      labelText: 'Nome *',
+                      textInputAction: TextInputAction.next,
+                    ), // Nome
+                    Divider(
+                      height: 7,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      thickness: 1,
                     ),
                     RecSysTextFormField(
                       validator: (value) {
@@ -155,9 +176,9 @@ class _LoginRouteState extends State<LoginRoute> {
                         if (!(isEmailValid == CheckTypes.validValue))
                           switch (isEmailValid) {
                             case CheckTypes.emptyValue:
-                              return "Attenzione! L'indirizzo e-mail è obbligatorio";
+                              return 'Attenzione! L\'indirizzo e-mail è obbligatorio';
                             case CheckTypes.notValidPatternEmail:
-                              return "Attenzione! L'indirizzo e-mail inserito non è valido";
+                              return 'Attenzione! L\'indirizzo e-mail inserito non è valido';
                             default:
                               return null;
                           }
@@ -187,6 +208,33 @@ class _LoginRouteState extends State<LoginRoute> {
                         onPressed: () =>
                             setState(() => _isObscured = !_isObscured),
                       ),
+                      textInputAction: TextInputAction.next,
+                    ), // Password
+                    RecSysTextFormField(
+                      validator: (value) {
+                        if (Validators.isEmptyValue(value as String) ==
+                            CheckTypes.emptyValue)
+                          return 'Attenzione! La password è obbligatoria';
+                        if (!(value == passwordController.value.text))
+                          return 'Attenzione! Le password non corrispondono';
+                        return null;
+                      },
+                      controller: passwordCheckController,
+                      prefixIcon: Icons.lock,
+                      labelText: 'Ripeti la password *',
+                      isObscured: _isCheckObscured,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isCheckObscured
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          size: 25.0,
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
+                        onPressed: () => setState(
+                          () => _isCheckObscured = !_isCheckObscured,
+                        ),
+                      ),
                       textInputAction: TextInputAction.done,
                     ), // Password
                     ElevatedButton(
@@ -203,7 +251,7 @@ class _LoginRouteState extends State<LoginRoute> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Entra',
+                          'Crea account',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onPrimary,
@@ -229,6 +277,4 @@ class _LoginRouteState extends State<LoginRoute> {
 //	############################################################################
 //	RIFERIMENTI
 
-//  https://dribbble.com/shots/23424744-Login-Page
-//  https://stackoverflow.com/questions/79153827/using-min-width-with-fractionallysizedbox
-//  https://stackoverflow.com/questions/48914775/gesture-detection-in-flutter-textspan
+//  https://stackoverflow.com/questions/45986093/textfield-inside-of-row-causes-layout-exception-unable-to-calculate-size

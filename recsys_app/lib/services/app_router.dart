@@ -14,12 +14,9 @@
 //	############################################################################
 //	LIBRERIE
 
-import 'dart:developer';
-
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:knowledge_recsys/recsys_main.dart';
+import 'package:knowledge_recsys/view/routes/signup_route.dart';
 import 'package:knowledge_recsys/view/screens/error_screen.dart';
 import 'package:knowledge_recsys/view/routes/home_route.dart';
 import 'package:knowledge_recsys/view/routes/login_route.dart';
@@ -45,26 +42,18 @@ class AppRouter {
   Future<GoRouter> get router async => _router ??= await _initRouter();
 
   Future<GoRouter> _initRouter() async {
-    String isUserLoggedIn = await storage.read(key: 'ISUSERLOGGEDIN') ?? '';
-
-    Widget mainRoute = isUserLoggedIn == 'SI'
-        ? const HomeRoute()
-        : const LoginRoute();
-
     return GoRouter(
-      initialLocation: '/',
-      // redirect: (context, state) {
-      //   if (isUserLoggedIn == 'SI') {
-      //     return '/home';
-      //   } else {
-      //     return '/';
-      //   }
-      // },
+      initialLocation: '/login',
       routes: [
         GoRoute(
           name: 'LOGIN',
-          path: '/',
-          builder: (context, state) => mainRoute,
+          path: '/login',
+          builder: (context, state) => const LoginRoute(),
+        ),
+        GoRoute(
+          name: 'SIGNUP',
+          path: '/signup',
+          builder: (context, state) => const SignUpRoute(),
         ),
         GoRoute(
           name: 'HOME',
