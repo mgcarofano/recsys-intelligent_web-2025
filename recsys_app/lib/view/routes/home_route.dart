@@ -22,6 +22,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/recsys_main.dart';
+import 'package:knowledge_recsys/view/widgets/recsys_action_button.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 
 //	############################################################################
@@ -48,6 +49,9 @@ class _HomeRouteState extends State<HomeRoute> {
         case HomeRouteAction.openSettings:
           if (!mounted) return;
           context.push('/settings');
+        case HomeRouteAction.logout:
+          if (!mounted) return;
+          context.go('/login');
       }
     }
 
@@ -61,7 +65,19 @@ class _HomeRouteState extends State<HomeRoute> {
             icon: const Icon(Icons.settings),
             tooltip: 'Impostazioni',
           ),
+          IconButton(
+            onPressed: () => handleAppBarClick(HomeRouteAction.logout),
+            icon: const Icon(Icons.logout),
+            tooltip: 'Esci',
+          ),
         ],
+      ),
+      resizeToAvoidBottomInset: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => {},
+        tooltip: 'Aggiorna',
+        child: const Icon(Icons.refresh_rounded),
       ),
       body: const Center(child: Text("Home")),
     );

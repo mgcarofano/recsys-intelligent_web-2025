@@ -16,13 +16,11 @@
 
 import 'package:go_router/go_router.dart';
 
-// import 'package:knowledge_recsys/_old/login_route.dart';
-// import 'package:knowledge_recsys/_old/signup_route.dart';
 import 'package:knowledge_recsys/view/screens/error_screen.dart';
+import 'package:knowledge_recsys/view/routes/login_route.dart';
 import 'package:knowledge_recsys/view/routes/home_route.dart';
 import 'package:knowledge_recsys/view/routes/movie_route.dart';
 import 'package:knowledge_recsys/view/routes/settings_route.dart';
-// import 'package:knowledge_recsys/view/routes/user_route.dart';
 
 //	############################################################################
 //	COSTANTI E VARIABILI
@@ -43,28 +41,19 @@ class AppRouter {
 
   Future<GoRouter> _initRouter() async {
     return GoRouter(
-      initialLocation: '/home',
+      initialLocation: '/login',
+      routerNeglect: true,
       routes: [
-        // GoRoute(
-        //   name: 'LOGIN',
-        //   path: '/login',
-        //   builder: (context, state) => const LoginRoute(),
-        // ),
-        // GoRoute(
-        //   name: 'SIGNUP',
-        //   path: '/signup',
-        //   builder: (context, state) => const SignUpRoute(),
-        // ),
+        GoRoute(
+          name: 'LOGIN',
+          path: '/login',
+          builder: (context, state) => const LoginRoute(),
+        ),
         GoRoute(
           name: 'HOME',
           path: '/home',
           builder: (context, state) => const HomeRoute(),
         ),
-        // GoRoute(
-        //   name: 'USER',
-        //   path: '/user',
-        //   builder: (context, state) => const UserRoute(),
-        // ),
         GoRoute(
           name: 'MOVIE',
           path: '/movie/:id',
