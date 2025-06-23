@@ -28,6 +28,8 @@ import 'package:knowledge_recsys/theme.dart';
 
 enum SyncState { synced, notSynced, offline, error }
 
+enum HomeRouteAction { openSettings }
+
 //	############################################################################
 //	ALTRI METODI
 

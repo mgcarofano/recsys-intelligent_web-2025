@@ -20,6 +20,8 @@
 //	LIBRERIE
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 
 //	############################################################################
@@ -41,10 +43,25 @@ class HomeRoute extends StatefulWidget {
 class _HomeRouteState extends State<HomeRoute> {
   @override
   Widget build(BuildContext context) {
+    handleAppBarClick(HomeRouteAction action) async {
+      switch (action) {
+        case HomeRouteAction.openSettings:
+          if (!mounted) return;
+          context.push('/settings');
+      }
+    }
+
     return Scaffold(
-      appBar: const RecSysAppBar(
+      appBar: RecSysAppBar(
         title: 'Knowledge-based Recommender System',
         alignment: Alignment.topLeft,
+        actions: [
+          IconButton(
+            onPressed: () => handleAppBarClick(HomeRouteAction.openSettings),
+            icon: const Icon(Icons.settings),
+            tooltip: 'Impostazioni',
+          ),
+        ],
       ),
       body: const Center(child: Text("Home")),
     );
