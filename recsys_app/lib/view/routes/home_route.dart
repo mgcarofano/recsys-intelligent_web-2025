@@ -154,6 +154,24 @@ class _HomeRouteState extends State<HomeRoute> {
 
   @override
   Widget build(BuildContext context) {
+    final card = RecSysMovieCard(
+      idMovie: '59315',
+      title: 'Iron Man',
+      description:
+          "Iron Man è un film del 2008 diretto da Jon Favreau. Basato sull'omonimo personaggio dei fumetti della Marvel Comics Iron Man, interpretato da Robert Downey Jr., è il primo film del Marvel Cinematic Universe, della cosiddetta \"Fase Uno\" e della \"Saga dell'infinito\".",
+      subjects: [
+        'Azione',
+        'Avventura',
+        'Stati Uniti',
+        'Supereroi',
+        'Los Angeles',
+        '2008',
+      ],
+    );
+
+    const int totalCards = 15;
+    const int maxColumns = 5;
+
     handleAppBarClick(HomeRouteAction action) async {
       switch (action) {
         case HomeRouteAction.openSettings:
@@ -199,22 +217,25 @@ class _HomeRouteState extends State<HomeRoute> {
             case ConnectionState.active:
               return RecSysLoadingDialog(alertMessage: 'Caricamento...');
             case ConnectionState.done:
-              // return Center(child: Text(snapshot.data ?? '[]'));
-              return Center(
-                child: RecSysMovieCard(
-                  idMovie: '59315',
-                  title: 'Iron Man',
-                  description:
-                      "Iron Man è un film del 2008 diretto da Jon Favreau. Basato sull'omonimo personaggio dei fumetti della Marvel Comics Iron Man, interpretato da Robert Downey Jr., è il primo film del Marvel Cinematic Universe, della cosiddetta \"Fase Uno\" e della \"Saga dell'infinito\".",
-                  subjects: [
-                    'Azione',
-                    'Avventura',
-                    'Supereroi',
-                    '2008',
-                    'Stati Uniti',
-                    'Los Angeles',
-                  ],
-                ),
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  final double cardWidth = 350;
+                  final int columns = (constraints.maxWidth / cardWidth)
+                      .floor()
+                      .clamp(1, maxColumns);
+
+                  return GridView.builder(
+                    padding: const EdgeInsets.all(20.0),
+                    itemCount: totalCards,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: columns,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      childAspectRatio: 5 / 4,
+                    ),
+                    itemBuilder: (context, index) => card,
+                  );
+                },
               );
           }
         },

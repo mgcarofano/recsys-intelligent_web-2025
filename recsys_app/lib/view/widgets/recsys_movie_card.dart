@@ -30,13 +30,15 @@ import 'package:soft_edge_blur/soft_edge_blur.dart';
 //	############################################################################
 //	CLASSI e ROUTE
 
+// TODO: convertire in StatefulWidget e implementare InitState con caricamento unico delle immagini e altre info
+// TODO: implementare click sulla card con stato selezionato / non selezionato
 class RecSysMovieCard extends StatelessWidget {
   final String idMovie;
   final String title;
   final String description;
   final List<String> subjects;
 
-  const RecSysMovieCard({
+  RecSysMovieCard({
     super.key,
     required this.idMovie,
     required this.title,
@@ -58,14 +60,54 @@ class RecSysMovieCard extends StatelessWidget {
   }
 
   Widget _buildFadingChipsRow(List<String> subjects) {
-    // TODO: visualizzazione subjects
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return ShaderMask(
+          shaderCallback: (rect) {
+            return LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Colors.transparent,
+                Colors.white,
+                Colors.white,
+                Colors.transparent,
+              ],
+              stops: [0.0, 0.2, 0.8, 1.0],
+            ).createShader(Rect.fromLTWH(0, 0, rect.width, rect.height));
+          },
+          blendMode: BlendMode.dstIn,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: Row(
+              spacing: 5,
+              children: subjects.map((subject) {
+                return Chip(
+                  label: Text(
+                    subject,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w100,
+                      fontSize: 11,
+                    ),
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 300,
-      height: 240,
+      width: 350,
+      height: 280,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
         child: Stack(
@@ -83,92 +125,104 @@ class RecSysMovieCard extends StatelessWidget {
                       if (snapshot.hasError)
                         return const Center(child: Icon(Icons.broken_image));
                       else
-                        return Image.memory(snapshot.data!, fit: BoxFit.cover);
+                        return SoftEdgeBlur(
+                          edges: [
+                            EdgeBlur(
+                              type: EdgeType.bottomEdge,
+                              size: 200,
+                              sigma: 10,
+                              controlPoints: [
+                                ControlPoint(
+                                  position: 0.5,
+                                  type: ControlPointType.visible,
+                                ),
+                                ControlPoint(
+                                  position: 1.0,
+                                  type: ControlPointType.transparent,
+                                ),
+                              ],
+                            ),
+                          ],
+                          child: Image.memory(
+                            snapshot.data!,
+                            fit: BoxFit.cover,
+                          ),
+                        );
                   }
                 },
               ),
             ),
-            // Positioned.directional(
-            //   textDirection: TextDirection.rtl,
-            //   top: 20,
-            //   start: 20,
-            //   child: Container(
-            //     padding: EdgeInsets.all(5.0),
-            //     decoration: BoxDecoration(
-            //       color: Colors.white,
-            //       borderRadius: BorderRadius.circular(100),
-            //     ),
-            //     child: TextButton.icon(
-            //       onPressed: _showDetails,
-            //       icon: const Icon(Icons.info_outline, color: Colors.black),
-            //       label: const Text(
-            //         'Vedi dettagli',
-            //         style: TextStyle(color: Colors.black),
-            //       ),
-            //       style: TextButton.styleFrom(
-            //         // padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            //         minimumSize: Size.zero,
-            //         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // Positioned(
-            //   bottom: 0,
-            //   left: 0,
-            //   right: 0,
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(20.0),
-            //     child: SoftEdgeBlur(
-            //       edges: [
-            //         EdgeBlur(
-            //           type: EdgeType.bottomEdge,
-            //           size: 100,
-            //           sigma: 30,
-            //           controlPoints: [
-            //             ControlPoint(
-            //               position: 0.0,
-            //               type: ControlPointType.visible,
-            //             ),
-            //             ControlPoint(
-            //               position: 1.0,
-            //               type: ControlPointType.transparent,
-            //             ),
-            //           ],
-            //         ),
-            //       ],
-            //       child: Column(
-            //         spacing: 8.0,
-            //         mainAxisSize: MainAxisSize.min,
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           Text(
-            //             title,
-            //             style: Theme.of(context).textTheme.headlineLarge
-            //                 ?.copyWith(
-            //                   color: Colors.white,
-            //                   fontWeight: FontWeight.bold,
-            //                 ),
-            //             maxLines: 1,
-            //             overflow: TextOverflow.fade,
-            //           ),
-            //           Text(
-            //             description,
-            //             style: Theme.of(
-            //               context,
-            //             ).textTheme.bodyMedium?.copyWith(color: Colors.white),
-            //             maxLines: 3,
-            //             overflow: TextOverflow.ellipsis,
-            //           ),
-            //           SizedBox(
-            //             height: 34,
-            //             child: _buildFadingChipsRow(subjects),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            Positioned.directional(
+              textDirection: TextDirection.rtl,
+              top: 12,
+              start: 12,
+              child: IconButton(
+                onPressed: _showDetails,
+                constraints: BoxConstraints(
+                  maxHeight: 34,
+                  maxWidth: 34,
+                  minWidth: 34,
+                  minHeight: 34,
+                ),
+                padding: EdgeInsets.all(0.0),
+                style: IconButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
+                ),
+                icon: const Icon(
+                  Icons.info_outline,
+                  color: Colors.black,
+                  size: 24,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                decoration: const BoxDecoration(
+                  backgroundBlendMode: BlendMode.darken,
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black12,
+                      Colors.black26,
+                      Colors.black,
+                    ],
+                    stops: [0.0, 0.5, 0.8, 1.0],
+                  ),
+                ),
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                  spacing: 12.0,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.headlineLarge
+                          ?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                    ),
+                    Text(
+                      description,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 30, child: _buildFadingChipsRow(subjects)),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
