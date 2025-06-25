@@ -22,8 +22,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/recsys_main.dart';
-import 'package:knowledge_recsys/view/widgets/recsys_action_button.dart';
+import 'package:knowledge_recsys/services/base_client.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
+import 'package:knowledge_recsys/view/widgets/recsys_loading_dialog.dart';
 
 //	############################################################################
 //	COSTANTI E VARIABILI
@@ -42,6 +43,114 @@ class HomeRoute extends StatefulWidget {
 }
 
 class _HomeRouteState extends State<HomeRoute> {
+  late Future<String> movieRecommendationsResponse;
+  var isLoading = false;
+
+  Future<String> _getMovieRecommendationsRawList() async {
+    var data = await BaseClient.instance.getMovieRecommendations().catchError((
+      err,
+    ) {
+      // debugPrint('\n--- ERRORE ---\n$err\n-----\n');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(err.toString()),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+    });
+
+    return data ?? '[]';
+  }
+
+  Future<void> _refreshHomePage() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      // Attendi il risultato della Future e decodifica la stringa JSON in una lista di stringhe
+      final String rawList = await movieRecommendationsResponse;
+      final List<String> idMovies = toList(rawList) as List<String>;
+
+      final response = await BaseClient.instance
+          .postUserPreferences(idMovies: idMovies)
+          .catchError((err) {
+            debugPrint('\n--- ERRORE ---\n$err\n-----\n');
+            if (!mounted) return;
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  content: Text(err.toString()),
+                  duration: const Duration(seconds: 3),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+              );
+          });
+
+      if (response == null) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              content: Text('Errore durante la ricezione dei dati.'),
+              duration: const Duration(seconds: 3),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        return;
+      }
+
+      // Ricarica i nuovi dati dopo la POST
+      movieRecommendationsResponse = _getMovieRecommendationsRawList();
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text('Preferenze aggiornate con successo!'),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Theme.of(context).colorScheme.tertiary,
+          ),
+        );
+    } catch (err) {
+      setState(() {
+        isLoading = false;
+      });
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(err.toString()),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    movieRecommendationsResponse = _getMovieRecommendationsRawList();
+  }
+
   @override
   Widget build(BuildContext context) {
     handleAppBarClick(HomeRouteAction action) async {
@@ -75,14 +184,29 @@ class _HomeRouteState extends State<HomeRoute> {
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
+        onPressed: _refreshHomePage,
         tooltip: 'Aggiorna',
         child: const Icon(Icons.refresh_rounded),
       ),
-      body: const Center(child: Text("Home")),
+      body: FutureBuilder(
+        initialData: '[]',
+        future: movieRecommendationsResponse,
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+            case ConnectionState.active:
+              return RecSysLoadingDialog(alertMessage: 'Caricamento...');
+            case ConnectionState.done:
+              return Center(child: Text(snapshot.data ?? '[]'));
+          }
+        },
+      ),
     );
   }
 }
 
 //	############################################################################
 //	RIFERIMENTI
+
+//  https://stackoverflow.com/questions/68871880/do-not-use-buildcontexts-across-async-gaps

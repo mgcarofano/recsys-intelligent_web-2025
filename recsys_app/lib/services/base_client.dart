@@ -17,8 +17,9 @@
 
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
-import 'package:knowledge_recsys/recsys_main.dart';
+// import 'package:knowledge_recsys/recsys_main.dart';
 
 //	############################################################################
 //	COSTANTI E VARIABILI
@@ -43,11 +44,11 @@ class BaseClient {
   BaseClient._privateConstructor();
   static final BaseClient instance = BaseClient._privateConstructor();
   static Dio? _client;
-  static SyncState _isSynced = SyncState.notSynced;
+  // static SyncState _isSynced = SyncState.notSynced;
   static String errorMessage = '';
 
   static const serverProtocol = 'http';
-  static String _serverAddress = '192.168.59.100';
+  static String _serverAddress = 'localhost';
   static const serverPort = '8000';
 
   String get serverAddress => _serverAddress;
@@ -57,9 +58,10 @@ class BaseClient {
   }
 
   Dio get client => _client ??= _initClient();
-  SyncState get isSynced {
-    return _isSynced;
-  }
+
+  // SyncState get isSynced {
+  //   return _isSynced;
+  // }
 
   Dio _initClient() {
     var options = BaseOptions(
@@ -71,6 +73,10 @@ class BaseClient {
 
     return Dio(options);
   }
+
+  //  ##########################################################################
+  //  GET REQUESTS
+  //  GET is used to request data from a specified resource.
 
   Future<dynamic> _getRequest(
     String api, [
@@ -113,13 +119,22 @@ class BaseClient {
     }
   }
 
-  Future<dynamic> _postRequest(String api, [Map<String, dynamic>? form]) async {
+  Future<dynamic> getMovieRecommendations() async =>
+      _getRequest('/get-recommendations');
+
+  //  ##########################################################################
+  //  POST REQUESTS
+  //  POST is used to send data to a server to create/update a resource.
+
+  Future<dynamic> _postRequest(String api, [Map<String, dynamic>? data]) async {
     try {
       var response = await client.request(
         api,
-        data: FormData.fromMap(form ?? {}),
+        data: data ?? {},
         options: Options(method: 'POST'),
       );
+
+      debugPrint(response.data);
 
       if (response.statusCode != 201) {
         throw FormatException(
@@ -150,7 +165,12 @@ class BaseClient {
       }
     }
   }
+
+  Future<dynamic> postUserPreferences({required List<String> idMovies}) async =>
+      _postRequest('/update-preferences', {'idMovies': idMovies});
 }
 
 //	############################################################################
 //	RIFERIMENTI
+
+//  https://www.w3schools.com/tags/ref_httpmethods.asp

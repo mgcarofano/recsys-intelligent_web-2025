@@ -35,7 +35,9 @@ class RecSysLoadingDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       icon: Center(
-        child: CircularProgressIndicator(color: Theme.of(context).primaryColor),
+        child: CircularProgressIndicator(
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
       title: Text(alertMessage),
     );

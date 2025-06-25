@@ -17,6 +17,8 @@
 //	############################################################################
 //	LIBRERIE
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -32,6 +34,10 @@ enum HomeRouteAction { openSettings, logout }
 
 //	############################################################################
 //	ALTRI METODI
+
+List<dynamic> toList(String data) {
+  return json.decode(data).cast<String>().toList();
+}
 
 //	############################################################################
 //	MAIN
