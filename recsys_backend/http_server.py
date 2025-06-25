@@ -32,6 +32,8 @@ TIMEOUT = 30
 EXISTING_MOVIES = 6725
 MOVIE_RECOMMENDATIONS = 15
 
+POSTER_DIR = Path('./data/movie_posters')
+
 #	########################################################################	#
 #	ALTRE FUNZIONI
 
@@ -109,7 +111,8 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 		try:
 
 			if urlparse(self.path).path.endswith('/get-recommendations'):
-				output = json.dumps(get_movie_recommendations())
+				recs = get_movie_recommendations()
+				output = json.dumps(recs)
 
 				self.send_response(200) # OK
 				self._send_cors_headers()
@@ -118,6 +121,38 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				self.wfile.write(output.encode(encoding='utf_8'))
 
 				# end if '/get-recommendations'
+			
+			elif urlparse(self.path).path.endswith('/download-movie-poster'):
+				selected_id = dict(parse_qsl(urlparse(self.path).query))['id']
+
+				if not selected_id:
+					self.send_response(400, 'Impossibile eseguire tale richiesta.') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+				
+				file_name_path = None
+
+				for file in POSTER_DIR.glob("*.jpg"):
+					if file.name.startswith(selected_id + '_') and file.is_file:
+						file_name_path = POSTER_DIR.resolve().joinpath(file.name)
+
+				if not file_name_path:
+					self.send_response(404, 'Copertina non trovata') # NOT FOUND
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+
+				with open(file_name_path, 'rb') as f:
+					self.send_response(200)
+					self._send_cors_headers()
+					self.send_header('Content-type', 'image/jpeg')
+					self.end_headers()
+					self.wfile.write(f.read())
+				
+				# end if '/download-movie-poster'
 			
 			else:
 				self.send_response(404, 'Impossibile eseguire tale richiesta.') # NOT FOUND

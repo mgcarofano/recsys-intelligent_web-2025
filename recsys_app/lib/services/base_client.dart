@@ -122,6 +122,44 @@ class BaseClient {
   Future<dynamic> getMovieRecommendations() async =>
       _getRequest('/get-recommendations');
 
+  Future<dynamic> downloadMoviePoster({required String idMovie}) async {
+    try {
+      var response = await client.request(
+        '/download-movie-poster',
+        queryParameters: {'id': idMovie},
+        options: Options(method: 'GET', responseType: ResponseType.bytes),
+      );
+
+      if (response.statusCode != 200) {
+        errorMessage =
+            response.statusMessage ?? 'Impossibile completare la richiesta!';
+        throw FormatException(errorMessage);
+      }
+
+      return response.data;
+    } on DioException catch (e) {
+      if (e.isNoConnectionError) {
+        errorMessage = 'Sei offline!';
+        throw FormatException(errorMessage);
+      } else if (e.notNullErrorResponse) {
+        errorMessage =
+            e.response?.statusMessage ?? 'Impossibile completare la richiesta!';
+        throw FormatException(errorMessage);
+      } else if (e.connectionTimeoutError) {
+        errorMessage = 'Impossibile connettersi al server!';
+        throw FormatException(errorMessage);
+      } else if (e.receiveTimeoutError) {
+        errorMessage = 'La connessione è scaduta!';
+        throw FormatException(errorMessage);
+      } else if (e.httpError) {
+        errorMessage = 'Impossibile completare la richiesta!';
+        throw FormatException(errorMessage);
+      } else {
+        rethrow;
+      }
+    }
+  }
+
   //  ##########################################################################
   //  POST REQUESTS
   //  POST is used to send data to a server to create/update a resource.

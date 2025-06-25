@@ -20,6 +20,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:knowledge_recsys/services/app_router.dart';
@@ -46,6 +47,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final router = await AppRouter.instance.router;
 
+  // debugPaintSizeEnabled = true;
   runApp(RecSysApp(router: router));
 }
 

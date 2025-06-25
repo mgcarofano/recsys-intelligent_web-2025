@@ -25,6 +25,7 @@ import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_loading_dialog.dart';
+import 'package:knowledge_recsys/view/widgets/recsys_movie_card.dart';
 
 //	############################################################################
 //	COSTANTI E VARIABILI
@@ -198,7 +199,23 @@ class _HomeRouteState extends State<HomeRoute> {
             case ConnectionState.active:
               return RecSysLoadingDialog(alertMessage: 'Caricamento...');
             case ConnectionState.done:
-              return Center(child: Text(snapshot.data ?? '[]'));
+              // return Center(child: Text(snapshot.data ?? '[]'));
+              return Center(
+                child: RecSysMovieCard(
+                  idMovie: '59315',
+                  title: 'Iron Man',
+                  description:
+                      "Iron Man è un film del 2008 diretto da Jon Favreau. Basato sull'omonimo personaggio dei fumetti della Marvel Comics Iron Man, interpretato da Robert Downey Jr., è il primo film del Marvel Cinematic Universe, della cosiddetta \"Fase Uno\" e della \"Saga dell'infinito\".",
+                  subjects: [
+                    'Azione',
+                    'Avventura',
+                    'Supereroi',
+                    '2008',
+                    'Stati Uniti',
+                    'Los Angeles',
+                  ],
+                ),
+              );
           }
         },
       ),
