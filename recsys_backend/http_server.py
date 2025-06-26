@@ -21,6 +21,7 @@ from pathlib import Path
 from time import sleep
 
 import random
+import csv
 
 #	########################################################################	#
 #	COSTANTI e VARIABILI GLOBALI
@@ -33,6 +34,18 @@ EXISTING_MOVIES = 6725
 MOVIE_RECOMMENDATIONS = 15
 
 POSTER_DIR = Path('./data/movie_posters')
+CSV_PATH_MAPPING = {
+	'actors': Path('./data/CSVs/movie_actors.csv'),
+	'composers': Path('./data/CSVs/movie_composers.csv'),
+	# 'description': Path('./data/CSVs/.csv'),
+	'directors': Path('./data/CSVs/movie_directors.csv'),
+	'genres': Path('./data/CSVs/movie_genres.csv'),
+	'producers': Path('./data/CSVs/movie_producers.csv'),
+	'production_companies': Path('./data/CSVs/movie_production_companies.csv'),
+	'subjects': Path('./data/CSVs/movie_subjects.csv'),
+	'title': Path('./data/CSVs/existing_movies.csv'),
+	'writers': Path('./data/CSVs/movie_writers.csv'),
+}
 
 #	########################################################################	#
 #	ALTRE FUNZIONI
@@ -153,6 +166,54 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.wfile.write(f.read())
 				
 				# end if '/download-movie-poster'
+			
+			elif urlparse(self.path).path.endswith('/get-movie-info'):
+				params = dict(parse_qsl(urlparse(self.path).query))
+				selected_id = params['id']
+				selected_type = params['type']
+
+				if not selected_id or not selected_type:
+					self.send_response(400, 'Impossibile eseguire tale richiesta.') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+				
+				if selected_type not in CSV_PATH_MAPPING:
+					self.send_response(400, 'Informazione non disponibile.') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+				
+				with open(CSV_PATH_MAPPING[selected_type], newline='', encoding='utf-8') as f:
+					collecting = False
+					info_values = []
+					reader = csv.DictReader(f, fieldnames=['movieId', 'value'])
+
+					for row in reader:
+						if row['movieId'] == selected_id:
+							collecting = True
+							info_values.append(row['value'])
+						elif collecting:
+							break
+				
+				if not info_values:
+					self.send_response(404, f'Informazione "{selected_type}" non trovata per movie "{selected_id}"') # NOT FOUND
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+				
+				output = json.dumps(info_values.pop()) if (len(info_values) == 1) else json.dumps(info_values)
+
+				self.send_response(200)
+				self._send_cors_headers()
+				self.send_header('Content-type', 'application/json')
+				self.end_headers()
+				self.wfile.write(output.encode(encoding='utf_8'))
+				
+				# end if '/get-movie-info'
 			
 			else:
 				self.send_response(404, 'Impossibile eseguire tale richiesta.') # NOT FOUND

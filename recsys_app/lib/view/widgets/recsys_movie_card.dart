@@ -101,7 +101,44 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
     // TODO: naviga alla pagina dettagli del movie selezionato
   }
 
-  Widget _buildFadingChipsRow(List<String> subjects) {
+  List<Widget> _buildMovieInfo() {
+    List<Widget> ret = List.empty(growable: true);
+
+    if (widget.movie.title != null) {
+      ret.add(
+        Text(
+          widget.movie.title!,
+          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.fade,
+        ),
+      );
+    }
+
+    if (widget.movie.description != null) {
+      ret.add(
+        Text(
+          widget.movie.description!,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+        ),
+      );
+    }
+
+    if (widget.movie.subjects != null) {
+      ret.add(SizedBox(height: 30, child: _buildFadingChipsRow()));
+    }
+
+    return ret;
+  }
+
+  Widget _buildFadingChipsRow() {
     return LayoutBuilder(
       builder: (context, constraints) {
         return ShaderMask(
@@ -124,7 +161,7 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
             physics: const BouncingScrollPhysics(),
             child: Row(
               spacing: 5,
-              children: subjects.map((subject) {
+              children: widget.movie.subjects!.map((subject) {
                 return Chip(
                   label: Text(
                     subject,
@@ -220,49 +257,26 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
               left: 0,
               right: 0,
               child: Container(
-                decoration: const BoxDecoration(
-                  backgroundBlendMode: BlendMode.darken,
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black12,
-                      Colors.black26,
-                      Colors.black,
-                    ],
-                    stops: [0.0, 0.5, 0.8, 1.0],
-                  ),
-                ),
+                // decoration: const BoxDecoration(
+                //   backgroundBlendMode: BlendMode.darken,
+                //   gradient: LinearGradient(
+                //     begin: Alignment.topCenter,
+                //     end: Alignment.bottomCenter,
+                //     colors: [
+                //       Colors.transparent,
+                //       Colors.black26,
+                //       Colors.black87,
+                //       Colors.black,
+                //     ],
+                //     stops: [0.0, 0.6, 0.8, 1.0],
+                //   ),
+                // ),
                 padding: EdgeInsets.all(20.0),
                 child: Column(
                   spacing: 12.0,
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.movie.title,
-                      style: Theme.of(context).textTheme.headlineLarge
-                          ?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                      maxLines: 1,
-                      overflow: TextOverflow.fade,
-                    ),
-                    Text(
-                      widget.movie.description,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.copyWith(color: Colors.white),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: _buildFadingChipsRow(widget.movie.subjects),
-                    ),
-                  ],
+                  children: _buildMovieInfo(),
                 ),
               ),
             ),

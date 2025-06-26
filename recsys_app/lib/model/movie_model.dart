@@ -24,20 +24,15 @@
 
 class Movie {
   final String idMovie;
-  final String title;
-  final String description;
-  final List<String> subjects;
+  final String? title;
+  final String? description;
+  final List<String>? subjects;
 
-  Movie({
-    required this.idMovie,
-    required this.title,
-    required this.description,
-    required this.subjects,
-  });
+  Movie({required this.idMovie, this.title, this.description, this.subjects});
 
   @override
   String toString() {
-    return 'Documento{id: $idMovie, titolo: $title, descrizione: $subjects, size: $subjects}';
+    return 'Movie{id: $idMovie, titolo: ${title ?? ''}, descrizione: ${subjects ?? ''}, subjects: ${subjects ?? ''}}';
   }
 }
 
