@@ -21,6 +21,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:knowledge_recsys/model/movie_model.dart';
 import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
@@ -46,6 +47,12 @@ class HomeRoute extends StatefulWidget {
 class _HomeRouteState extends State<HomeRoute> {
   late Future<String> movieRecommendationsResponse;
   var isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    movieRecommendationsResponse = _getMovieRecommendationsRawList();
+  }
 
   Future<String> _getMovieRecommendationsRawList() async {
     var data = await BaseClient.instance.getMovieRecommendations().catchError((
@@ -74,7 +81,8 @@ class _HomeRouteState extends State<HomeRoute> {
     });
 
     try {
-      // Attendi il risultato della Future e decodifica la stringa JSON in una lista di stringhe
+      // Attendi il risultato della Future e decodifica la stringa JSON
+      // in una lista di stringhe.
       final String rawList = await movieRecommendationsResponse;
       final List<String> idMovies = toList(rawList) as List<String>;
 
@@ -147,26 +155,22 @@ class _HomeRouteState extends State<HomeRoute> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    movieRecommendationsResponse = _getMovieRecommendationsRawList();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final card = RecSysMovieCard(
-      idMovie: '59315',
-      title: 'Iron Man',
-      description:
-          "Iron Man è un film del 2008 diretto da Jon Favreau. Basato sull'omonimo personaggio dei fumetti della Marvel Comics Iron Man, interpretato da Robert Downey Jr., è il primo film del Marvel Cinematic Universe, della cosiddetta \"Fase Uno\" e della \"Saga dell'infinito\".",
-      subjects: [
-        'Azione',
-        'Avventura',
-        'Stati Uniti',
-        'Supereroi',
-        'Los Angeles',
-        '2008',
-      ],
+      movie: Movie(
+        idMovie: '59315',
+        title: 'Iron Man',
+        description:
+            "Iron Man è un film del 2008 diretto da Jon Favreau. Basato sull'omonimo personaggio dei fumetti della Marvel Comics Iron Man, interpretato da Robert Downey Jr., è il primo film del Marvel Cinematic Universe, della cosiddetta \"Fase Uno\" e della \"Saga dell'infinito\".",
+        subjects: [
+          'Azione',
+          'Avventura',
+          'Stati Uniti',
+          'Supereroi',
+          'Los Angeles',
+          '2008',
+        ],
+      ),
     );
 
     const int totalCards = 15;

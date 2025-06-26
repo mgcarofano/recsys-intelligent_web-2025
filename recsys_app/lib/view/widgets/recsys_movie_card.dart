@@ -3,7 +3,12 @@
 	recsys_movie_card.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	...
+	La classe RecSysMovieCard rappresenta una card che visualizza le informazioni
+  su un film raccomandato dal sistema, inclusi il titolo, la descrizione e i
+  subjects associati. La card include anche la copertina del film, che viene
+  scaricata dal server se non è già presente nella cache locale.
+  L'utente può cliccare sulla card per selezionarla in modo da aggiornare le
+  proprie preferenze e migliorare le raccomandazioni future.
 
 */
 
@@ -13,12 +18,12 @@
 //	############################################################################
 //	LIBRERIE
 
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:knowledge_recsys/cache/poster_cache.dart';
+import 'package:knowledge_recsys/model/movie_model.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
-import 'package:knowledge_recsys/view/widgets/recsys_loading_dialog.dart';
 import 'package:soft_edge_blur/soft_edge_blur.dart';
 
 //	############################################################################
@@ -30,29 +35,66 @@ import 'package:soft_edge_blur/soft_edge_blur.dart';
 //	############################################################################
 //	CLASSI e ROUTE
 
-// TODO: convertire in StatefulWidget e implementare InitState con caricamento unico delle immagini e altre info
-// TODO: implementare click sulla card con stato selezionato / non selezionato
-class RecSysMovieCard extends StatelessWidget {
-  final String idMovie;
-  final String title;
-  final String description;
-  final List<String> subjects;
+class RecSysMovieCard extends StatefulWidget {
+  final Movie movie;
 
-  RecSysMovieCard({
-    super.key,
-    required this.idMovie,
-    required this.title,
-    required this.description,
-    required this.subjects,
-  });
+  const RecSysMovieCard({super.key, required this.movie});
 
-  Future<Uint8List> _getRawMoviePoster(String idMovie) async {
-    var data = await BaseClient.instance.downloadMoviePoster(idMovie: idMovie);
+  @override
+  State<RecSysMovieCard> createState() => _RecSysMovieCardState();
+}
 
-    if (data != null)
-      return Uint8List.fromList(data!);
-    else
-      throw Exception("Impossibile scaricare l'immagine");
+class _RecSysMovieCardState extends State<RecSysMovieCard> {
+  Uint8List? _moviePosterBytes;
+  bool _isPosterLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initRawMoviePoster();
+  }
+
+  Future<void> _initRawMoviePoster() async {
+    //  ########################################################################
+    //  Verifica se il poster già esiste nella memoria cache.
+
+    var data = PosterCache.get(widget.movie.idMovie);
+
+    if (data != null) {
+      setState(() {
+        _moviePosterBytes = Uint8List.fromList(data!);
+        _isPosterLoading = false;
+      });
+      return;
+    }
+
+    //  ########################################################################
+    //  Se non è già disponibile, scarica il poster dal server.
+
+    data = await BaseClient.instance
+        .downloadMoviePoster(idMovie: widget.movie.idMovie)
+        .catchError((err) {
+          // debugPrint('\n--- ERRORE ---\n$err\n-----\n');
+        });
+
+    if (data != null) {
+      setState(() {
+        _moviePosterBytes = Uint8List.fromList(data!);
+        PosterCache.set(widget.movie.idMovie, _moviePosterBytes);
+        _isPosterLoading = false;
+      });
+      return;
+    }
+
+    //  ########################################################################
+    //  Se non è stato trovato alcun poster nel server o nella cache.
+
+    setState(() {
+      _moviePosterBytes = null;
+      _isPosterLoading = false;
+    });
+
+    return;
   }
 
   void _showDetails() {
@@ -73,7 +115,7 @@ class RecSysMovieCard extends StatelessWidget {
                 Colors.white,
                 Colors.transparent,
               ],
-              stops: [0.0, 0.2, 0.8, 1.0],
+              stops: [0.0, 0.1, 0.9, 1.0],
             ).createShader(Rect.fromLTWH(0, 0, rect.width, rect.height));
           },
           blendMode: BlendMode.dstIn,
@@ -94,6 +136,9 @@ class RecSysMovieCard extends StatelessWidget {
                   ),
                   backgroundColor: Theme.of(context).colorScheme.tertiary,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
                 );
               }).toList(),
             ),
@@ -113,41 +158,36 @@ class RecSysMovieCard extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: FutureBuilder(
-                future: _getRawMoviePoster(idMovie),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                    case ConnectionState.active:
-                      return const Center(child: CircularProgressIndicator());
-                    case ConnectionState.done:
-                      if (snapshot.hasError)
-                        return const Center(child: Icon(Icons.broken_image));
-                      else
-                        return SoftEdgeBlur(
-                          edges: [
-                            EdgeBlur(
-                              type: EdgeType.bottomEdge,
-                              size: 200,
-                              sigma: 10,
-                              controlPoints: [
-                                ControlPoint(
-                                  position: 0.5,
-                                  type: ControlPointType.visible,
-                                ),
-                                ControlPoint(
-                                  position: 1.0,
-                                  type: ControlPointType.transparent,
-                                ),
-                              ],
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  if (_isPosterLoading)
+                    return const Center(child: CircularProgressIndicator());
+                  if (_moviePosterBytes == null)
+                    return const Placeholder();
+                  else {
+                    return SoftEdgeBlur(
+                      edges: [
+                        EdgeBlur(
+                          type: EdgeType.bottomEdge,
+                          size: 200,
+                          sigma: 15,
+                          controlPoints: [
+                            ControlPoint(
+                              position: 0.5,
+                              type: ControlPointType.visible,
+                            ),
+                            ControlPoint(
+                              position: 1.0,
+                              type: ControlPointType.transparent,
                             ),
                           ],
-                          child: Image.memory(
-                            snapshot.data!,
-                            fit: BoxFit.cover,
-                          ),
-                        );
+                        ),
+                      ],
+                      child: Image.memory(
+                        _moviePosterBytes!,
+                        fit: BoxFit.cover,
+                      ),
+                    );
                   }
                 },
               ),
@@ -201,7 +241,7 @@ class RecSysMovieCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      widget.movie.title,
                       style: Theme.of(context).textTheme.headlineLarge
                           ?.copyWith(
                             color: Colors.white,
@@ -211,14 +251,17 @@ class RecSysMovieCard extends StatelessWidget {
                       overflow: TextOverflow.fade,
                     ),
                     Text(
-                      description,
+                      widget.movie.description,
                       style: Theme.of(
                         context,
                       ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 30, child: _buildFadingChipsRow(subjects)),
+                    SizedBox(
+                      height: 30,
+                      child: _buildFadingChipsRow(widget.movie.subjects),
+                    ),
                   ],
                 ),
               ),
@@ -233,5 +276,7 @@ class RecSysMovieCard extends StatelessWidget {
 //	############################################################################
 //	RIFERIMENTI
 
+//  https://dribbble.com/shots/25974845-Travel-Guide-Card-UI-Clean-Card-Design-Travel-App
 //  https://api.flutter.dev/flutter/widgets/Positioned/Positioned.html
 //  https://pub.dev/packages/soft_edge_blur
+//  https://stackoverflow.com/questions/49211024/how-to-resize-height-and-width-of-an-iconbutton-in-flutter
