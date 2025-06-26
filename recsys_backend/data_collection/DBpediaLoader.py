@@ -20,7 +20,8 @@ class DBpediaLoader:
             "writers": True,
             "production_companies": True,
             "subjects": True,
-            "wikipedia": True  # NEW: treat like a normal attribute
+            "wikipedia": True,
+            "abstract": True
         }
 
     def configure(self, **kwargs):
@@ -28,10 +29,10 @@ class DBpediaLoader:
             if key in self.use_attributes:
                 self.use_attributes[key] = value
 
-    def build_query(self, property_name, use_label=True):
+    def build_query(self, property_name, use_label=True, is_literal=False):
         resource_uri = f"<{self.film_uri}>"
 
-        # Use special property for foaf:isPrimaryTopicOf (Wikipedia URL)
+        # Special case for Wikipedia URL
         if property_name == "foaf:isPrimaryTopicOf":
             return f"""
             PREFIX foaf: <http://xmlns.com/foaf/0.1/>
@@ -40,9 +41,18 @@ class DBpediaLoader:
             }} LIMIT 1
             """
 
-        # Standard label-based query
+        if is_literal:
+            return f"""
+            SELECT DISTINCT ?sharedValue
+            WHERE {{
+                {resource_uri} dbo:{property_name} ?sharedValue .
+                FILTER(lang(?sharedValue) = "en")
+            }}
+            LIMIT 1
+            """
+
         if use_label:
-            query = f"""
+            return f"""
             SELECT DISTINCT ?sharedValueLabel
             WHERE {{
                 {resource_uri} dbo:{property_name} ?sharedValue .
@@ -52,14 +62,13 @@ class DBpediaLoader:
             ORDER BY ?sharedValueLabel
             """
         else:
-            query = f"""
+            return f"""
             SELECT DISTINCT ?sharedValue
             WHERE {{
                 {resource_uri} dcterms:{property_name} ?sharedValue .
             }}
             ORDER BY ?sharedValue
             """
-        return query
 
     def run_query(self, query):
         self.sparql.setQuery(query)
@@ -116,21 +125,26 @@ class DBpediaLoader:
             "writers": "writer",
             "production_companies": "productionCompany",
             "subjects": "subject",
-            "wikipedia": "foaf:isPrimaryTopicOf"  # Treat like other predicates
+            "wikipedia": "foaf:isPrimaryTopicOf",
+            "abstract": "abstract"
         }
 
         for key, enabled in self.use_attributes.items():
-            if enabled:
-                property_name = mapping[key]
+            if not enabled:
+                continue
 
-                if key == "subjects":
-                    query = self.build_query(property_name, use_label=False)
-                elif key == "wikipedia":
-                    query = self.build_query(property_name, use_label=False)
-                else:
-                    query = self.build_query(property_name)
+            property_name = mapping[key]
 
-                self.results[key] = self.run_query(query)
+            if key == "subjects":
+                query = self.build_query(property_name, use_label=False)
+            elif key == "wikipedia":
+                query = self.build_query(property_name, use_label=False)
+            elif key == "abstract":
+                query = self.build_query(property_name, is_literal=True)
+            else:
+                query = self.build_query(property_name)
+
+            self.results[key] = self.run_query(query)
 
     def print_results(self, max_results=3, limit_results=True):
         all_empty = True

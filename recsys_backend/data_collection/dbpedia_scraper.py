@@ -22,7 +22,7 @@ def normalize_title(title):
 
 # --- Load MovieLens data ---
 loader = MovieLensDataLoader(
-    '~/IW_Project/recsys-intelligent_web-2025/ml-latest-small')
+    '~/IW_Project/recsys-intelligent_web-2025/recsys_backend/data/ml-latest-small')
 loader.load_datasets()
 combined_all: DataFrame = loader.merge_all()
 
@@ -30,7 +30,7 @@ movies_df = loader.movies
 
 # --- Define poster directory ---
 poster_dir = os.path.expanduser(
-    "~/IW_Project/recsys-intelligent_web-2025/movie_posters")
+    "~/IW_Project/recsys-intelligent_web-2025/recsys_backend/data/CSVs/movie_posters")
 os.makedirs(poster_dir, exist_ok=True)
 
 # --- Define output CSV files mapping ---
@@ -43,11 +43,13 @@ category_to_csv = {
     "production_companies": "movie_production_companies.csv",
     "subjects": "movie_subjects.csv",
     "writers": "movie_writers.csv",
+    "abstract": "movie_abstracts.csv",
 }
 
 # Ensure CSV directory exists (same as poster_dir for convenience)
 # or specify another directory if you want
-csv_dir = os.path.expanduser("~/IW_Project/recsys-intelligent_web-2025/")
+csv_dir = os.path.expanduser(
+    "~/IW_Project/recsys-intelligent_web-2025/recsys_backend/data/CSVs/")
 os.makedirs(csv_dir, exist_ok=True)
 
 
@@ -63,7 +65,7 @@ def append_to_csv(filepath, rows, header=["movieId", "value"]):
         writer.writerows(rows)
 
 
-start_index = 7735  # for example, start from the 51st movie (0-based index)
+start_index = 2699  # for example, start from the 51st movie (0-based index)
 
 # --- Process each title ---
 for i, (_, row) in enumerate(movies_df.iloc[start_index:].iterrows()):
@@ -83,8 +85,18 @@ for i, (_, row) in enumerate(movies_df.iloc[start_index:].iterrows()):
 
     explorer = DBpediaLoader(title=normalized_title, year=year)
 
+    # Disable all except abstract
     explorer.configure(
-        genres=False
+        actors=False,
+        composers=False,
+        directors=False,
+        genres=False,
+        producers=False,
+        production_companies=False,
+        subjects=False,
+        writers=False,
+        wikipedia=False,
+        abstract=True
     )
 
     explorer.execute()
@@ -98,11 +110,11 @@ for i, (_, row) in enumerate(movies_df.iloc[start_index:].iterrows()):
             csv_path = os.path.join(csv_dir, category_to_csv[category])
             append_to_csv(csv_path, rows)
 
-    # Sanitize original title for filename
-    safe_title = re.sub(r'[<>:"/\\|?*]', '', title)
-    poster_filename = f"{movie_id}_{safe_title}.jpg"
-    poster_path = os.path.join(poster_dir, poster_filename)
+    # Uncomment for poster download
+    # safe_title = re.sub(r'[<>:"/\\|?*]', '', title)
+    # poster_filename = f"{movie_id}_{safe_title}.jpg"
+    # poster_path = os.path.join(poster_dir, poster_filename)
 
-    success = explorer.download_poster(output_filename=poster_path)
-    if success:
-        print(f"📸 Poster saved as: {poster_path}")
+    # success = explorer.download_poster(output_filename=poster_path)
+    # if success:
+    #     print(f"📸 Poster saved as: {poster_path}")
