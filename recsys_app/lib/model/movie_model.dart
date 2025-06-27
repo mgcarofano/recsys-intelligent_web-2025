@@ -32,7 +32,7 @@ class Movie {
 
   @override
   String toString() {
-    return 'Movie{id: $idMovie, titolo: ${title ?? ''}, descrizione: ${subjects ?? ''}, subjects: ${subjects ?? ''}}';
+    return 'Movie{id: $idMovie, titolo: ${title ?? ''}, descrizione: ${description ?? ''}, subjects: ${subjects ?? ''}}';
   }
 }
 

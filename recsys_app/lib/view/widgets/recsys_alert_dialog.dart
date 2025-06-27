@@ -52,44 +52,32 @@ class RecSysAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       icon: Icon(topIcon, size: 25.0, color: Colors.grey.shade50),
-      title: Center(
-        child: Text(
-          alertTitle,
-          // style: Theme.of(context).textTheme.headline2?.copyWith(
-          //   color: Colors.grey.shade50
-          // ),
-        ),
-      ),
-      content: Text(
-        alertMessage,
-        // style: Theme.of(context).textTheme.headline4?.copyWith(
-        //   color: Colors.grey.shade50
-        // )
-      ),
+      title: Center(child: Text(alertTitle)),
+      content: Text(alertMessage),
       actions: [
-        OutlinedButton(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+            foregroundColor: Theme.of(context).colorScheme.inverseSurface,
+          ),
           onPressed: onPressCancel ?? () => context.pop(),
-          child: Text(
-            cancelText ?? 'Annulla',
-            // style: Theme.of(context).textTheme.headline5?.copyWith(
-            //     color: Colors.grey.shade50
-            // ),
-          ),
+          child: Text(cancelText ?? 'Annulla'),
         ),
-        TextButton(
-          onPressed: onPressConfirm ?? () {},
-          style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.grey.shade50,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
             backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
           ),
+          onPressed: onPressConfirm ?? () {},
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              confirmText ?? 'Si',
-              // style: Theme.of(context).textTheme.headline5?.copyWith(
-              //     color: Colors.grey.shade50
-              // ),
-            ),
+            child: Text(confirmText ?? 'Si'),
           ),
         ),
       ],

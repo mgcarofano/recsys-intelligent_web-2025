@@ -37,8 +37,15 @@ import 'package:soft_edge_blur/soft_edge_blur.dart';
 
 class RecSysMovieCard extends StatefulWidget {
   final Movie movie;
+  final bool isSelected;
+  final VoidCallback onTap;
 
-  const RecSysMovieCard({super.key, required this.movie});
+  const RecSysMovieCard({
+    super.key,
+    required this.movie,
+    required this.isSelected,
+    required this.onTap,
+  });
 
   @override
   State<RecSysMovieCard> createState() => _RecSysMovieCardState();
@@ -47,6 +54,7 @@ class RecSysMovieCard extends StatefulWidget {
 class _RecSysMovieCardState extends State<RecSysMovieCard> {
   Uint8List? _moviePosterBytes;
   bool _isPosterLoading = true;
+  static const double _scaleReductionFactor = 0.02;
 
   @override
   void initState() {
@@ -104,21 +112,25 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
   List<Widget> _buildMovieInfo() {
     List<Widget> ret = List.empty(growable: true);
 
-    if (widget.movie.title != null) {
+    if (widget.movie.title != null && widget.movie.title!.isNotEmpty) {
       ret.add(
-        Text(
-          widget.movie.title!,
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+        Tooltip(
+          message: widget.movie.title!,
+          child: Text(
+            widget.movie.title!,
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          maxLines: 1,
-          overflow: TextOverflow.fade,
         ),
       );
     }
 
-    if (widget.movie.description != null) {
+    if (widget.movie.description != null &&
+        widget.movie.description!.isNotEmpty) {
       ret.add(
         Text(
           widget.movie.description!,
@@ -131,62 +143,64 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
       );
     }
 
-    if (widget.movie.subjects != null) {
-      ret.add(SizedBox(height: 30, child: _buildFadingChipsRow()));
+    if (widget.movie.subjects != null && widget.movie.subjects!.isNotEmpty) {
+      ret.add(_buildFadingChipsRow());
     }
 
     return ret;
   }
 
   Widget _buildFadingChipsRow() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return ShaderMask(
-          shaderCallback: (rect) {
-            return LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                Colors.transparent,
-                Colors.white,
-                Colors.white,
-                Colors.transparent,
-              ],
-              stops: [0.0, 0.1, 0.9, 1.0],
-            ).createShader(Rect.fromLTWH(0, 0, rect.width, rect.height));
-          },
-          blendMode: BlendMode.dstIn,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            child: Row(
-              spacing: 5,
-              children: widget.movie.subjects!.map((subject) {
-                return Chip(
-                  label: Text(
-                    subject,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w100,
-                      fontSize: 11,
+    return SizedBox(
+      height: 30,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return ShaderMask(
+            shaderCallback: (rect) {
+              return LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  Colors.transparent,
+                  Colors.white,
+                  Colors.white,
+                  Colors.transparent,
+                ],
+                stops: [0.0, 0.1, 0.9, 1.0],
+              ).createShader(Rect.fromLTWH(0, 0, rect.width, rect.height));
+            },
+            blendMode: BlendMode.dstIn,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              child: Row(
+                spacing: 5,
+                children: widget.movie.subjects!.map((subject) {
+                  return Chip(
+                    label: Text(
+                      subject,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w100,
+                        fontSize: 11,
+                      ),
                     ),
-                  ),
-                  backgroundColor: Theme.of(context).colorScheme.tertiary,
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                );
-              }).toList(),
+                    backgroundColor: Theme.of(context).colorScheme.tertiary,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildCard() {
     return SizedBox(
       width: 350,
       height: 280,
@@ -229,6 +243,24 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
                 },
               ),
             ),
+            Positioned.fill(
+              child: Container(
+                decoration: const BoxDecoration(
+                  backgroundBlendMode: BlendMode.darken,
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black26,
+                      Colors.black87,
+                      Colors.black,
+                    ],
+                    stops: [0.0, 0.6, 0.8, 1.0],
+                  ),
+                ),
+              ),
+            ),
             Positioned.directional(
               textDirection: TextDirection.rtl,
               top: 12,
@@ -256,21 +288,7 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
               bottom: 0,
               left: 0,
               right: 0,
-              child: Container(
-                // decoration: const BoxDecoration(
-                //   backgroundBlendMode: BlendMode.darken,
-                //   gradient: LinearGradient(
-                //     begin: Alignment.topCenter,
-                //     end: Alignment.bottomCenter,
-                //     colors: [
-                //       Colors.transparent,
-                //       Colors.black26,
-                //       Colors.black87,
-                //       Colors.black,
-                //     ],
-                //     stops: [0.0, 0.6, 0.8, 1.0],
-                //   ),
-                // ),
+              child: Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Column(
                   spacing: 12.0,
@@ -285,6 +303,32 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: AnimatedScale(
+        scale: widget.isSelected ? (1.0 - _scaleReductionFactor) : 1.0,
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.easeInOut,
+        child: Material(
+          elevation: 4,
+          shape: RoundedSuperellipseBorder(
+            borderRadius: BorderRadius.circular(24),
+            side: widget.isSelected
+                ? BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 5,
+                  )
+                : BorderSide.none,
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: _buildCard(),
+        ),
+      ),
+    );
+  }
 }
 
 //	############################################################################
@@ -294,3 +338,4 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
 //  https://api.flutter.dev/flutter/widgets/Positioned/Positioned.html
 //  https://pub.dev/packages/soft_edge_blur
 //  https://stackoverflow.com/questions/49211024/how-to-resize-height-and-width-of-an-iconbutton-in-flutter
+//  https://stackoverflow.com/questions/51190657/flutter-how-to-blend-an-image-with-a-gradient-colour

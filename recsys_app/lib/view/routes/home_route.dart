@@ -19,14 +19,19 @@
 //	############################################################################
 //	LIBRERIE
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
 import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
+import 'package:knowledge_recsys/theme.dart';
+import 'package:knowledge_recsys/view/widgets/recsys_alert_dialog.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_loading_dialog.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_movie_card.dart';
+import 'package:soft_edge_blur/soft_edge_blur.dart';
 
 //	############################################################################
 //	COSTANTI E VARIABILI
@@ -46,8 +51,7 @@ class HomeRoute extends StatefulWidget {
 
 class _HomeRouteState extends State<HomeRoute> {
   late Future<List<Movie>> movieRecommendations;
-  final Set<String> selectedMovieIds = {};
-  var isLoading = false;
+  final Set<Movie> selectedMovies = {};
 
   @override
   void initState() {
@@ -75,138 +79,133 @@ class _HomeRouteState extends State<HomeRoute> {
       return null;
     });
 
+    // debugPrint("$data");
     if (data == null) return List<Movie>.empty(growable: true);
 
     for (String id in toList(data as String) as List<String>) {
+      String? t = await BaseClient.instance
+          .getMovieTitle(idMovie: id)
+          .catchError((_) => null);
+      String? d = await BaseClient.instance
+          .getMovieDescription(idMovie: id)
+          .catchError((_) => null);
+      String? s = await BaseClient.instance
+          .getMovieSubjects(idMovie: id)
+          .catchError((_) => null);
+
+      // debugPrint("$id, ${s.runtimeType.toString()}, $s");
+
       Movie m = Movie(
         idMovie: id,
-        title: await BaseClient.instance
-            .getMovieTitle(idMovie: id)
-            .catchError((_) => null),
-        description: await BaseClient.instance
-            .getMovieDescription(idMovie: id)
-            .catchError((_) => null),
-        subjects: await BaseClient.instance
-            .getMovieSubjects(idMovie: id)
-            .catchError((_) => null),
+        title: t,
+        description: d,
+        subjects: toList(s ?? '[]') as List<String>,
       );
 
       if (!list.any((movie) => movie.idMovie == id)) {
         list.add(m);
+        // debugPrint(m.toString());
       }
     }
+
+    // debugPrint(list.toString());
 
     return list;
   }
 
   Future<void> _refreshHomePage() async {
-    // setState(() {
-    //   isLoading = true;
-    // });
+    if (selectedMovies.isEmpty) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text('Seleziona almeno un film'),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      return;
+    }
 
-    // try {
-    //   // Attendi il risultato della Future e decodifica la stringa JSON
-    //   // in una lista di stringhe.
-    //   final String rawList = await movieRecommendationsResponse;
-    //   final List<String> idMovies = toList(rawList) as List<String>;
+    final selectedIds = selectedMovies
+        .map((m) => m.idMovie.toString())
+        .toList();
+    final selectedTitles = selectedMovies.map((m) => m.title).join('\n');
 
-    //   final response = await BaseClient.instance
-    //       .postUserPreferences(idMovies: idMovies)
-    //       .catchError((err) {
-    //         debugPrint('\n--- ERRORE ---\n$err\n-----\n');
-    //         if (!mounted) return;
-    //         ScaffoldMessenger.of(context)
-    //           ..hideCurrentSnackBar()
-    //           ..showSnackBar(
-    //             SnackBar(
-    //               behavior: SnackBarBehavior.floating,
-    //               content: Text(err.toString()),
-    //               duration: const Duration(seconds: 3),
-    //               backgroundColor: Theme.of(context).colorScheme.error,
-    //             ),
-    //           );
-    //       });
+    Future<void> confirmAction() async {
+      try {
+        // debugPrint(selectedMovieIds.toString());
+        if (!mounted) return;
+        context.pop();
 
-    //   if (response == null) {
-    //     if (!mounted) return;
-    //     ScaffoldMessenger.of(context)
-    //       ..hideCurrentSnackBar()
-    //       ..showSnackBar(
-    //         SnackBar(
-    //           behavior: SnackBarBehavior.floating,
-    //           content: Text('Errore durante la ricezione dei dati.'),
-    //           duration: const Duration(seconds: 3),
-    //           backgroundColor: Theme.of(context).colorScheme.error,
-    //         ),
-    //       );
-    //     return;
-    //   }
+        await BaseClient.instance
+            .postUserPreferences(idMovies: selectedIds)
+            .catchError((err) {
+              debugPrint('\n--- ERRORE ---\n$err\n-----\n');
+              if (!mounted) return;
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text(err.toString()),
+                    duration: const Duration(seconds: 3),
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                  ),
+                );
+            });
 
-    //   // Ricarica i nuovi dati dopo la POST
-    //   movieRecommendationsResponse = _getMovieRecommendationsRawList();
+        // Ricarica i nuovi dati dopo la POST
+        setState(() {
+          selectedMovies.clear();
+          movieRecommendations = _getMovieRecommendations().then((val) {
+            if (mounted) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text('Preferenze aggiornate con successo!'),
+                    duration: const Duration(seconds: 3),
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.successContainer,
+                  ),
+                );
+            }
+            return val;
+          });
+        });
+      } catch (err) {
+        if (!mounted) return;
+        context.pop();
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              content: Text(err.toString()),
+              duration: const Duration(seconds: 3),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+      }
+    }
 
-    //   setState(() {
-    //     isLoading = false;
-    //   });
-
-    //   if (!mounted) return;
-    //   ScaffoldMessenger.of(context)
-    //     ..hideCurrentSnackBar()
-    //     ..showSnackBar(
-    //       SnackBar(
-    //         behavior: SnackBarBehavior.floating,
-    //         content: Text('Preferenze aggiornate con successo!'),
-    //         duration: const Duration(seconds: 3),
-    //         backgroundColor: Theme.of(context).colorScheme.tertiary,
-    //       ),
-    //     );
-    // } catch (err) {
-    //   setState(() {
-    //     isLoading = false;
-    //   });
-
-    //   ScaffoldMessenger.of(context)
-    //     ..hideCurrentSnackBar()
-    //     ..showSnackBar(
-    //       SnackBar(
-    //         behavior: SnackBarBehavior.floating,
-    //         content: Text(err.toString()),
-    //         duration: const Duration(seconds: 3),
-    //         backgroundColor: Theme.of(context).colorScheme.error,
-    //       ),
-    //     );
-    // }
+    showDialog(
+      context: context,
+      builder: (context) => RecSysAlertDialog(
+        topIcon: Icons.help_outline_rounded,
+        alertTitle: 'Aggiorna preferenze',
+        alertMessage: "Confermi la tua selezione?\n$selectedTitles",
+        onPressConfirm: confirmAction,
+      ),
+    );
   }
-
-  // void _toggleSelection(String movieId) {
-  //   setState(() {
-  //     if (_selectedMovieIds.contains(movieId)) {
-  //       _selectedMovieIds.remove(movieId);
-  //     } else {
-  //       _selectedMovieIds.add(movieId);
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
-    // final card = RecSysMovieCard(
-    //   movie: Movie(
-    //     idMovie: '59315',
-    //     title: 'Iron Man',
-    //     description:
-    //         "Iron Man è un film del 2008 diretto da Jon Favreau. Basato sull'omonimo personaggio dei fumetti della Marvel Comics Iron Man, interpretato da Robert Downey Jr., è il primo film del Marvel Cinematic Universe, della cosiddetta \"Fase Uno\" e della \"Saga dell'infinito\".",
-    //     subjects: [
-    //       'Azione',
-    //       'Avventura',
-    //       'Stati Uniti',
-    //       'Supereroi',
-    //       'Los Angeles',
-    //       '2008',
-    //     ],
-    //   ),
-    // );
-
     const int totalCards = 15;
     const int maxColumns = 5;
 
@@ -243,7 +242,7 @@ class _HomeRouteState extends State<HomeRoute> {
       floatingActionButton: FloatingActionButton(
         onPressed: _refreshHomePage,
         tooltip: 'Aggiorna',
-        child: const Icon(Icons.refresh_rounded),
+        child: const Icon(Icons.cloud_sync),
       ),
       body: FutureBuilder<List<Movie>>(
         initialData: List<Movie>.empty(growable: true),
@@ -262,17 +261,92 @@ class _HomeRouteState extends State<HomeRoute> {
                       .floor()
                       .clamp(1, maxColumns);
 
-                  return GridView.builder(
+                  return Padding(
                     padding: const EdgeInsets.all(20.0),
-                    itemCount: totalCards,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: columns,
-                      mainAxisSpacing: 32,
-                      crossAxisSpacing: 32,
-                      childAspectRatio: 5 / 4,
+                    child: Column(
+                      spacing: 20.0,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Seleziona i film e poi premi il tasto in basso per aggiornare le tue preferenze.",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              spacing: 10.0,
+                              children: [
+                                Text(
+                                  'Film selezionati: ${selectedMovies.length}',
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleMedium,
+                                ),
+                                TextButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (selectedMovies.length ==
+                                          snapshot.data!.length)
+                                        selectedMovies.clear();
+                                      else
+                                        selectedMovies
+                                          ..clear()
+                                          ..addAll(snapshot.data!);
+                                    });
+                                  },
+                                  icon: Icon(
+                                    selectedMovies.length ==
+                                            snapshot.data!.length
+                                        ? Icons.clear_all
+                                        : Icons.select_all,
+                                  ),
+                                  label: Text(
+                                    selectedMovies.length ==
+                                            snapshot.data!.length
+                                        ? 'Deseleziona tutti'
+                                        : 'Seleziona tutti',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleSmall,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: GridView.builder(
+                            itemCount: min(snapshot.data!.length, totalCards),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: columns,
+                                  mainAxisSpacing: 32,
+                                  crossAxisSpacing: 32,
+                                  childAspectRatio: 5 / 5,
+                                ),
+                            itemBuilder: (context, index) {
+                              final m = snapshot.data![index];
+                              final isSelected = selectedMovies.contains(m);
+
+                              return RecSysMovieCard(
+                                movie: m,
+                                isSelected: isSelected,
+                                onTap: () {
+                                  setState(() {
+                                    if (isSelected)
+                                      selectedMovies.remove(m);
+                                    else
+                                      selectedMovies.add(m);
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                    itemBuilder: (context, index) => const Placeholder(),
-                    // RecSysMovieCard(movie: snapshot.data![index]),
                   );
                 },
               );
@@ -287,3 +361,4 @@ class _HomeRouteState extends State<HomeRoute> {
 //	RIFERIMENTI
 
 //  https://stackoverflow.com/questions/68871880/do-not-use-buildcontexts-across-async-gaps
+//  https://api.flutter.dev/flutter/material/TextTheme-class.html

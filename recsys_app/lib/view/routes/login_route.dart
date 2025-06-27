@@ -107,7 +107,7 @@ class _LoginRouteState extends State<LoginRoute> {
               decoration: ShapeDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainerHigh,
                 shape: ContinuousRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
               child: Form(

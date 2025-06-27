@@ -30,14 +30,13 @@ ADDRESS = '0.0.0.0'
 PORT = 8000
 TIMEOUT = 30
 
-EXISTING_MOVIES = 6725
 MOVIE_RECOMMENDATIONS = 15
 
 POSTER_DIR = Path('./data/movie_posters')
 CSV_PATH_MAPPING = {
 	'actors': Path('./data/CSVs/movie_actors.csv'),
 	'composers': Path('./data/CSVs/movie_composers.csv'),
-	# 'description': Path('./data/CSVs/.csv'),
+	'description': Path('./data/CSVs/movie_abstracts.csv'),
 	'directors': Path('./data/CSVs/movie_directors.csv'),
 	'genres': Path('./data/CSVs/movie_genres.csv'),
 	'producers': Path('./data/CSVs/movie_producers.csv'),
@@ -51,7 +50,16 @@ CSV_PATH_MAPPING = {
 #	ALTRE FUNZIONI
 
 def get_movie_recommendations():
-	return [str(random.randint(1, EXISTING_MOVIES)) for _ in range(MOVIE_RECOMMENDATIONS)]
+
+	with open(CSV_PATH_MAPPING['title'], newline='', encoding='utf-8') as f:
+		next(f) # Salta la prima riga (intestazione del file .csv).
+		reader = csv.DictReader(f, fieldnames=['movieId', 'value'])
+		existing_ids = [int(row['movieId']) for row in reader if row['movieId'].isdigit()]
+
+	selected_ids = random.sample(existing_ids, MOVIE_RECOMMENDATIONS)
+	ret = [str(i) for i in selected_ids]
+	
+	return ret
 
 	# end
 

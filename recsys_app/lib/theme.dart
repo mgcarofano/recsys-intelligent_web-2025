@@ -436,6 +436,13 @@ class ColorFamily {
   final Color onColorContainer;
 }
 
+extension SuccessColorScheme on ColorScheme {
+  Color get success => const Color(0xFF4CAF50); // verde "success"
+  Color get successContainer => const Color(0xFFC8E6C9);
+  Color get onSuccess => const Color(0xFFFFFFFF);
+  Color get onSuccessContainer => const Color(0xFF1B5E20);
+}
+
 //	############################################################################
 //	RIFERIMENTI
 
