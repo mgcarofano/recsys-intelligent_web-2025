@@ -21,6 +21,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/cache/poster_cache.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
@@ -106,7 +107,8 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
   }
 
   void _showDetails() {
-    // TODO: naviga alla pagina dettagli del movie selezionato
+    if (!mounted) return;
+    context.push('/movie/${widget.movie.idMovie}', extra: widget.movie);
   }
 
   List<Widget> _buildMovieInfo() {

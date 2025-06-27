@@ -31,7 +31,6 @@ import 'package:knowledge_recsys/view/widgets/recsys_alert_dialog.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_loading_dialog.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_movie_card.dart';
-import 'package:soft_edge_blur/soft_edge_blur.dart';
 
 //	############################################################################
 //	COSTANTI E VARIABILI

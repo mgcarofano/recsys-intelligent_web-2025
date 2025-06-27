@@ -15,6 +15,7 @@
 //	LIBRERIE
 
 import 'package:go_router/go_router.dart';
+import 'package:knowledge_recsys/model/movie_model.dart';
 
 import 'package:knowledge_recsys/view/screens/error_screen.dart';
 import 'package:knowledge_recsys/view/routes/login_route.dart';
@@ -58,8 +59,17 @@ class AppRouter {
           name: 'MOVIE',
           path: '/movie/:id',
           builder: (context, state) {
+            final extra = state.extra;
             final id = state.pathParameters['id'];
-            return MovieRoute(movieId: id!);
+
+            if (extra is Movie) return MovieRoute(movie: extra);
+
+            // if (id != null) {
+            //   // TODO: recuperare oggetto Movie dal server tramite id
+            //   return MovieRoute(movie: m);
+            // }
+
+            return ErrorScreen();
           },
         ),
         GoRoute(

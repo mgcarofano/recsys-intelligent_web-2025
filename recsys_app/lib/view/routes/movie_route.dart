@@ -18,6 +18,7 @@
 //	LIBRERIE
 
 import 'package:flutter/material.dart';
+import 'package:knowledge_recsys/model/movie_model.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 
 //	############################################################################
@@ -30,9 +31,9 @@ import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 //	CLASSI E ROUTE
 
 class MovieRoute extends StatefulWidget {
-  final String movieId;
+  final Movie movie;
 
-  const MovieRoute({super.key, required this.movieId});
+  const MovieRoute({super.key, required this.movie});
 
   @override
   State<MovieRoute> createState() => _MovieRouteState();
@@ -42,8 +43,12 @@ class _MovieRouteState extends State<MovieRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: RecSysAppBar(title: widget.movieId, alignment: Alignment.topLeft),
-      body: Center(child: Text("Movie")),
+      appBar: RecSysAppBar(
+        title: widget.movie.title ?? "Movie n. ${widget.movie.idMovie}",
+        alignment: Alignment.topLeft,
+      ),
+      // TODO: caricare tutte le informazioni disponibili del movie in widget
+      body: Center(child: Text(widget.movie.toString())),
     );
   }
 }
