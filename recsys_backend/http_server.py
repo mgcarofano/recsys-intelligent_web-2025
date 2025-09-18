@@ -234,7 +234,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				# 		output = json.dumps(values)
 				# else:											# MULTIPLE TYPE REQUEST
 				# 	output = json.dumps(results)
-				
+
 				output = json.dumps(results)
 
 				self.send_response(200)

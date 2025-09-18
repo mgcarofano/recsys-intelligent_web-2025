@@ -90,10 +90,15 @@ class _HomeRouteState extends State<HomeRoute> {
 
       Map<String, dynamic> movieMap = toMap(movieInfo ?? '{}');
 
+      T? safeFirst<T>(List<T>? list) {
+        if (list == null || list.isEmpty) return null;
+        return list.first;
+      }
+
       Movie m = Movie(
         idMovie: id,
-        title: movieMap['title'][0] as String,
-        description: movieMap['description'][0] as String,
+        title: safeFirst(movieMap['title']) ?? "",
+        description: safeFirst(movieMap['description']) ?? "",
         actors: List<String>.from(movieMap['actors'] ?? []),
         composers: List<String>.from(movieMap['composers'] ?? []),
         directors: List<String>.from(movieMap['directors'] ?? []),
