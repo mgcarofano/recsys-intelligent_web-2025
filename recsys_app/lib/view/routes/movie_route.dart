@@ -47,7 +47,6 @@ class _MovieRouteState extends State<MovieRoute> {
         title: widget.movie.title ?? "Movie n. ${widget.movie.idMovie}",
         alignment: Alignment.topLeft,
       ),
-      // TODO: caricare tutte le informazioni disponibili del movie in widget
       body: Center(child: Text(widget.movie.toString())),
     );
   }

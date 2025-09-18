@@ -82,28 +82,32 @@ class _HomeRouteState extends State<HomeRoute> {
     if (data == null) return List<Movie>.empty(growable: true);
 
     for (String id in toList(data as String) as List<String>) {
-      String? t = await BaseClient.instance
-          .getMovieTitle(idMovie: id)
-          .catchError((_) => null);
-      String? d = await BaseClient.instance
-          .getMovieDescription(idMovie: id)
-          .catchError((_) => null);
-      String? s = await BaseClient.instance
-          .getMovieSubjects(idMovie: id)
+      String? movieInfo = await BaseClient.instance
+          .getMovieInfo(idMovie: id)
           .catchError((_) => null);
 
-      // debugPrint("$id, ${s.runtimeType.toString()}, $s");
+      // debugPrint("$id, ${movieInfo.runtimeType.toString()}, $movieInfo");
+
+      Map<String, dynamic> movieMap = toMap(movieInfo ?? '{}');
 
       Movie m = Movie(
         idMovie: id,
-        title: t,
-        description: d,
-        subjects: toList(s ?? '[]') as List<String>,
+        title: movieMap['title'][0] as String,
+        description: movieMap['description'][0] as String,
+        actors: List<String>.from(movieMap['actors'] ?? []),
+        composers: List<String>.from(movieMap['composers'] ?? []),
+        directors: List<String>.from(movieMap['directors'] ?? []),
+        genres: List<String>.from(movieMap['genres'] ?? []),
+        producers: List<String>.from(movieMap['producers'] ?? []),
+        productionCompanies: List<String>.from(
+          movieMap['production_companies'] ?? [],
+        ),
+        subjects: List<String>.from(movieMap['subjects'] ?? []),
+        writers: List<String>.from(movieMap['writers'] ?? []),
       );
 
       if (!list.any((movie) => movie.idMovie == id)) {
         list.add(m);
-        // debugPrint(m.toString());
       }
     }
 
@@ -253,6 +257,7 @@ class _HomeRouteState extends State<HomeRoute> {
             case ConnectionState.active:
               return RecSysLoadingDialog(alertMessage: 'Caricamento...');
             case ConnectionState.done:
+              // return Placeholder();
               return LayoutBuilder(
                 builder: (context, constraints) {
                   final double cardWidth = 350;

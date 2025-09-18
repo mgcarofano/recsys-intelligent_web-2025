@@ -121,12 +121,34 @@ class BaseClient {
 
   Future<dynamic> getMovieRecommendations() async =>
       _getRequest('/get-recommendations');
+
   Future<dynamic> getMovieTitle({required String idMovie}) async =>
       _getRequest('/get-movie-info', {'id': idMovie, 'type': 'title'});
+  Future<dynamic> getMovieActors({required String idMovie}) async =>
+      _getRequest('/get-movie-info', {'id': idMovie, 'type': 'actors'});
+  Future<dynamic> getMovieComposers({required String idMovie}) async =>
+      _getRequest('/get-movie-info', {'id': idMovie, 'type': 'composers'});
   Future<dynamic> getMovieDescription({required String idMovie}) async =>
       _getRequest('/get-movie-info', {'id': idMovie, 'type': 'description'});
+  Future<dynamic> getMovieDirectors({required String idMovie}) async =>
+      _getRequest('/get-movie-info', {'id': idMovie, 'type': 'directors'});
+  Future<dynamic> getMovieGenres({required String idMovie}) async =>
+      _getRequest('/get-movie-info', {'id': idMovie, 'type': 'genres'});
+  Future<dynamic> getMovieProducers({required String idMovie}) async =>
+      _getRequest('/get-movie-info', {'id': idMovie, 'type': 'producers'});
+  Future<dynamic> getMovieproductionCompanies({
+    required String idMovie,
+  }) async => _getRequest('/get-movie-info', {
+    'id': idMovie,
+    'type': 'production_companies',
+  });
   Future<dynamic> getMovieSubjects({required String idMovie}) async =>
       _getRequest('/get-movie-info', {'id': idMovie, 'type': 'subjects'});
+  Future<dynamic> getMovieWriters({required String idMovie}) async =>
+      _getRequest('/get-movie-info', {'id': idMovie, 'type': 'writers'});
+
+  Future<dynamic> getMovieInfo({required String idMovie}) async =>
+      _getRequest('/get-movie-info', {'id': idMovie});
 
   Future<dynamic> downloadMoviePoster({required String idMovie}) async {
     try {

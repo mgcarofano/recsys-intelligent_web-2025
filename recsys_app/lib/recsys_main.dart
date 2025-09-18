@@ -20,7 +20,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:knowledge_recsys/services/app_router.dart';
@@ -38,6 +38,10 @@ enum HomeRouteAction { openSettings, logout }
 
 List<dynamic> toList(String data) {
   return json.decode(data).cast<String>().toList();
+}
+
+Map<String, dynamic> toMap(String data) {
+  return json.decode(data);
 }
 
 //	############################################################################

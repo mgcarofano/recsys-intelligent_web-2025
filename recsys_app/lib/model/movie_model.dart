@@ -26,13 +26,44 @@ class Movie {
   final String idMovie;
   final String? title;
   final String? description;
+  final List<String>? actors;
+  final List<String>? composers;
+  final List<String>? directors;
+  final List<String>? genres;
+  final List<String>? producers;
+  final List<String>? productionCompanies;
   final List<String>? subjects;
+  final List<String>? writers;
 
-  Movie({required this.idMovie, this.title, this.description, this.subjects});
+  Movie({
+    required this.idMovie,
+    this.title,
+    this.description,
+    this.actors,
+    this.composers,
+    this.directors,
+    this.genres,
+    this.producers,
+    this.productionCompanies,
+    this.subjects,
+    this.writers,
+  });
 
   @override
   String toString() {
-    return 'Movie{id: $idMovie, titolo: ${title ?? ''}, descrizione: ${description ?? ''}, subjects: ${subjects ?? ''}}';
+    return '''Movie{
+      id: $idMovie,
+      title: ${title ?? ''},
+      description: ${description ?? ''},
+      actors: ${actors ?? ''},
+      composers: ${composers ?? ''},
+      directors: ${directors ?? ''},
+      genres: ${genres ?? ''},
+      producers: ${producers ?? ''},
+      productionCompanies: ${productionCompanies ?? ''},
+      subjects: ${subjects ?? ''},
+      writers: ${writers ?? ''},
+    }''';
   }
 }
 

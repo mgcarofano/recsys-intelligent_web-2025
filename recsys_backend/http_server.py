@@ -34,15 +34,15 @@ MOVIE_RECOMMENDATIONS = 15
 
 POSTER_DIR = Path('./data/movie_posters')
 CSV_PATH_MAPPING = {
+	'title': Path('./data/CSVs/existing_movies.csv'),
+	'description': Path('./data/CSVs/movie_abstracts.csv'),
 	'actors': Path('./data/CSVs/movie_actors.csv'),
 	'composers': Path('./data/CSVs/movie_composers.csv'),
-	'description': Path('./data/CSVs/movie_abstracts.csv'),
 	'directors': Path('./data/CSVs/movie_directors.csv'),
 	'genres': Path('./data/CSVs/movie_genres.csv'),
 	'producers': Path('./data/CSVs/movie_producers.csv'),
 	'production_companies': Path('./data/CSVs/movie_production_companies.csv'),
 	'subjects': Path('./data/CSVs/movie_subjects.csv'),
-	'title': Path('./data/CSVs/existing_movies.csv'),
 	'writers': Path('./data/CSVs/movie_writers.csv'),
 }
 
@@ -178,42 +178,64 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 			elif urlparse(self.path).path.endswith('/get-movie-info'):
 				params = dict(parse_qsl(urlparse(self.path).query))
 				selected_id = params['id']
-				selected_type = params['type']
+				
+				if 'type' in params.keys():
+					selected_type = params['type']
+					if selected_type not in CSV_PATH_MAPPING:
+						self.send_response(400, 'Informazione non disponibile.') # BAD REQUEST
+						self._send_cors_headers()
+						self.send_header('Content-type', 'text/plain')
+						self.end_headers()
+						return
 
-				if not selected_id or not selected_type:
+				if not selected_id:
 					self.send_response(400, 'Impossibile eseguire tale richiesta.') # BAD REQUEST
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
 				
-				if selected_type not in CSV_PATH_MAPPING:
-					self.send_response(400, 'Informazione non disponibile.') # BAD REQUEST
-					self._send_cors_headers()
-					self.send_header('Content-type', 'text/plain')
-					self.end_headers()
-					return
+				results = {}
 				
-				with open(CSV_PATH_MAPPING[selected_type], newline='', encoding='utf-8') as f:
-					collecting = False
-					info_values = []
-					reader = csv.DictReader(f, fieldnames=['movieId', 'value'])
+				for key, path in CSV_PATH_MAPPING.items():
+					if 'selected_type' in locals() and selected_type != key:
+						continue
 
-					for row in reader:
-						if row['movieId'] == selected_id:
-							collecting = True
-							info_values.append(row['value'])
-						elif collecting:
-							break
+					with open(path, newline='', encoding='utf-8') as f:
+						collecting = False
+						info_values = []
+						reader = csv.DictReader(f, fieldnames=['movieId', 'value'])
+
+						for row in reader:
+							if row['movieId'] == selected_id:
+								collecting = True
+								info_values.append(row['value'])
+							elif collecting:
+								break
+						
+						if info_values:
+							results[key] = info_values
+					
+					if 'selected_type' in locals() and selected_type == key:
+						break
 				
-				if not info_values:
+				if not results:
 					self.send_response(404, f'Informazione "{selected_type}" non trovata per movie "{selected_id}"') # NOT FOUND
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
+
+				# if len(results) == 1:							# SINGLE TYPE REQUEST
+				# 	_, values = next(iter(results.items()))
+				# 	if len(values) == 1:						# SINGLE RESULT
+				# 		output = json.dumps(values[0])
+				# 	else:										# LIST RESULT
+				# 		output = json.dumps(values)
+				# else:											# MULTIPLE TYPE REQUEST
+				# 	output = json.dumps(results)
 				
-				output = json.dumps(info_values.pop()) if (len(info_values) == 1) else json.dumps(info_values)
+				output = json.dumps(results)
 
 				self.send_response(200)
 				self._send_cors_headers()

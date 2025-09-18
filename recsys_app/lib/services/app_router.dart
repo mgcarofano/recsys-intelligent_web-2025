@@ -60,7 +60,7 @@ class AppRouter {
           path: '/movie/:id',
           builder: (context, state) {
             final extra = state.extra;
-            final id = state.pathParameters['id'];
+            // final id = state.pathParameters['id'];
 
             if (extra is Movie) return MovieRoute(movie: extra);
 
