@@ -59,6 +59,11 @@ class _HomeRouteState extends State<HomeRoute> {
   }
 
   Future<List<Movie>> _getMovieRecommendations() async {
+    T? safeFirst<T>(List<T>? list) {
+      if (list == null || list.isEmpty) return null;
+      return list.first;
+    }
+
     List<Movie> list = List<Movie>.empty(growable: true);
     var data = await BaseClient.instance.getMovieRecommendations().catchError((
       err,
@@ -90,15 +95,13 @@ class _HomeRouteState extends State<HomeRoute> {
 
       Map<String, dynamic> movieMap = toMap(movieInfo ?? '{}');
 
-      T? safeFirst<T>(List<T>? list) {
-        if (list == null || list.isEmpty) return null;
-        return list.first;
-      }
+      final t = safeFirst(movieMap['title']);
+      final d = safeFirst(movieMap['description']);
 
       Movie m = Movie(
         idMovie: id,
-        title: safeFirst(movieMap['title']) ?? "",
-        description: safeFirst(movieMap['description']) ?? "",
+        title: t ?? "",
+        description: d ?? "",
         actors: List<String>.from(movieMap['actors'] ?? []),
         composers: List<String>.from(movieMap['composers'] ?? []),
         directors: List<String>.from(movieMap['directors'] ?? []),

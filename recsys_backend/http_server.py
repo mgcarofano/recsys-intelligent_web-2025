@@ -226,15 +226,6 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.end_headers()
 					return
 
-				# if len(results) == 1:							# SINGLE TYPE REQUEST
-				# 	_, values = next(iter(results.items()))
-				# 	if len(values) == 1:						# SINGLE RESULT
-				# 		output = json.dumps(values[0])
-				# 	else:										# LIST RESULT
-				# 		output = json.dumps(values)
-				# else:											# MULTIPLE TYPE REQUEST
-				# 	output = json.dumps(results)
-
 				output = json.dumps(results)
 
 				self.send_response(200)
