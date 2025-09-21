@@ -60,15 +60,7 @@ class AppRouter {
           path: '/movie/:id',
           builder: (context, state) {
             final extra = state.extra;
-            // final id = state.pathParameters['id'];
-
             if (extra is Movie) return MovieRoute(movie: extra);
-
-            // if (id != null) {
-            //   // TODO: recuperare oggetto Movie dal server tramite id
-            //   return MovieRoute(movie: m);
-            // }
-
             return ErrorScreen();
           },
         ),

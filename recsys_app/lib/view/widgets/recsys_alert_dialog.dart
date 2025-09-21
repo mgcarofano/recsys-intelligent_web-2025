@@ -66,20 +66,21 @@ class RecSysAlertDialog extends StatelessWidget {
           onPressed: onPressCancel ?? () => context.pop(),
           child: Text(cancelText ?? 'Annulla'),
         ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+        if (onPressConfirm != null)
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
             ),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            onPressed: onPressConfirm ?? () {},
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(confirmText ?? 'Si'),
+            ),
           ),
-          onPressed: onPressConfirm ?? () {},
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(confirmText ?? 'Si'),
-          ),
-        ),
       ],
     );
   }

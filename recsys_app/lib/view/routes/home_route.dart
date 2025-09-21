@@ -59,11 +59,6 @@ class _HomeRouteState extends State<HomeRoute> {
   }
 
   Future<List<Movie>> _getMovieRecommendations() async {
-    T? safeFirst<T>(List<T>? list) {
-      if (list == null || list.isEmpty) return null;
-      return list.first;
-    }
-
     List<Movie> list = List<Movie>.empty(growable: true);
     var data = await BaseClient.instance.getMovieRecommendations().catchError((
       err,
@@ -265,7 +260,6 @@ class _HomeRouteState extends State<HomeRoute> {
             case ConnectionState.active:
               return RecSysLoadingDialog(alertMessage: 'Caricamento...');
             case ConnectionState.done:
-              // return Placeholder();
               return LayoutBuilder(
                 builder: (context, constraints) {
                   final double cardWidth = 350;

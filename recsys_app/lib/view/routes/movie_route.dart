@@ -22,7 +22,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:knowledge_recsys/cache/poster_cache.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
-// import 'package:knowledge_recsys/services/base_client.dart';
+import 'package:knowledge_recsys/recsys_main.dart';
+import 'package:knowledge_recsys/view/widgets/recsys_alert_dialog.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 
 //	############################################################################
@@ -61,7 +62,7 @@ class _MovieRouteState extends State<MovieRoute> {
 
     if (data != null) {
       setState(() {
-        _moviePosterBytes = Uint8List.fromList(data!);
+        _moviePosterBytes = Uint8List.fromList(data);
         _isPosterLoading = false;
       });
       return;
@@ -134,12 +135,37 @@ class _MovieRouteState extends State<MovieRoute> {
     );
   }
 
+  Future<void> handleAppBarClick(MovieRouteAction action) async {
+    switch (action) {
+      case MovieRouteAction.showNerdStats:
+        showDialog(
+          context: context,
+          builder: (context) => RecSysAlertDialog(
+            topIcon: Icons.bar_chart,
+            alertTitle: 'Statistiche per nerd',
+            alertMessage: "...",
+            cancelText: "Ok",
+          ),
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: RecSysAppBar(title: "Movie info", alignment: Alignment.topLeft),
+      appBar: RecSysAppBar(
+        title: "Movie info",
+        alignment: Alignment.topLeft,
+        actions: [
+          IconButton(
+            onPressed: () => handleAppBarClick(MovieRouteAction.showNerdStats),
+            icon: const Icon(Icons.bar_chart),
+            tooltip: "Statistiche per nerd",
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -33,6 +33,8 @@ enum SyncState { synced, notSynced, offline, error }
 
 enum HomeRouteAction { openSettings, logout }
 
+enum MovieRouteAction { showNerdStats }
+
 //	############################################################################
 //	ALTRI METODI
 
@@ -42,6 +44,11 @@ List<dynamic> toList(String data) {
 
 Map<String, dynamic> toMap(String data) {
   return json.decode(data);
+}
+
+T? safeFirst<T>(List<T>? list) {
+  if (list == null || list.isEmpty) return null;
+  return list.first;
 }
 
 //	############################################################################
