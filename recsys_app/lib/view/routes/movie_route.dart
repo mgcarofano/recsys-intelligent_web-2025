@@ -156,7 +156,7 @@ class _MovieRouteState extends State<MovieRoute> {
 
     return Scaffold(
       appBar: RecSysAppBar(
-        title: "Movie info",
+        title: "Informazioni",
         alignment: Alignment.topLeft,
         actions: [
           IconButton(
