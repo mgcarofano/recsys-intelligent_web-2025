@@ -23,6 +23,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:knowledge_recsys/model/carousel_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
 import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
@@ -49,8 +50,9 @@ class HomeRoute extends StatefulWidget {
 }
 
 class _HomeRouteState extends State<HomeRoute> {
-  late Future<List<Movie>> movieRecommendations;
+  late Future<List<Carousel>> movieRecommendations;
   final Set<Movie> selectedMovies = {};
+  final expanded = List.filled(3, false);
 
   @override
   void initState() {
@@ -58,8 +60,7 @@ class _HomeRouteState extends State<HomeRoute> {
     movieRecommendations = _getMovieRecommendations();
   }
 
-  Future<List<Movie>> _getMovieRecommendations() async {
-    List<Movie> list = List<Movie>.empty(growable: true);
+  Future<List<Carousel>> _getMovieRecommendations() async {
     var data = await BaseClient.instance.getMovieRecommendations().catchError((
       err,
     ) {
@@ -79,42 +80,72 @@ class _HomeRouteState extends State<HomeRoute> {
     });
 
     // debugPrint("$data");
-    if (data == null) return List<Movie>.empty(growable: true);
+    if (data == null) return List<Carousel>.empty(growable: true);
 
-    for (String id in toList(data as String) as List<String>) {
-      String? movieInfo = await BaseClient.instance
-          .getMovieInfo(idMovie: id)
-          .catchError((_) => null);
+    List<Carousel> list = [];
+    final map = toMap(data);
 
-      // debugPrint("$id, ${movieInfo.runtimeType.toString()}, $movieInfo");
+    Future<List<Movie>> fetchMoviesFromIds(List<String> ids) async {
+      List<Movie> ret = [];
 
-      Map<String, dynamic> movieMap = toMap(movieInfo ?? '{}');
+      for (var id in ids) {
+        if (ret.any((movie) => movie.idMovie == id)) break;
 
-      final t = safeFirst(movieMap['title']);
-      final d = safeFirst(movieMap['description']);
+        String? movieInfo = await BaseClient.instance
+            .getMovieInfo(idMovie: id)
+            .catchError((_) => null);
 
-      Movie m = Movie(
-        idMovie: id,
-        title: t ?? "",
-        description: d ?? "",
-        actors: List<String>.from(movieMap['actors'] ?? []),
-        composers: List<String>.from(movieMap['composers'] ?? []),
-        directors: List<String>.from(movieMap['directors'] ?? []),
-        genres: List<String>.from(movieMap['genres'] ?? []),
-        producers: List<String>.from(movieMap['producers'] ?? []),
-        productionCompanies: List<String>.from(
-          movieMap['production_companies'] ?? [],
-        ),
-        subjects: List<String>.from(movieMap['subjects'] ?? []),
-        writers: List<String>.from(movieMap['writers'] ?? []),
-      );
+        Map<String, dynamic> movieMap = toMap(movieInfo ?? '{}');
 
-      if (!list.any((movie) => movie.idMovie == id)) {
-        list.add(m);
+        final t = safeFirst(movieMap['title']);
+        final d = safeFirst(movieMap['description']);
+
+        Movie m = Movie(
+          idMovie: id,
+          title: t ?? "",
+          description: d ?? "",
+          actors: List<String>.from(movieMap['actors'] ?? []),
+          composers: List<String>.from(movieMap['composers'] ?? []),
+          directors: List<String>.from(movieMap['directors'] ?? []),
+          genres: List<String>.from(movieMap['genres'] ?? []),
+          producers: List<String>.from(movieMap['producers'] ?? []),
+          productionCompanies: List<String>.from(
+            movieMap['production_companies'] ?? [],
+          ),
+          subjects: List<String>.from(movieMap['subjects'] ?? []),
+          writers: List<String>.from(movieMap['writers'] ?? []),
+        );
+
+        ret.add(m);
       }
+
+      return ret;
     }
 
-    // debugPrint(list.toString());
+    for (final entry in map.entries) {
+      final category = entry.key;
+      final features = Map<String, dynamic>.from(entry.value);
+
+      for (final featureEntry in features.entries) {
+        final featureName = featureEntry.key;
+        final ids = List<String>.from(featureEntry.value);
+
+        // debugPrint("${featureName.runtimeType.toString()}, $featureName");
+        debugPrint("${ids.runtimeType.toString()}, $ids, ${ids.length}");
+
+        final movies = await fetchMoviesFromIds(ids);
+
+        list.add(
+          Carousel(
+            category: category,
+            featureName: featureName,
+            movies: movies,
+          ),
+        );
+      }
+
+      // debugPrint(list.toString());
+    }
 
     return list;
   }
@@ -212,7 +243,6 @@ class _HomeRouteState extends State<HomeRoute> {
 
   @override
   Widget build(BuildContext context) {
-    const int totalCards = 15;
     const int maxColumns = 5;
 
     handleAppBarClick(HomeRouteAction action) async {
@@ -244,16 +274,16 @@ class _HomeRouteState extends State<HomeRoute> {
         ],
       ),
       resizeToAvoidBottomInset: false,
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: _refreshHomePage,
-        tooltip: 'Aggiorna',
-        child: const Icon(Icons.cloud_sync),
-      ),
-      body: FutureBuilder<List<Movie>>(
-        initialData: List<Movie>.empty(growable: true),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _refreshHomePage,
+      //   tooltip: 'Aggiorna',
+      //   child: const Icon(Icons.cloud_sync),
+      // ),
+      body: FutureBuilder<List<Carousel>>(
+        initialData: List<Carousel>.empty(growable: true),
         future: movieRecommendations,
-        builder: (BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<Carousel>> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
@@ -267,91 +297,89 @@ class _HomeRouteState extends State<HomeRoute> {
                       .floor()
                       .clamp(1, maxColumns);
 
-                  return Padding(
+                  return SingleChildScrollView(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       spacing: 20.0,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(snapshot.data!.length, (index) {
+                        final carousel = snapshot.data![index];
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: 10.0,
                           children: [
-                            Text(
-                              "Seleziona i film e poi premi il tasto in basso per aggiornare le tue preferenze.",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              spacing: 10.0,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  'Film selezionati: ${selectedMovies.length}',
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.titleMedium,
-                                ),
-                                TextButton.icon(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (selectedMovies.length ==
-                                          snapshot.data!.length)
-                                        selectedMovies.clear();
-                                      else
-                                        selectedMovies
-                                          ..clear()
-                                          ..addAll(snapshot.data!);
-                                    });
-                                  },
-                                  icon: Icon(
-                                    selectedMovies.length ==
-                                            snapshot.data!.length
-                                        ? Icons.clear_all
-                                        : Icons.select_all,
-                                  ),
-                                  label: Text(
-                                    selectedMovies.length ==
-                                            snapshot.data!.length
-                                        ? 'Deseleziona tutti'
-                                        : 'Seleziona tutti',
+                                Expanded(
+                                  child: Text(
+                                    "${carousel.category} - ${carousel.featureName}: ${carousel.movies.length}",
                                     style: Theme.of(
                                       context,
-                                    ).textTheme.titleSmall,
+                                    ).textTheme.headlineMedium,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
+                                if (carousel.movies.length > maxColumns)
+                                  TextButton.icon(
+                                    onPressed: () {
+                                      setState(() {
+                                        expanded[index] = !expanded[index];
+                                      });
+                                    },
+                                    icon: expanded[index]
+                                        ? Icon(Icons.expand_less)
+                                        : Icon(Icons.expand_more),
+                                    label: Text(
+                                      expanded[index]
+                                          ? "Mostra meno"
+                                          : "Mostra tutto",
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.headlineSmall,
+                                    ),
+                                  ),
                               ],
                             ),
-                          ],
-                        ),
-                        Expanded(
-                          child: GridView.builder(
-                            itemCount: min(snapshot.data!.length, totalCards),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: columns,
-                                  mainAxisSpacing: 32,
-                                  crossAxisSpacing: 32,
-                                  childAspectRatio: 5 / 5,
+                            if (!expanded[index])
+                              SizedBox(
+                                height: constraints.maxHeight * 0.4,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: min(
+                                    carousel.movies.length,
+                                    maxColumns,
+                                  ),
+                                  separatorBuilder: (_, __) =>
+                                      const SizedBox(width: 32),
+                                  itemBuilder: (context, i) {
+                                    final m = carousel.movies[i];
+                                    return RecSysMovieCard(movie: m);
+                                  },
                                 ),
-                            itemBuilder: (context, index) {
-                              final m = snapshot.data![index];
-                              final isSelected = selectedMovies.contains(m);
-
-                              return RecSysMovieCard(
-                                movie: m,
-                                isSelected: isSelected,
-                                onTap: () {
-                                  setState(() {
-                                    if (isSelected)
-                                      selectedMovies.remove(m);
-                                    else
-                                      selectedMovies.add(m);
-                                  });
+                              )
+                            else
+                              GridView.builder(
+                                itemCount: carousel.movies.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: columns,
+                                      mainAxisSpacing: 32,
+                                      crossAxisSpacing: 32,
+                                      childAspectRatio: 5 / 5,
+                                    ),
+                                itemBuilder: (context, i) {
+                                  final m = carousel.movies[i];
+                                  return RecSysMovieCard(movie: m);
                                 },
-                              );
-                            },
-                          ),
-                        ),
-                      ],
+                              ),
+                            const Divider(),
+                          ],
+                        );
+                      }),
                     ),
                   );
                 },
@@ -368,3 +396,4 @@ class _HomeRouteState extends State<HomeRoute> {
 
 //  https://stackoverflow.com/questions/68871880/do-not-use-buildcontexts-across-async-gaps
 //  https://api.flutter.dev/flutter/material/TextTheme-class.html
+//  https://stackoverflow.com/questions/65608681/how-to-create-an-empty-map-in-dart

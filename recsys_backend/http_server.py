@@ -24,13 +24,14 @@ import random
 import csv
 
 #	########################################################################	#
-#	COSTANTI e VARIABILI GLOBALI
+#	COSTANTI
 
 ADDRESS = '0.0.0.0'
 PORT = 8000
 TIMEOUT = 30
 
-MOVIE_RECOMMENDATIONS = 15
+SUBJECTS_SELECTION = 3
+MOVIE_RECOMMENDATIONS = 5
 
 POSTER_DIR = Path('./data/movie_posters')
 CSV_PATH_MAPPING = {
@@ -46,20 +47,49 @@ CSV_PATH_MAPPING = {
 	'writers': Path('./data/CSVs/movie_writers.csv'),
 }
 
+CATEGORIES = [
+	cat
+	for cat in CSV_PATH_MAPPING.keys()
+	if cat not in ['title', 'description']
+]
+
+#	########################################################################	#
+#	VARIABILI GLOBALI
+
+existing_movies = {}
+movies_features_map = {}
+
 #	########################################################################	#
 #	ALTRE FUNZIONI
 
 def get_movie_recommendations():
+    
+	recommendations = {}
 
-	with open(CSV_PATH_MAPPING['title'], newline='', encoding='utf-8') as f:
-		next(f) # Salta la prima riga (intestazione del file .csv).
-		reader = csv.DictReader(f, fieldnames=['movieId', 'value'])
-		existing_ids = [int(row['movieId']) for row in reader if row['movieId'].isdigit()]
+	# # Test
+	# selected_categories = ["actors", "directors"]
+	# available_features = {"Sylvester Stallone"}
 
-	selected_ids = random.sample(existing_ids, MOVIE_RECOMMENDATIONS)
-	ret = [str(i) for i in selected_ids]
-	
-	return ret
+	# Seleziona casualmente le categorie da raccomandare.
+	selected_categories = random.choices(CATEGORIES, k=SUBJECTS_SELECTION)
+
+	for cat in selected_categories:
+		
+		# Verifica che la categoria non sia vuota.
+		if movies_features_map[cat]:
+
+			# Estrai solo le feature che non sono ancora state scelte per quella categoria.
+			available_features = set(movies_features_map[cat].keys()) - set(recommendations.get(cat, {}).keys())
+
+			if available_features:
+
+				# Seleziona casualmente le features da raccomandare.
+				feature = random.choice(list(available_features))
+
+				# Aggiorna la raccomandazione con la lista di film relativa alla feature della categoria selezionata.
+				recommendations.setdefault(cat, {})[feature] = movies_features_map[cat][feature]
+
+	return recommendations
 
 	# end
 
@@ -86,8 +116,47 @@ class UserPreferences:
 class RecSys_HTTPServer:
 
 	def __init__(self):
-		RecSys_RequestHandler.user_prefs = UserPreferences()
 
+		#	################################################################	#
+		#	ANALISI DEL DATASET
+
+		# Recupera tutti gli ID dei movie dal dataset.
+		with open(CSV_PATH_MAPPING['title'], newline='', encoding='utf-8') as f:
+			
+			# Salta la prima riga (intestazione del file .csv).
+			next(f)
+
+			reader = csv.DictReader(f, fieldnames=['movieId', 'value'])
+			existing_movies = {row['movieId'] for row in reader if row['movieId'].isdigit()}
+
+		# Recupera tutti le voci di tutte le categorie dei movie dal dataset (es. actors, composers, ...)
+		# La struttura del dizionario è: categoria -> feature -> lista di id.
+		for cat in CATEGORIES:
+			features = {}
+			with open(CSV_PATH_MAPPING[cat], newline='', encoding='utf-8') as f:
+				next(f)
+				reader = csv.DictReader(f, fieldnames=['movieId', 'value'])
+				for row in reader:
+					m_id, feat = row['movieId'], row['value']
+					if cat == "genres" and row['value'] == "(no genres listed)":
+						break
+					if m_id in existing_movies and feat:
+						features.setdefault(feat, set()).add(m_id)
+
+				# Filtra le features più importanti.
+				filtered_features = {
+					feat: sorted(list(films))
+					for feat, films in features.items() if len(films) >= MOVIE_RECOMMENDATIONS
+				}
+
+				# Aggiungi la categoria solo se non è vuota.
+				if filtered_features:
+					movies_features_map[cat] = filtered_features
+
+		#	################################################################	#
+		#	INIZIALIZZAZIONE ED ESECUZIONE DEL SERVER
+
+		RecSys_RequestHandler.user_prefs = UserPreferences()
 		server = HTTPServer((ADDRESS, PORT), RecSys_RequestHandler)
 		print("Server in esecuzione su " + str(ADDRESS) + ":" + str(PORT) + "...")
 

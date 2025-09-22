@@ -38,14 +38,14 @@ import 'package:soft_edge_blur/soft_edge_blur.dart';
 
 class RecSysMovieCard extends StatefulWidget {
   final Movie movie;
-  final bool isSelected;
-  final VoidCallback onTap;
+  final bool? isSelected;
+  final VoidCallback? onTap;
 
   const RecSysMovieCard({
     super.key,
     required this.movie,
-    required this.isSelected,
-    required this.onTap,
+    this.isSelected,
+    this.onTap,
   });
 
   @override
@@ -309,16 +309,16 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onTap,
+      onTap: widget.onTap ?? () {},
       child: AnimatedScale(
-        scale: widget.isSelected ? (1.0 - _scaleReductionFactor) : 1.0,
+        scale: widget.isSelected ?? false ? (1.0 - _scaleReductionFactor) : 1.0,
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInOut,
         child: Material(
           elevation: 4,
           shape: RoundedSuperellipseBorder(
             borderRadius: BorderRadius.circular(24),
-            side: widget.isSelected
+            side: widget.isSelected ?? false
                 ? BorderSide(
                     color: Theme.of(context).colorScheme.primary,
                     width: 5,
