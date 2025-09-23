@@ -13,11 +13,45 @@
 //	############################################################################
 //	LIBRERIE
 
+import 'package:knowledge_recsys/recsys_main.dart';
+import 'package:knowledge_recsys/services/base_client.dart';
+
 //	############################################################################
 //	COSTANTI e VARIABILI
 
 //	############################################################################
 //	ALTRI METODI
+
+Future<List<Movie>> fetchMoviesFromIds(List<String> ids) async {
+  final ret = ids.toSet().map((id) async {
+    String? movieInfo = await BaseClient.instance
+        .getMovieInfo(idMovie: id)
+        .catchError((_) => null);
+
+    Map<String, dynamic> movieMap = toMap(movieInfo ?? '{}');
+
+    final t = safeFirst(movieMap['title']);
+    final d = safeFirst(movieMap['description']);
+
+    return Movie(
+      idMovie: id,
+      title: t ?? "",
+      description: d ?? "",
+      actors: List<String>.from(movieMap['actors'] ?? []),
+      composers: List<String>.from(movieMap['composers'] ?? []),
+      directors: List<String>.from(movieMap['directors'] ?? []),
+      genres: List<String>.from(movieMap['genres'] ?? []),
+      producers: List<String>.from(movieMap['producers'] ?? []),
+      productionCompanies: List<String>.from(
+        movieMap['production_companies'] ?? [],
+      ),
+      subjects: List<String>.from(movieMap['subjects'] ?? []),
+      writers: List<String>.from(movieMap['writers'] ?? []),
+    );
+  }).toList();
+
+  return (await Future.wait(ret)).whereType<Movie>().toList();
+}
 
 //	############################################################################
 //	CLASSI e ROUTE
