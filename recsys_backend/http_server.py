@@ -56,7 +56,6 @@ CATEGORIES = [
 #	########################################################################	#
 #	VARIABILI GLOBALI
 
-existing_movies = {}
 movies_features_map = {}
 
 #	########################################################################	#
@@ -120,15 +119,6 @@ class RecSys_HTTPServer:
 		#	################################################################	#
 		#	ANALISI DEL DATASET
 
-		# Recupera tutti gli ID dei movie dal dataset.
-		with open(CSV_PATH_MAPPING['title'], newline='', encoding='utf-8') as f:
-			
-			# Salta la prima riga (intestazione del file .csv).
-			next(f)
-
-			reader = csv.DictReader(f, fieldnames=['movieId', 'value'])
-			existing_movies = {row['movieId'] for row in reader if row['movieId'].isdigit()}
-
 		# Recupera tutti le voci di tutte le categorie dei movie dal dataset (es. actors, composers, ...)
 		# La struttura del dizionario è: categoria -> feature -> lista di id.
 		for cat in CATEGORIES:
@@ -140,7 +130,8 @@ class RecSys_HTTPServer:
 					m_id, feat = row['movieId'], row['value']
 					if cat == "genres" and row['value'] == "(no genres listed)":
 						break
-					if m_id in existing_movies and feat:
+					if m_id and m_id.isdigit() and feat:
+						# Aggiunge il movieId se esiste ed è corretto.
 						features.setdefault(feat, set()).add(m_id)
 
 				# Filtra le features più importanti.
