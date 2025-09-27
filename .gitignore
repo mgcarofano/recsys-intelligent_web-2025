@@ -2,4 +2,6 @@ venv/
 /_old
 /_altro
 recsys_backend/data/ratings_complemented.csv
-.gitignore
+/_documentazione
+recsys_backend/data/movie_cosine_similarity.npy
+recsys_backend/data/movie_cosine_similarity.npz
