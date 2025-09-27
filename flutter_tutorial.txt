@@ -1,0 +1,9 @@
+# Check flutter status
+flutter doctor
+
+# run backend (in backend folder)
+python http_server.py
+
+# run lib/recsys_main.dart (first enter recsys_app folder)
+flutter run -t lib/recsys_main.dart
+

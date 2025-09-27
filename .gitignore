@@ -1,3 +1,5 @@
 venv/
 /_old
 /_altro
+recsys_backend/data/ratings_complemented.csv
+.gitignore
