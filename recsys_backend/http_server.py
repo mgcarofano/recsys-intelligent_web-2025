@@ -57,9 +57,42 @@ CATEGORIES = [
 #	VARIABILI GLOBALI
 
 movies_features_map = {}
+user_id = 0
 
 #	########################################################################	#
 #	ALTRE FUNZIONI
+
+def compute_movie_features_ratings():
+	pass
+
+	#	1. recuperare l'id dell'utente U (controlla if u == 0)
+	#	2. unire ratings calcolati e assegnati da U (dim. Mx1)
+	#	3. calcolare hadamard prodotto di M (ratings) moltiplicato M*F (matrice movies-features)
+	#	4a. calcolare la media sulla matrice M*F per ogni feature -> vettore 1xF
+	#	4b. calcolare la media sulla matrice M*F per ogni feature -> vettore Mx1
+
+	# end
+
+def extract_user_top_features():
+	pass
+
+	# if cat == "genres" and row['value'] == "(no genres listed)":
+
+	# # Filtra le features più importanti.
+	# filtered_features = {
+	# 	feat: sorted(list(films))
+	# 	for feat, films in features.items() if len(films) >= MOVIE_RECOMMENDATIONS
+	# }
+	
+	#	5. ordinare il vettore 1xF dei rating sulle features
+	#	6. accedere a vector_index.csv e ritornare un vettore di 3 features (id, category, name, rank)
+
+	# end
+
+def extract_xxx():
+	pass
+
+	# end
 
 def get_movie_recommendations():
     
@@ -95,23 +128,6 @@ def get_movie_recommendations():
 #	########################################################################	#
 #	CLASSI
 
-class UserPreferences:
-	id_movies = []
-
-	def __str__(self) -> str:
-		return f'''
-		
-		--- USER PREFERENCES ---
-
-			prefs: {self.id_movies}
-
-		-----
-		'''
-
-		# end
-
-	# end class
-
 class RecSys_HTTPServer:
 
 	def __init__(self):
@@ -128,26 +144,17 @@ class RecSys_HTTPServer:
 				reader = csv.DictReader(f, fieldnames=['movieId', 'value'])
 				for row in reader:
 					m_id, feat = row['movieId'], row['value']
-					if cat == "genres" and row['value'] == "(no genres listed)":
-						break
 					if m_id and m_id.isdigit() and feat:
 						# Aggiunge il movieId se esiste ed è corretto.
 						features.setdefault(feat, set()).add(m_id)
 
-				# Filtra le features più importanti.
-				filtered_features = {
-					feat: sorted(list(films))
-					for feat, films in features.items() if len(films) >= MOVIE_RECOMMENDATIONS
-				}
-
 				# Aggiungi la categoria solo se non è vuota.
-				if filtered_features:
-					movies_features_map[cat] = filtered_features
+				if features:
+					movies_features_map[cat] = features
 
 		#	################################################################	#
 		#	INIZIALIZZAZIONE ED ESECUZIONE DEL SERVER
 
-		RecSys_RequestHandler.user_prefs = UserPreferences()
 		server = HTTPServer((ADDRESS, PORT), RecSys_RequestHandler)
 		print("Server in esecuzione su " + str(ADDRESS) + ":" + str(PORT) + "...")
 
@@ -166,8 +173,6 @@ class RecSys_HTTPServer:
 	# end class
 
 class RecSys_RequestHandler(BaseHTTPRequestHandler):
-
-	user_prefs = None
 
 	def _send_cors_headers(self):
 		self.send_header('Access-Control-Allow-Origin', '*')
@@ -315,9 +320,8 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 	def do_POST(self):
 		
 		try:
-
-			if urlparse(self.path).path.endswith('/update-preferences'):
-				# Content-type, Parameter dictionary
+				
+			if urlparse(self.path).path.endswith('/update-user'):
 				ctype = self.headers.get('Content-Type')
 				content_len = int(self.headers.get('Content-Length', 0))
 
@@ -329,30 +333,65 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					return
 					
 				body = self.rfile.read(content_len).decode('utf-8')
-				data = json.loads(body)['idMovies']
-				print(data)
+				data = json.loads(body)
+				# print(data)
 
-				if not isinstance(data, list) or not all(isinstance(i, str) for i in data):
-					self.send_response(400, 'Il payload deve essere una lista di stringhe.') # BAD REQUEST
+				if not isinstance(data, int):
+					self.send_response(400, 'Il payload deve essere un intero.') # BAD REQUEST
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
-				
-				self.user_prefs.id_movies = data
 
-				self.send_response(201, 'Preferenze aggiornate con successo!') # CREATED
+				user_id = data
+
+				self.send_response(201, 'Utente loggato con successo!') # CREATED
 				self._send_cors_headers()
 				self.end_headers()
-				print(str(self.user_prefs))
+				# print(str(self.user_prefs))
+				return
+
+				# end if '/update-user'
+
+			# if urlparse(self.path).path.endswith('/update-preferences'):
+			# 	# Content-type, Parameter dictionary
+			# 	ctype = self.headers.get('Content-Type')
+			# 	content_len = int(self.headers.get('Content-Length', 0))
+
+			# 	if not ctype == 'application/json':
+			# 		self.send_response(400, 'Il "content-type" non è application/json.') # BAD REQUEST
+			# 		self._send_cors_headers()
+			# 		self.send_header('Content-type', 'text/plain')
+			# 		self.end_headers()
+			# 		return
+					
+			# 	body = self.rfile.read(content_len).decode('utf-8')
+			# 	data = json.loads(body)
+			# 	# print(data)
+
+			# 	if not isinstance(data, list) or not all(isinstance(i, str) for i in data):
+			# 		self.send_response(400, 'Il payload deve essere una lista di stringhe.') # BAD REQUEST
+			# 		self._send_cors_headers()
+			# 		self.send_header('Content-type', 'text/plain')
+			# 		self.end_headers()
+			# 		return
 				
-				# end if '/update-preferences'
+			# 	self.user_prefs.id_movies = data
+
+			# 	self.send_response(201, 'Preferenze aggiornate con successo!') # CREATED
+			# 	self._send_cors_headers()
+			# 	self.end_headers()
+			# 	# print(str(self.user_prefs))
+			# 	return
+				
+			# 	# end if '/update-preferences'
 			
 			else:
 				self.send_response(404, 'Impossibile eseguire tale richiesta.') # NOT FOUND
 				self._send_cors_headers()
 				self.send_header('Content-type', 'text/plain')
 				self.end_headers()
+				return
 
 				# end
 
@@ -361,6 +400,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 			self._send_cors_headers()
 			self.send_header('Content-type', 'text/plain')
 			self.end_headers()
+			return
 
 		# end
 
