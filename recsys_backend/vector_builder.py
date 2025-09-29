@@ -20,9 +20,9 @@ metadata_files = {
 }
 
 # === Step 1: Load all movie IDs ===
-movies_csv = os.path.join(BASE_FOLDER, "ml-latest-small", "movies.csv")
+movies_csv = os.path.join(BASE_FOLDER, "CSVs", "existing_movies.csv")
 movies_df = pd.read_csv(movies_csv)
-movie_ids = movies_df['movieId'].astype(str).tolist()
+movie_ids = movies_df['movieID'].astype(str).tolist()
 movie_id_to_index = {mid: i for i, mid in enumerate(movie_ids)}
 print(f"Loaded {len(movie_ids)} movies.")
 
@@ -72,12 +72,18 @@ output_matrix_path = os.path.join(BASE_FOLDER, "movie_vectors_sparse.npz")
 save_npz(output_matrix_path, sparse_matrix.tocsr())
 print(f"Saved sparse matrix to {output_matrix_path}")
 
-# Creo DataFrame con dimension, feature e categoria
+# Creo feature index csv
 index_df = pd.DataFrame({
-    "feature_id": range(1, num_features + 1),
+    "feature_id": range(num_features),
     "category": [f[0] for f in unique_features],
     "feature": [f[1] for f in unique_features]
 })
-index_csv_path = os.path.join(BASE_FOLDER, "vector_index.csv")
+index_csv_path = os.path.join(BASE_FOLDER, "feature_index.csv")
 index_df.to_csv(index_csv_path, index=False, quotechar="'")
 print(f"Saved feature index (with categories) to {index_csv_path}")
+
+# Creo movie index csv
+index_csv_path = os.path.join(BASE_FOLDER, "movie_index.csv")
+df = pd.DataFrame(list(movie_id_to_index.items()), columns=["movie_id", "matrix_id"])
+df.to_csv(index_csv_path, index=False, quotechar="'")
+print(f"Saved movie index to {index_csv_path}")

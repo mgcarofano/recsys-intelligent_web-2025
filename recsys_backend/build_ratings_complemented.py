@@ -6,9 +6,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # === CONFIGURATION ===
 BASE_FOLDER = "/home/olexandro/IW_Project/recsys-intelligent_web-2025/recsys_backend/data"
-ratings_path = os.path.join(BASE_FOLDER, "ml-latest-small", "ratings.csv")
+ratings_path = os.path.join(BASE_FOLDER, "CSVs", "existing_ratings.csv")
 similarity_matrix_path = os.path.join(BASE_FOLDER, "movie_cosine_similarity.npz")
-movies_path = os.path.join(BASE_FOLDER, "ml-latest-small", "movies.csv")
+movies_path = os.path.join(BASE_FOLDER, "CSVs", "existing_movies.csv")
 
 output_path = os.path.join(BASE_FOLDER, "ratings_complemented.csv")
 
@@ -19,7 +19,7 @@ movies_df = pd.read_csv(movies_path)
 
 # Usiamo direttamente i movieId come indici nella matrice di similarità
 X = load_npz(os.path.join(BASE_FOLDER, "movie_vectors_sparse.npz"))
-movie_ids = movies_df['movieId'].astype(int).tolist()
+movie_ids = movies_df['movieID'].astype(int).tolist()
 sim_matrix = cosine_similarity(X, dense_output=True)
 sim_df = pd.DataFrame(sim_matrix, index=movie_ids, columns=movie_ids)
 
@@ -44,20 +44,25 @@ for user_id, group in ratings_df.groupby("userId"):
             # Già valutato → manteniamo il voto originale
             # complemented_rows.append((user_id, mid, user_ratings[mid]))
         if mid not in user_ratings:
-            # Se non valutato → prediciamo la valutazione
-            sims = sim_df.loc[mid, rated_idx].values
-            votes = np.array([user_ratings[m] for m in rated_movies])
+            # try:
+                # Se non valutato → prediciamo la valutazione
+                sims = sim_df.loc[mid, rated_idx].values
+                votes = np.array([user_ratings[m] for m in rated_movies])
 
-            if sims.sum() > 0:
-                # se la similarità è positiva, allora avremo un valore coerente
-                pred = np.dot(sims, votes) / sims.sum()
-            else:
-                # se la similarità è non positiva, allora scegliamo un valore medio e se non è positivo allora si pone il ranking minimo (pari a 1)
-                pred = np.mean(rated_ratings) if len(rated_ratings) > 0 else 0.5  # fallback
+                if sims.sum() > 0:
+                    # se la similarità è positiva, allora avremo un valore coerente
+                    pred = np.dot(sims, votes) / sims.sum()
+                else:
+                    # se la similarità è non positiva, allora scegliamo un valore medio e se non è positivo allora si pone il ranking minimo (pari a 1)
+                    pred = np.mean(rated_ratings) if len(rated_ratings) > 0 else 0.5  # fallback
 
-            # Clipping tra 1 e 5
-            pred = float(np.clip(pred, 1.0, 5.0))
-            complemented_rows.append((user_id, mid, pred))
+                # Clipping tra 1 e 5
+                pred = float(np.clip(pred, 1.0, 5.0))
+                complemented_rows.append((user_id, mid, pred))
+            # except KeyError:
+            #     if mid < 1000:
+            #         print(f"skipped m_id = {mid}")
+            #     continue
     # Salva l'output in "ratings_complemented/ratings_complemented_user_user_id"
     output_path_user = os.path.join(BASE_FOLDER, "ratings_complemented", f"ratings_complemented_user_{user_id}.csv")
     comp_df = pd.DataFrame(complemented_rows, columns=["userId", "movieId", "rating"])
