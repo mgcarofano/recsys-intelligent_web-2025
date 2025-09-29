@@ -21,7 +21,11 @@ from pathlib import Path
 from time import sleep
 
 import random
+
 import csv
+import numpy as np
+import pandas as pd
+from scipy.sparse import load_npz
 
 #	########################################################################	#
 #	COSTANTI
@@ -57,15 +61,41 @@ CATEGORIES = [
 #	VARIABILI GLOBALI
 
 movies_features_map = {}
-user_id = 0
+user_id = 1
 
 #	########################################################################	#
 #	ALTRE FUNZIONI
 
 def compute_movie_features_ratings():
-	pass
 
-	#	1. recuperare l'id dell'utente U (controlla if u == 0)
+	# 1. Carico la matrice film-features (M×F)
+	movie_features = load_npz('./data/movie_vectors_sparse.npz').toarray()  # M x F
+	mapping_df = pd.read_csv('./data/movie_index.csv')
+	movie_id_to_index = dict(zip(mapping_df['movieId'], mapping_df['matrix_id']))
+	M, F = movie_features.shape
+
+	# 2. Carico i rating dell'utente: reali e predetti
+	existing_ratings = pd.read_csv('./data/CSVs/existing_ratings.csv')
+	user_existing = existing_ratings[existing_ratings["userId"] == user_id][["movieId", "rating"]]
+	ratings_complemented = pd.read_csv('./data/ratings_complemented/ratings_complemented_user_' + str(user_id) + '.csv')
+
+	# prendo solo le valutazioni dell'utente
+	# user_complemented = ratings_complemented[["movieId", "rating"]]
+	user_complemented = ratings_complemented.set_index("movieId")["rating"].to_dict()
+
+	
+
+	# 3. Hadamard product: rating (M×1) * features (M×F)
+	weighted_matrix = ratings_vector * movie_features  # broadcasting M×1 con M×F
+
+	# 4a. Media per feature (1×F)
+	feature_means = weighted_matrix.mean(axis=0)
+
+	# 4b. Media per film (M×1)
+	movie_means = weighted_matrix.mean(axis=1)
+
+	return feature_means, movie_means
+
 	#	2. unire ratings calcolati e assegnati da U (dim. Mx1)
 	#	3. calcolare hadamard prodotto di M (ratings) moltiplicato M*F (matrice movies-features)
 	#	4a. calcolare la media sulla matrice M*F per ogni feature -> vettore 1xF
@@ -74,7 +104,8 @@ def compute_movie_features_ratings():
 	# end
 
 def extract_user_top_features():
-	pass
+	
+	print(compute_movie_features_ratings())
 
 	# if cat == "genres" and row['value'] == "(no genres listed)":
 
@@ -157,6 +188,8 @@ class RecSys_HTTPServer:
 
 		server = HTTPServer((ADDRESS, PORT), RecSys_RequestHandler)
 		print("Server in esecuzione su " + str(ADDRESS) + ":" + str(PORT) + "...")
+		extract_user_top_features()
+		return
 
 		try:
 			server.serve_forever()
