@@ -67,34 +67,56 @@ user_id = 1
 #	ALTRE FUNZIONI
 
 def compute_movie_features_ratings():
+		# 1) Matrice film-features (M x F) e mapping
+    movie_features = load_npz('./data/movie_vectors_sparse.npz').toarray()  # M x F
+    mapping_df = pd.read_csv('./data/movie_index.csv')
+    # Assicuriamoci che i tipi siano interi
+    mapping_df['movie_id'] = mapping_df['movie_id'].astype(int)
+    mapping_df['matrix_id'] = mapping_df['matrix_id'].astype(int)
+    movie_id_to_index = dict(zip(mapping_df['movie_id'], mapping_df['matrix_id']))
+    M, F = movie_features.shape
 
-	# 1. Carico la matrice film-features (M×F)
-	movie_features = load_npz('./data/movie_vectors_sparse.npz').toarray()  # M x F
-	mapping_df = pd.read_csv('./data/movie_index.csv')
-	movie_id_to_index = dict(zip(mapping_df['movieId'], mapping_df['matrix_id']))
-	M, F = movie_features.shape
+    # 2a) Rating reali (tutti gli utenti) -> prendiamo solo quelli dell'user
+    ratings_df = pd.read_csv('./data/ml-latest-small/ratings.csv')
+    user_existing = ratings_df[ratings_df["userId"] == user_id][["movieId", "rating"]]
 
-	# 2. Carico i rating dell'utente: reali e predetti
-	existing_ratings = pd.read_csv('./data/CSVs/existing_ratings.csv')
-	user_existing = existing_ratings[existing_ratings["userId"] == user_id][["movieId", "rating"]]
-	ratings_complemented = pd.read_csv('./data/ratings_complemented/ratings_complemented_user_' + str(user_id) + '.csv')
+    # 2b) Rating complementati (file per user). Se non esiste, consideriamo vuoto.
+    comp_path = f'./data/ratings_complemented/ratings_complemented_user_{user_id}.csv'
+    if os.path.exists(comp_path):
+        ratings_complemented = pd.read_csv(comp_path)
+    else:
+        # file complementati non trovato: trattiamo come vuoto
+        ratings_complemented = pd.DataFrame(columns=["movieId", "rating"])
 
-	# prendo solo le valutazioni dell'utente
-	# user_complemented = ratings_complemented[["movieId", "rating"]]
-	user_complemented = ratings_complemented.set_index("movieId")["rating"].to_dict()
+    # 2c) Dizionari {movieId: rating}
+    # Attenzione ai tipi
+    real_ratings = dict(zip(user_existing['movieId'].astype(int), user_existing['rating'].astype(float)))
+    comp_ratings = dict(zip(ratings_complemented['movieId'].astype(int), ratings_complemented['rating'].astype(float)))
 
-	
+    # 3) UNIONE (disgiunta). Se dovesse esserci overlap, il rating reale sovrascrive.
+    overlap = set(real_ratings.keys()) & set(comp_ratings.keys())
+    if overlap:
+        # avviso utile in caso di dati non disgiunti
+        print(f"[compute_movie_features_ratings] Warning: overlap found for user {user_id} on movieIds: {sorted(overlap)}. Real ratings will override complemented.")
+    all_ratings = comp_ratings.copy()   # prima complementati
+    all_ratings.update(real_ratings)    # poi i reali (sovrascrivono se necessario)
 
-	# 3. Hadamard product: rating (M×1) * features (M×F)
-	weighted_matrix = ratings_vector * movie_features  # broadcasting M×1 con M×F
+    # 3 (cont.) -> costruisco ratings_vector (lunghezza M) allineato alla matrix_id
+    ratings_vector = np.zeros(M, dtype=float)  # vettore 1D: indices 0..M-1
+    for movie_id, rating in all_ratings.items():
+        idx = movie_id_to_index.get(movie_id)
+        ratings_vector[idx] = rating
 
-	# 4a. Media per feature (1×F)
-	feature_means = weighted_matrix.mean(axis=0)
+    # 4) Hadamard product: (M,) -> reshape (M,1) per broadcasting con (M,F)
+    weighted_matrix = ratings_vector.reshape(M, 1) * movie_features  # risultato M x F
 
-	# 4b. Media per film (M×1)
-	movie_means = weighted_matrix.mean(axis=1)
+    # 5a) Media per feature (1 x F)
+    feature_means = weighted_matrix.mean(axis=0)   # shape (F,)
 
-	return feature_means, movie_means
+    # 5b) Media per film (M x 1)
+    movie_means = weighted_matrix.mean(axis=1)     # shape (M,)
+
+    return feature_means, movie_means
 
 	#	2. unire ratings calcolati e assegnati da U (dim. Mx1)
 	#	3. calcolare hadamard prodotto di M (ratings) moltiplicato M*F (matrice movies-features)
@@ -104,8 +126,9 @@ def compute_movie_features_ratings():
 	# end
 
 def extract_user_top_features():
-	
+
 	print(compute_movie_features_ratings())
+	print("OK: feature and movie ratings extracted!")
 
 	# if cat == "genres" and row['value'] == "(no genres listed)":
 
@@ -114,7 +137,7 @@ def extract_user_top_features():
 	# 	feat: sorted(list(films))
 	# 	for feat, films in features.items() if len(films) >= MOVIE_RECOMMENDATIONS
 	# }
-	
+
 	#	5. ordinare il vettore 1xF dei rating sulle features
 	#	6. accedere a vector_index.csv e ritornare un vettore di 3 features (id, category, name, rank)
 
@@ -126,7 +149,7 @@ def extract_xxx():
 	# end
 
 def get_movie_recommendations():
-    
+
 	recommendations = {}
 
 	# # Test
@@ -137,7 +160,7 @@ def get_movie_recommendations():
 	selected_categories = random.choices(CATEGORIES, k=SUBJECTS_SELECTION)
 
 	for cat in selected_categories:
-		
+
 		# Verifica che la categoria non sia vuota.
 		if movies_features_map[cat]:
 
@@ -224,7 +247,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 		self._send_cors_headers()
 		self.end_headers()
 		# end
-	
+
 	def do_GET(self):
 
 		try:
@@ -240,7 +263,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				self.wfile.write(output.encode(encoding='utf_8'))
 
 				# end if '/get-recommendations'
-			
+
 			elif urlparse(self.path).path.endswith('/download-movie-poster'):
 				selected_id = dict(parse_qsl(urlparse(self.path).query))['id']
 
@@ -250,7 +273,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
-				
+
 				file_name_path = None
 
 				for file in POSTER_DIR.glob("*.jpg"):
@@ -270,13 +293,13 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.send_header('Content-type', 'image/jpeg')
 					self.end_headers()
 					self.wfile.write(f.read())
-				
+
 				# end if '/download-movie-poster'
-			
+
 			elif urlparse(self.path).path.endswith('/get-movie-info'):
 				params = dict(parse_qsl(urlparse(self.path).query))
 				selected_id = params['id']
-				
+
 				if 'type' in params.keys():
 					selected_type = params['type']
 					if selected_type not in CSV_PATH_MAPPING:
@@ -292,9 +315,9 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
-				
+
 				results = {}
-				
+
 				for key, path in CSV_PATH_MAPPING.items():
 					if 'selected_type' in locals() and selected_type != key:
 						continue
@@ -310,13 +333,13 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 								info_values.append(row['value'])
 							elif collecting:
 								break
-						
+
 						if info_values:
 							results[key] = info_values
-					
+
 					if 'selected_type' in locals() and selected_type == key:
 						break
-				
+
 				if not results:
 					self.send_response(404, f'Informazione "{selected_type}" non trovata per movie "{selected_id}"') # NOT FOUND
 					self._send_cors_headers()
@@ -331,9 +354,9 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				self.send_header('Content-type', 'application/json')
 				self.end_headers()
 				self.wfile.write(output.encode(encoding='utf_8'))
-				
+
 				# end if '/get-movie-info'
-			
+
 			else:
 				self.send_response(404, 'Impossibile eseguire tale richiesta.') # NOT FOUND
 				self._send_cors_headers()
@@ -347,13 +370,13 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 			self._send_cors_headers()
 			self.send_header('Content-type', 'text/plain')
 			self.end_headers()
-	
+
 		# end
 
 	def do_POST(self):
-		
+
 		try:
-				
+
 			if urlparse(self.path).path.endswith('/update-user'):
 				ctype = self.headers.get('Content-Type')
 				content_len = int(self.headers.get('Content-Length', 0))
@@ -364,7 +387,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
-					
+
 				body = self.rfile.read(content_len).decode('utf-8')
 				data = json.loads(body)
 				# print(data)
@@ -397,7 +420,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 			# 		self.send_header('Content-type', 'text/plain')
 			# 		self.end_headers()
 			# 		return
-					
+
 			# 	body = self.rfile.read(content_len).decode('utf-8')
 			# 	data = json.loads(body)
 			# 	# print(data)
@@ -408,7 +431,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 			# 		self.send_header('Content-type', 'text/plain')
 			# 		self.end_headers()
 			# 		return
-				
+
 			# 	self.user_prefs.id_movies = data
 
 			# 	self.send_response(201, 'Preferenze aggiornate con successo!') # CREATED
@@ -416,9 +439,9 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 			# 	self.end_headers()
 			# 	# print(str(self.user_prefs))
 			# 	return
-				
+
 			# 	# end if '/update-preferences'
-			
+
 			else:
 				self.send_response(404, 'Impossibile eseguire tale richiesta.') # NOT FOUND
 				self._send_cors_headers()
