@@ -79,7 +79,7 @@ index_df = pd.DataFrame({
     "feature": [f[1] for f in unique_features]
 })
 index_csv_path = os.path.join(BASE_FOLDER, "feature_index.csv")
-index_df.to_csv(index_csv_path, index=False, quotechar="'")
+index_df.to_csv(index_csv_path, index=False)
 print(f"Saved feature index (with categories) to {index_csv_path}")
 
 # Creo movie index csv

@@ -1,42 +1,42 @@
 feature_id,category,feature
-0,actor,"""Weird Al"" Yankovic"
-1,actor,'"Atsushi Watanabe (actor, born 1898)"'
-2,actor,"Billy ""Green"" Bush"
-3,actor,'"Brad Johnson (actor, born 1959)"'
-4,actor,'"Chin Han (actor, born 1969)"'
-5,actor,'"Clifton Collins, Jr."'
-6,actor,"Curtis ""50 Cent"" Jackson"
-7,actor,'"Damon Wayans, Jr."'
-8,actor,'"Ed Begley, Jr."'
-9,actor,'"Elisha Cook, Jr."'
-10,actor,'"Freddie Prinze, Jr."'
-11,actor,"Gary ""Litefoot"" Davis"
-12,actor,"George ""Buck"" Flower"
-13,actor,'"Harry Shum, Jr."'
-14,actor,'"Ian Nelson (actor, born 1995)"'
-15,actor,'"Jane Adams (actress, born 1965)"'
-16,actor,'"Jason Davis (actor, born 1984)"'
-17,actor,'"Jeff Richards (actor, born 1924)"'
-18,actor,'"Jeremy Jordan (actor, born 1984)"'
-19,actor,'"Jeremy Jordan (singer, born 1973)"'
-20,actor,'"John Gallagher, Jr."'
-21,actor,'"Kim Min-hee (actress, born 1982)"'
-22,actor,'"Lon Chaney, Jr."'
-23,actor,'"Marsha Hunt (actress, born 1946)"'
-24,actor,'"Meghan, Duchess of Sussex"'
-25,actor,'"Michael Anderson, Jr."'
-26,actor,'"Nick Adams (actor, born 1931)"'
-27,actor,'"Peyton List (actress, born 1998)"'
-28,actor,"Randall ""Tex"" Cobb"
-29,actor,'"Richard Speight, Jr."'
-30,actor,'"Robert Walker (actor, born 1918)"'
-31,actor,'"Shōgo Suzuki (actor, born 1963)"'
-32,actor,"Steve ""Lips"" Kudlow"
-33,actor,"Timothy ""Speed"" Levitch"
-34,actor,"Tip ""T.I."" Harris"
-35,actor,"Troy ""Trombone Shorty"" Andrews"
-36,actor,'"Victor Wong (actor, born 1927)"'
-37,actor,'"Will Kemp (actor, born 1977)"'
+0,actor,"""""""Weird Al"""" Yankovic"""
+1,actor,"""Atsushi Watanabe (actor, born 1898)"""
+2,actor,"""Billy """"Green"""" Bush"""
+3,actor,"""Brad Johnson (actor, born 1959)"""
+4,actor,"""Chin Han (actor, born 1969)"""
+5,actor,"""Clifton Collins, Jr."""
+6,actor,"""Curtis """"50 Cent"""" Jackson"""
+7,actor,"""Damon Wayans, Jr."""
+8,actor,"""Ed Begley, Jr."""
+9,actor,"""Elisha Cook, Jr."""
+10,actor,"""Freddie Prinze, Jr."""
+11,actor,"""Gary """"Litefoot"""" Davis"""
+12,actor,"""George """"Buck"""" Flower"""
+13,actor,"""Harry Shum, Jr."""
+14,actor,"""Ian Nelson (actor, born 1995)"""
+15,actor,"""Jane Adams (actress, born 1965)"""
+16,actor,"""Jason Davis (actor, born 1984)"""
+17,actor,"""Jeff Richards (actor, born 1924)"""
+18,actor,"""Jeremy Jordan (actor, born 1984)"""
+19,actor,"""Jeremy Jordan (singer, born 1973)"""
+20,actor,"""John Gallagher, Jr."""
+21,actor,"""Kim Min-hee (actress, born 1982)"""
+22,actor,"""Lon Chaney, Jr."""
+23,actor,"""Marsha Hunt (actress, born 1946)"""
+24,actor,"""Meghan, Duchess of Sussex"""
+25,actor,"""Michael Anderson, Jr."""
+26,actor,"""Nick Adams (actor, born 1931)"""
+27,actor,"""Peyton List (actress, born 1998)"""
+28,actor,"""Randall """"Tex"""" Cobb"""
+29,actor,"""Richard Speight, Jr."""
+30,actor,"""Robert Walker (actor, born 1918)"""
+31,actor,"""Shōgo Suzuki (actor, born 1963)"""
+32,actor,"""Steve """"Lips"""" Kudlow"""
+33,actor,"""Timothy """"Speed"""" Levitch"""
+34,actor,"""Tip """"T.I."""" Harris"""
+35,actor,"""Troy """"Trombone Shorty"""" Andrews"""
+36,actor,"""Victor Wong (actor, born 1927)"""
+37,actor,"""Will Kemp (actor, born 1977)"""
 38,actor,50 Cent
 39,actor,A. J. Bowen
 40,actor,A. J. Buckley
@@ -147,7 +147,7 @@ feature_id,category,feature
 145,actor,Ahn Seo-hyun
 146,actor,Ahn Sung-ki
 147,actor,Ahna Capri
-148,actor,'Ahna O''Reilly'
+148,actor,Ahna O'Reilly
 149,actor,Aida Turturro
 150,actor,Aidan Gillen
 151,actor,Aidan McArdle
@@ -258,7 +258,7 @@ feature_id,category,feature
 256,actor,Alex Kendrick
 257,actor,Alex Kingston
 258,actor,Alex McKenna
-259,actor,'Alex O''Loughlin'
+259,actor,Alex O'Loughlin
 260,actor,Alex Pettyfer
 261,actor,Alex Reid (actress)
 262,actor,Alex Rocco
@@ -269,7 +269,7 @@ feature_id,category,feature
 267,actor,Alex Winter
 268,actor,Alexa Davalos
 269,actor,Alexa PenaVega
-270,actor,'Alexander D''Arcy'
+270,actor,Alexander D'Arcy
 271,actor,Alexander Godunov
 272,actor,Alexander Gould
 273,actor,Alexander Hammid
@@ -623,7 +623,7 @@ feature_id,category,feature
 621,actor,Annette Bening
 622,actor,Annette Crosbie
 623,actor,Annette Funicello
-624,actor,'Annette O''Toole'
+624,actor,Annette O'Toole
 625,actor,Annie Corley
 626,actor,Annie Golden
 627,actor,Annie McEnroe
@@ -634,7 +634,7 @@ feature_id,category,feature
 632,actor,Another Bad Creation
 633,actor,Ansel Elgort
 634,actor,Anson Mount
-635,actor,'Anthony ''Scooter'' Teague'
+635,actor,Anthony 'Scooter' Teague
 636,actor,Anthony Anderson
 637,actor,Anthony Barrile
 638,actor,Anthony Carrigan (actor)
@@ -749,7 +749,7 @@ feature_id,category,feature
 747,actor,Arthur Kennedy (actor)
 748,actor,Arthur Lowe
 749,actor,Arthur Malet
-750,actor,'Arthur O''Connell'
+750,actor,Arthur O'Connell
 751,actor,Arthur Treacher
 752,actor,Artie Lange
 753,actor,Artyom Bystrov
@@ -801,7 +801,7 @@ feature_id,category,feature
 799,actor,Aura Garrido
 800,actor,Aurélien Recoing
 801,actor,Austin Abrams
-802,actor,'Austin O''Brien'
+802,actor,Austin O'Brien
 803,actor,Austin Pendleton
 804,actor,Austin Stoker
 805,actor,Autumn Reeser
@@ -1007,7 +1007,7 @@ feature_id,category,feature
 1005,actor,Betty White
 1006,actor,Beulah Bondi
 1007,actor,Beverley Mitchell
-1008,actor,'Beverly D''Angelo'
+1008,actor,Beverly D'Angelo
 1009,actor,Beverly Garland
 1010,actor,Beverly Todd
 1011,actor,Beyoncé
@@ -1144,7 +1144,7 @@ feature_id,category,feature
 1142,actor,Bob Steele (actor)
 1143,actor,Bob Uecker
 1144,actor,Bob West
-1145,actor,'Bobb''e J. Thompson'
+1145,actor,Bobb'e J. Thompson
 1146,actor,Bobby (2006 film)
 1147,actor,Bobby Brown
 1148,actor,Bobby Cannavale
@@ -1255,7 +1255,7 @@ feature_id,category,feature
 1253,actor,Brian Markinson
 1254,actor,Brian McNamara
 1255,actor,Brian Murray (actor)
-1256,actor,'Brian O''Halloran'
+1256,actor,Brian O'Halloran
 1257,actor,Brian Oulton
 1258,actor,Brian Posehn
 1259,actor,Brian Tee
@@ -1294,7 +1294,7 @@ feature_id,category,feature
 1292,actor,Brontis Jodorowsky
 1293,actor,Brooke Adams (actress)
 1294,actor,Brooke Bloom
-1295,actor,'Brooke D''Orsay'
+1295,actor,Brooke D'Orsay
 1296,actor,Brooke Langton
 1297,actor,Brooke Shields
 1298,actor,Brooke Smith (actress)
@@ -1334,7 +1334,7 @@ feature_id,category,feature
 1332,actor,Bryan Leung
 1333,actor,Bryan White
 1334,actor,Bryce Dallas Howard
-1335,actor,'Brían F. O''Byrne'
+1335,actor,Brían F. O'Byrne
 1336,actor,Bubba Smith
 1337,actor,Buck Henry
 1338,actor,Buck Taylor
@@ -1389,7 +1389,7 @@ feature_id,category,feature
 1387,actor,Callum Turner
 1388,actor,Calum Worthy
 1389,actor,Cam Gigandet
-1390,actor,'Cam''ron'
+1390,actor,Cam'ron
 1391,actor,Cameron Bancroft
 1392,actor,Cameron Bright
 1393,actor,Cameron Diaz
@@ -1483,7 +1483,7 @@ feature_id,category,feature
 1481,actor,Carrie Snodgress
 1482,actor,Carrie-Anne Moss
 1483,actor,Carroll Baker
-1484,actor,'Carroll O''Connor'
+1484,actor,Carroll O'Connor
 1485,actor,Carrot Top
 1486,actor,Carré Otis
 1487,actor,Cary Elwes
@@ -1511,7 +1511,7 @@ feature_id,category,feature
 1509,actor,Catherine Mary Stewart
 1510,actor,Catherine McClements
 1511,actor,Catherine McCormack
-1512,actor,'Catherine O''Hara'
+1512,actor,Catherine O'Hara
 1513,actor,Catherine Oxenberg
 1514,actor,Catherine Reitman
 1515,actor,Catherine Schell
@@ -1663,7 +1663,7 @@ feature_id,category,feature
 1661,actor,Chevy Chase
 1662,actor,Chi McBride
 1663,actor,Chiang Sheng
-1664,actor,'Chiara D''Anna'
+1664,actor,Chiara D'Anna
 1665,actor,Chiara Mastroianni
 1666,actor,Chico Marx
 1667,actor,Chief Dan George
@@ -1707,8 +1707,8 @@ feature_id,category,feature
 1705,actor,Chris Miller (animator)
 1706,actor,Chris Mulkey
 1707,actor,Chris Noth
-1708,actor,'Chris O''Donnell'
-1709,actor,'Chris O''Dowd'
+1708,actor,Chris O'Donnell
+1709,actor,Chris O'Dowd
 1710,actor,Chris Owen (actor)
 1711,actor,Chris O’Dowd
 1712,actor,Chris Parnell
@@ -1807,7 +1807,7 @@ feature_id,category,feature
 1805,actor,Cillian Murphy
 1806,actor,Cindy Crawford
 1807,actor,Cindy Morgan
-1808,actor,'Cindy O''Callaghan'
+1808,actor,Cindy O'Callaghan
 1809,actor,Cindy Williams
 1810,actor,Cinqué Lee
 1811,actor,Cisse Cameron
@@ -2007,7 +2007,7 @@ feature_id,category,feature
 2005,actor,Cynthia Stevenson
 2006,actor,Cypress Hill
 2007,actor,Cyril Cusack
-2008,actor,'Cyril O''Reilly'
+2008,actor,Cyril O'Reilly
 2009,actor,Cyril Raymond
 2010,actor,Cécile de France
 2011,actor,D. B. Sweeney
@@ -2065,8 +2065,8 @@ feature_id,category,feature
 2063,actor,Dan Hedaya
 2064,actor,Dan Inosanto
 2065,actor,Dan Monahan
-2066,actor,'Dan O''Bannon'
-2067,actor,'Dan O''Herlihy'
+2066,actor,Dan O'Bannon
+2067,actor,Dan O'Herlihy
 2068,actor,Dan Shor
 2069,actor,Dan Stevens
 2070,actor,Dan Yeager
@@ -2284,7 +2284,7 @@ feature_id,category,feature
 2282,actor,David Moscow
 2283,actor,David Naughton
 2284,actor,David Niven
-2285,actor,'David O''Hara'
+2285,actor,David O'Hara
 2286,actor,David Ogden Stiers
 2287,actor,David Oyelowo
 2288,actor,David Patrick Kelly
@@ -2323,7 +2323,7 @@ feature_id,category,feature
 2321,actor,Dax Shepard
 2322,actor,Dayle Haddon
 2323,actor,Dayo Okeniyi
-2324,actor,'De''aundre Bonds'
+2324,actor,De'aundre Bonds
 2325,actor,DeForest Kelley
 2326,actor,DeVeren Bookwalter
 2327,actor,Dead End Kids
@@ -2384,7 +2384,7 @@ feature_id,category,feature
 2382,actor,Denis Lawson
 2383,actor,Denis Leary
 2384,actor,Denis Menochet
-2385,actor,'Denis O''Dea'
+2385,actor,Denis O'Dea
 2386,actor,Denise Crosby
 2387,actor,Denise Nicholas
 2388,actor,Denise Nickerson
@@ -2399,7 +2399,7 @@ feature_id,category,feature
 2397,actor,Dennis Hopper
 2398,actor,Dennis Kucinich
 2399,actor,Dennis Miller
-2400,actor,'Dennis O''Keefe'
+2400,actor,Dennis O'Keefe
 2401,actor,Dennis Price
 2402,actor,Dennis Quaid
 2403,actor,Dennis Rodman
@@ -2415,7 +2415,7 @@ feature_id,category,feature
 2413,actor,Derek de Lint
 2414,actor,Dermot Crowley
 2415,actor,Dermot Mulroney
-2416,actor,'Derrick O''Connor'
+2416,actor,Derrick O'Connor
 2417,actor,Desiree Akhavan
 2418,actor,Desmin Borges
 2419,actor,Desmond Harrington
@@ -2560,7 +2560,7 @@ feature_id,category,feature
 2558,actor,Donald Madden
 2559,actor,Donald Meek
 2560,actor,Donald Moffat
-2561,actor,'Donald O''Connor'
+2561,actor,Donald O'Connor
 2562,actor,Donald Pleasence
 2563,actor,Donald Rumsfeld
 2564,actor,Donald Sinden
@@ -2568,7 +2568,7 @@ feature_id,category,feature
 2566,actor,Donald Woods (actor)
 2567,actor,Dong Jie
 2568,actor,Donna Anderson
-2569,actor,'Donna D''Errico'
+2569,actor,Donna D'Errico
 2570,actor,Donna Dixon
 2571,actor,Donna Mills
 2572,actor,Donna Murphy
@@ -2654,7 +2654,7 @@ feature_id,category,feature
 2652,actor,Dylan McDermott
 2653,actor,Dylan Minnette
 2654,actor,Dylan Moran
-2655,actor,'Dylan O''Brien'
+2655,actor,Dylan O'Brien
 2656,actor,Dylan Sprouse
 2657,actor,Dylan Walsh
 2658,actor,E. G. Daily
@@ -2675,8 +2675,8 @@ feature_id,category,feature
 2673,actor,Ed Helms
 2674,actor,Ed Lauter
 2675,actor,Ed Nelson
-2676,actor,'Ed O''Neill'
-2677,actor,'Ed O''Ross'
+2676,actor,Ed O'Neill
+2677,actor,Ed O'Ross
 2678,actor,Ed Speleers
 2679,actor,Ed Stoppard
 2680,actor,Ed Templeton
@@ -2712,7 +2712,7 @@ feature_id,category,feature
 2710,actor,Edith Evanson
 2711,actor,Edith Ewing Bouvier Beale
 2712,actor,Edith Massey (actress)
-2713,actor,'Edmond O''Brien'
+2713,actor,Edmond O'Brien
 2714,actor,Edmund Gwenn
 2715,actor,Edmund Lowe
 2716,actor,Edmund McMillen
@@ -3075,7 +3075,7 @@ feature_id,category,feature
 3073,actor,Feodor Chaliapin Jr.
 3074,actor,Fernando Rey
 3075,actor,Fess Parker
-3076,actor,'Fichi d''India'
+3076,actor,Fichi d'India
 3077,actor,Filip Nikolic
 3078,actor,Filip Šovagović
 3079,actor,Finlay Currie
@@ -3116,7 +3116,7 @@ feature_id,category,feature
 3114,actor,Frances Hyland
 3115,actor,Frances Lee McCain
 3116,actor,Frances McDormand
-3117,actor,'Frances O''Connor'
+3117,actor,Frances O'Connor
 3118,actor,Frances Sternhagen
 3119,actor,Frances de la Tour
 3120,actor,Francesca Angelucci Capaldi
@@ -3251,7 +3251,7 @@ feature_id,category,feature
 3249,actor,Gad Elmaleh
 3250,actor,Gael García Bernal
 3251,actor,Gail Harris
-3252,actor,'Gail O''Grady'
+3252,actor,Gail O'Grady
 3253,actor,Gail Patrick
 3254,actor,Gailard Sartain
 3255,actor,Gal Gadot
@@ -3322,7 +3322,7 @@ feature_id,category,feature
 3320,actor,Genesis Rodriguez
 3321,actor,Genevieve Buechner
 3322,actor,Genevieve Lemon
-3323,actor,'Genevieve O''Reilly'
+3323,actor,Genevieve O'Reilly
 3324,actor,Geneviève Bujold
 3325,actor,Geneviève Page
 3326,actor,Geneviève Picot
@@ -3371,7 +3371,7 @@ feature_id,category,feature
 3369,actor,George Macready
 3370,actor,George Murdock (actor)
 3371,actor,George Newbern
-3372,actor,'George O''Hanlon'
+3372,actor,George O'Hanlon
 3373,actor,George Peppard
 3374,actor,George Plimpton
 3375,actor,George Raft
@@ -3399,7 +3399,7 @@ feature_id,category,feature
 3397,actor,Geraldine Fitzgerald
 3398,actor,Geraldine James
 3399,actor,Geraldine McEwan
-3400,actor,'Geraldine O''Rawe'
+3400,actor,Geraldine O'Rawe
 3401,actor,Geraldine Page
 3402,actor,Gerard Butler
 3403,actor,Gerard Horan
@@ -3484,7 +3484,7 @@ feature_id,category,feature
 3482,actor,Glynis Barber
 3483,actor,Glynis Johns
 3484,actor,Glynn Turman
-3485,actor,'Glynnis O''Connor'
+3485,actor,Glynnis O'Connor
 3486,actor,Go Ah-sung
 3487,actor,Go Kyung-pyo
 3488,actor,Godfrey Tearle
@@ -3549,7 +3549,7 @@ feature_id,category,feature
 3547,actor,Grey DeLisle
 3548,actor,Griffin Dunne
 3549,actor,Griffin Newman
-3550,actor,'Griffin O''Neal'
+3550,actor,Griffin O'Neal
 3551,actor,Grigoriy Dobrygin
 3552,actor,Groucho Marx
 3553,actor,Guang Li
@@ -3691,7 +3691,7 @@ feature_id,category,feature
 3689,actor,Heather Locklear
 3690,actor,Heather Matarazzo
 3691,actor,Heather North
-3692,actor,'Heather O''Rourke'
+3692,actor,Heather O'Rourke
 3693,actor,Heather Thomas
 3694,actor,Heavy D
 3695,actor,Hector Elizondo
@@ -3728,7 +3728,7 @@ feature_id,category,feature
 3726,actor,Henry Goodman
 3727,actor,Henry Jones (actor)
 3728,actor,Henry Joost
-3729,actor,'Henry O''Neill'
+3729,actor,Henry O'Neill
 3730,actor,Henry Rollins
 3731,actor,Henry Silva
 3732,actor,Henry Simmons
@@ -3805,8 +3805,8 @@ feature_id,category,feature
 3803,actor,Hugh Laurie
 3804,actor,Hugh Marlowe
 3805,actor,Hugh Masekela
-3806,actor,'Hugh O''Brian'
-3807,actor,'Hugh O''Conor'
+3806,actor,Hugh O'Brian
+3807,actor,Hugh O'Conor
 3808,actor,Hugh Williams
 3809,actor,Hugo Becker (actor)
 3810,actor,Hugo Weaving
@@ -3913,7 +3913,7 @@ feature_id,category,feature
 3911,actor,Isao Hashizume
 3912,actor,Isela Vega
 3913,actor,Isla Fisher
-3914,actor,'Ismael ''East'' Carlo'
+3914,actor,Ismael 'East' Carlo
 3915,actor,Isobel Elsom
 3916,actor,Israel Broussard
 3917,actor,Israel Contreras
@@ -3936,7 +3936,7 @@ feature_id,category,feature
 3934,actor,J. K. Simmons
 3935,actor,J. Kenneth Campbell
 3936,actor,J. LaRose
-3937,actor,'J. Pat O''Malley'
+3937,actor,J. Pat O'Malley
 3938,actor,J. Smith-Cameron
 3939,actor,J. T. Walsh
 3940,actor,J.B. Smoove
@@ -3979,8 +3979,8 @@ feature_id,category,feature
 3977,actor,Jack Nance
 3978,actor,Jack Nicholson
 3979,actor,Jack Noseworthy
-3980,actor,'Jack O''Connell (actor)'
-3981,actor,'Jack O''Halloran'
+3980,actor,Jack O'Connell (actor)
+3981,actor,Jack O'Halloran
 3982,actor,Jack Palance
 3983,actor,Jack Plotnick
 3984,actor,Jack Purvis (actor)
@@ -4057,7 +4057,7 @@ feature_id,category,feature
 4055,actor,Jamal Woolard
 4056,actor,Jamel Debbouze
 4057,actor,Jamel Simmons
-4058,actor,'James ''Kimo'' Wills'
+4058,actor,James 'Kimo' Wills
 4059,actor,James Anderson (American actor)
 4060,actor,James Arness
 4061,actor,James Arnold Taylor
@@ -4086,7 +4086,7 @@ feature_id,category,feature
 4084,actor,James Corden
 4085,actor,James Cosmo
 4086,actor,James Cromwell
-4087,actor,'James D''Arcy'
+4087,actor,James D'Arcy
 4088,actor,James Daly (actor)
 4089,actor,James Darren
 4090,actor,James Dean
@@ -4263,7 +4263,7 @@ feature_id,category,feature
 4261,actor,Jason Mitchell
 4262,actor,Jason Momoa
 4263,actor,Jason Narvy
-4264,actor,'Jason O''Mara'
+4264,actor,Jason O'Mara
 4265,actor,Jason Patric
 4266,actor,Jason Presson
 4267,actor,Jason Priestley
@@ -4293,7 +4293,7 @@ feature_id,category,feature
 4291,actor,Jay Chandrasekhar
 4292,actor,Jay Chou
 4293,actor,Jay Hernandez
-4294,actor,'Jay Laga''aia'
+4294,actor,Jay Laga'aia
 4295,actor,Jay Leno
 4296,actor,Jay Mohr
 4297,actor,Jay O. Sanders
@@ -4434,7 +4434,7 @@ feature_id,category,feature
 4432,actor,Jennifer Lopez
 4433,actor,Jennifer Love Hewitt
 4434,actor,Jennifer Morrison
-4435,actor,'Jennifer O''Neill'
+4435,actor,Jennifer O'Neill
 4436,actor,Jennifer Prediger
 4437,actor,Jennifer Rubin (actress)
 4438,actor,Jennifer Runyon
@@ -4492,7 +4492,7 @@ feature_id,category,feature
 4490,actor,Jerry Lewis
 4491,actor,Jerry Molen
 4492,actor,Jerry Nelson
-4493,actor,'Jerry O''Connell'
+4493,actor,Jerry O'Connell
 4494,actor,Jerry Orbach
 4495,actor,Jerry Paris
 4496,actor,Jerry Reed
@@ -4608,7 +4608,7 @@ feature_id,category,feature
 4606,actor,Jimmy Finlayson
 4607,actor,Jimmy MacDonald (sound effects artist)
 4608,actor,Jimmy Nail
-4609,actor,'Jimmy O''Dea'
+4609,actor,Jimmy O'Dea
 4610,actor,Jimmy Smits
 4611,actor,Jimmy Wolk
 4612,actor,Jing Tian
@@ -4668,7 +4668,7 @@ feature_id,category,feature
 4666,actor,Jodelle Ferland
 4667,actor,Jodhi May
 4668,actor,Jodi Benson
-4669,actor,'Jodi Lyn O''Keefe'
+4669,actor,Jodi Lyn O'Keefe
 4670,actor,Jodie Foster
 4671,actor,Jodie Whittaker
 4672,actor,Joe Alaskey
@@ -4766,7 +4766,7 @@ feature_id,category,feature
 4764,actor,John Corbett (actor)
 4765,actor,John Cullum
 4766,actor,John Cusack
-4767,actor,'John D''Leo'
+4767,actor,John D'Leo
 4768,actor,John Dall
 4769,actor,John David Washington
 4770,actor,John Derek
@@ -5075,7 +5075,7 @@ feature_id,category,feature
 5073,actor,Judith Henry (actress)
 5074,actor,Judith Hoag
 5075,actor,Judith Ivey
-5076,actor,'Judith O''Dea'
+5076,actor,Judith O'Dea
 5077,actor,Judith Roberts (actress)
 5078,actor,Judith Scott (American actress)
 5079,actor,Judy Cornwell
@@ -5201,7 +5201,7 @@ feature_id,category,feature
 5199,actor,Jérémie Renier
 5200,actor,Jørgen Kiil
 5201,actor,Jürgen Prochnow
-5202,actor,'K''Sun Ray'
+5202,actor,K'Sun Ray
 5203,actor,K.C. Martel
 5204,actor,K.d. lang
 5205,actor,KJ Apa
@@ -5383,7 +5383,7 @@ feature_id,category,feature
 5381,actor,Keiko Toda
 5382,actor,Keir Dullea
 5383,actor,Keir Gilchrist
-5384,actor,'Keir O''Donnell'
+5384,actor,Keir O'Donnell
 5385,actor,Keira Knightley
 5386,actor,Keisha Castle-Hughes
 5387,actor,Keith Carradine
@@ -5398,7 +5398,7 @@ feature_id,category,feature
 5396,actor,Keith Wayne
 5397,actor,Keke Palmer
 5398,actor,Kel Mitchell
-5399,actor,'Kel O''Neill'
+5399,actor,Kel O'Neill
 5400,actor,Kellan Lutz
 5401,actor,Kelli Garner
 5402,actor,Kelli Maroney
@@ -5447,7 +5447,7 @@ feature_id,category,feature
 5445,actor,Ken Takakura
 5446,actor,Ken Waller
 5447,actor,Ken Watanabe
-5448,actor,'Ken''ichi Matsuyama'
+5448,actor,Ken'ichi Matsuyama
 5449,actor,Kenan Thompson
 5450,actor,Kene Holliday
 5451,actor,Kenichi Suzumura
@@ -5509,7 +5509,7 @@ feature_id,category,feature
 5507,actor,Kevin Harrington (actor)
 5508,actor,Kevin Hart
 5509,actor,Kevin Heffernan (actor)
-5510,actor,'Kevin J. O''Connor (actor)'
+5510,actor,Kevin J. O'Connor (actor)
 5511,actor,Kevin James
 5512,actor,Kevin Kline
 5513,actor,Kevin McCarthy (actor)
@@ -5538,7 +5538,7 @@ feature_id,category,feature
 5536,actor,Ki Hong Lee
 5537,actor,Kiana Tom
 5538,actor,Kick Gurry
-5539,actor,'Kid ''n Play'
+5539,actor,Kid 'n Play
 5540,actor,Kid Cudi
 5541,actor,Kid Rock
 5542,actor,Kiefer Sutherland
@@ -5878,7 +5878,7 @@ feature_id,category,feature
 5876,actor,Leo Gregory
 5877,actor,Leo Howard
 5878,actor,Leo McKern
-5879,actor,'Leo O''Brien (actor)'
+5879,actor,Leo O'Brien (actor)
 5880,actor,Leo Rossi
 5881,actor,Leon Burchill
 5882,actor,Leon Rippy
@@ -5960,8 +5960,8 @@ feature_id,category,feature
 5958,actor,Liesel Matthews
 5959,actor,Liesel Pritzker Simmons
 5960,actor,Liev Schreiber
-5961,actor,'Lil'' C'
-5962,actor,'Lil'' Kim'
+5961,actor,Lil' C
+5962,actor,Lil' Kim
 5963,actor,Lili Mirojnick
 5964,actor,Lili Simmons
 5965,actor,Lili Taylor
@@ -6194,7 +6194,7 @@ feature_id,category,feature
 6192,actor,Luke Treadaway
 6193,actor,Luke Wilson
 6194,actor,Lupe Ontiveros
-6195,actor,'Lupita Nyong''o'
+6195,actor,Lupita Nyong'o
 6196,actor,Lurene Tuttle
 6197,actor,Luther Adler
 6198,actor,Luther Vandross
@@ -6359,7 +6359,7 @@ feature_id,category,feature
 6357,actor,Margaret Langrick
 6358,actor,Margaret Lindsay
 6359,actor,Margaret Lockwood
-6360,actor,'Margaret O''Brien'
+6360,actor,Margaret O'Brien
 6361,actor,Margaret Qualley
 6362,actor,Margaret Sheridan (actress)
 6363,actor,Margaret Sullavan
@@ -6590,7 +6590,7 @@ feature_id,category,feature
 6588,actor,Mary-Kate and Ashley Olsen
 6589,actor,Mary-Louise Parker
 6590,actor,Marya Delver
-6591,actor,'Maryam d''Abo'
+6591,actor,Maryam d'Abo
 6592,actor,Marylouise Burke
 6593,actor,María Conchita Alonso
 6594,actor,Masahiko Tsugawa
@@ -6634,7 +6634,7 @@ feature_id,category,feature
 6632,actor,Matt McCoy (actor)
 6633,actor,Matt McGrath (actor)
 6634,actor,Matt Mitler
-6635,actor,'Matt O''Leary'
+6635,actor,Matt O'Leary
 6636,actor,Matt Prokop
 6637,actor,Matt Riedy
 6638,actor,Matt Ross (actor)
@@ -6679,8 +6679,8 @@ feature_id,category,feature
 6677,actor,Maud Adams
 6678,actor,Maura Tierney
 6679,actor,Maureen Lipman
-6680,actor,'Maureen O''Hara'
-6681,actor,'Maureen O''Sullivan'
+6680,actor,Maureen O'Hara
+6681,actor,Maureen O'Sullivan
 6682,actor,Maureen Stapleton
 6683,actor,Maureen Teefy
 6684,actor,Maurice Chevalier
@@ -6910,8 +6910,8 @@ feature_id,category,feature
 6908,actor,Michael Murphy (actor)
 6909,actor,Michael Nouri
 6910,actor,Michael Nyqvist
-6911,actor,'Michael O''Hare'
-6912,actor,'Michael O''Keefe'
+6911,actor,Michael O'Hare
+6912,actor,Michael O'Keefe
 6913,actor,Michael Oliver (actor)
 6914,actor,Michael Ontkean
 6915,actor,Michael Ornstein
@@ -7065,7 +7065,7 @@ feature_id,category,feature
 7063,actor,Mildred Dunnock
 7064,actor,Mildred Natwick
 7065,actor,Miles Fisher
-7066,actor,'Miles O''Keeffe'
+7066,actor,Miles O'Keeffe
 7067,actor,Miles Teller
 7068,actor,Miley Cyrus
 7069,actor,Mili Avital
@@ -7075,7 +7075,7 @@ feature_id,category,feature
 7073,actor,Millicent Simmonds
 7074,actor,Millie Perkins
 7075,actor,Milo Cawthorne
-7076,actor,'Milo O''Shea'
+7076,actor,Milo O'Shea
 7077,actor,Milo Parker
 7078,actor,Milo Ventimiglia
 7079,actor,Milton Berle
@@ -7127,7 +7127,7 @@ feature_id,category,feature
 7125,actor,Miyu Irino
 7126,actor,Miyuki Sawashiro
 7127,actor,Mizuho Suzuki
-7128,actor,'Mo''Nique'
+7128,actor,Mo'Nique
 7129,actor,Mohamed Fellag
 7130,actor,Moira Kelly
 7131,actor,Moira Shearer
@@ -7161,7 +7161,7 @@ feature_id,category,feature
 7159,actor,Morgan Freeman
 7160,actor,Morgan Spurlock
 7161,actor,Morgan Woodward
-7162,actor,'Morgana O''Reilly'
+7162,actor,Morgana O'Reilly
 7163,actor,Moritz Bleibtreu
 7164,actor,Moroni Olsen
 7165,actor,Morris Ankrum
@@ -7200,7 +7200,7 @@ feature_id,category,feature
 7198,actor,Mélissa Désormeaux-Poulin
 7199,actor,Mía Maestro
 7200,actor,Mýa
-7201,actor,'N''Bushe Wright'
+7201,actor,N'Bushe Wright
 7202,actor,N.O.R.E
 7203,actor,Na Moon-hee
 7204,actor,Nabil Elouahabi
@@ -7314,7 +7314,7 @@ feature_id,category,feature
 7312,actor,Nicholas Brendon
 7313,actor,Nicholas Campbell
 7314,actor,Nicholas Clay
-7315,actor,'Nicholas D''Agosto'
+7315,actor,Nicholas D'Agosto
 7316,actor,Nicholas Farrell
 7317,actor,Nicholas Gonzalez
 7318,actor,Nicholas Hope
@@ -7453,7 +7453,7 @@ feature_id,category,feature
 7451,actor,Noël Coward
 7452,actor,Nutsa Kukhianidze
 7453,actor,Nǃxau ǂToma
-7454,actor,'O''Shea Jackson Jr.'
+7454,actor,O'Shea Jackson Jr.
 7455,actor,O. E. Hasse
 7456,actor,Oakes Fegley
 7457,actor,Obba Babatundé
@@ -7465,7 +7465,7 @@ feature_id,category,feature
 7463,actor,Odeya Rush
 7464,actor,Odin (band)
 7465,actor,Oh Jung-se
-7466,actor,'Ol'' Dirty Bastard'
+7466,actor,Ol' Dirty Bastard
 7467,actor,Oleg Basilashvili
 7468,actor,Oleg Menshikov
 7469,actor,Oleg Stefan
@@ -7483,7 +7483,7 @@ feature_id,category,feature
 7481,actor,Oliver Jackson-Cohen
 7482,actor,Oliver James (actor)
 7483,actor,Oliver Milburn
-7484,actor,'Oliver O''Grady'
+7484,actor,Oliver O'Grady
 7485,actor,Oliver Platt
 7486,actor,Oliver Reed
 7487,actor,Oliver Robins
@@ -7499,7 +7499,7 @@ feature_id,category,feature
 7497,actor,Olivia Thirlby
 7498,actor,Olivia Wilde
 7499,actor,Olivia Williams
-7500,actor,'Olivia d''Abo'
+7500,actor,Olivia d'Abo
 7501,actor,Olivia de Havilland
 7502,actor,Olivier Gourmet
 7503,actor,Olivier Martinez
@@ -7547,7 +7547,7 @@ feature_id,category,feature
 7545,actor,P.J. Soles
 7546,actor,PJ DeBoy
 7547,actor,Paddy Considine
-7548,actor,'Paige O''Hara'
+7548,actor,Paige O'Hara
 7549,actor,Paige Turco
 7550,actor,Pam Ferris
 7551,actor,Pam Grier
@@ -7595,13 +7595,13 @@ feature_id,category,feature
 7593,actor,Pat Hingle
 7594,actor,Pat McCormick (actor)
 7595,actor,Pat Morita
-7596,actor,'Pat O''Brien (actor)'
+7596,actor,Pat O'Brien (actor)
 7597,actor,Pat Shortt
 7598,actor,Pat Thomson
 7599,actor,Pat Woodell
 7600,actor,Pato Hoffmann
 7601,actor,Patric Knowles
-7602,actor,'Patrice O''Neal'
+7602,actor,Patrice O'Neal
 7603,actor,Patricia Arquette
 7604,actor,Patricia Barry
 7605,actor,Patricia Charbonneau
@@ -7633,7 +7633,7 @@ feature_id,category,feature
 7631,actor,Patrick McGaw
 7632,actor,Patrick McGoohan
 7633,actor,Patrick Muldoon
-7634,actor,'Patrick O''Neal (actor)'
+7634,actor,Patrick O'Neal (actor)
 7635,actor,Patrick Renna
 7636,actor,Patrick St. Esprit
 7637,actor,Patrick Stewart
@@ -7648,7 +7648,7 @@ feature_id,category,feature
 7646,actor,Patsy Garrett
 7647,actor,Patsy Kensit
 7648,actor,Patsy Ruth Miller
-7649,actor,'Patti D''Arbanville'
+7649,actor,Patti D'Arbanville
 7650,actor,Patti LaBelle
 7651,actor,Patti LuPone
 7652,actor,Patti Page
@@ -7798,7 +7798,7 @@ feature_id,category,feature
 7796,actor,Perry Pirkanen
 7797,actor,Persis Khambatta
 7798,actor,Peta Sergeant
-7799,actor,'Pete O''Herne'
+7799,actor,Pete O'Herne
 7800,actor,Pete Ploszek
 7801,actor,Pete Postlethwaite
 7802,actor,Pete Smith (actor)
@@ -7862,8 +7862,8 @@ feature_id,category,feature
 7860,actor,Peter Michael Goetz
 7861,actor,Peter Miller (actor)
 7862,actor,Peter Mullan
-7863,actor,'Peter O''Brien (actor)'
-7864,actor,'Peter O''Toole'
+7863,actor,Peter O'Brien (actor)
+7864,actor,Peter O'Toole
 7865,actor,Peter Ostrum
 7866,actor,Peter Outerbridge
 7867,actor,Peter Phelps
@@ -7982,7 +7982,7 @@ feature_id,category,feature
 7980,actor,Puk Scharbau
 7981,actor,Pupella Maggio
 7982,actor,Pádraic Delaney
-7983,actor,'Q''orianka Kilcher'
+7983,actor,Q'orianka Kilcher
 7984,actor,Queen Latifah
 7985,actor,Quentin Crisp
 7986,actor,Quentin Tarantino
@@ -8108,7 +8108,7 @@ feature_id,category,feature
 8106,actor,Raymond Hatton
 8107,actor,Raymond J. Barry
 8108,actor,Raymond Massey
-8109,actor,'Raymond O''Connor'
+8109,actor,Raymond O'Connor
 8110,actor,Raymond Ochoa
 8111,actor,Razaaq Adoti
 8112,actor,Raúl Arévalo
@@ -8182,7 +8182,7 @@ feature_id,category,feature
 8180,actor,Rhys Ifans
 8181,actor,Rhys Williams (Welsh-American actor)
 8182,actor,Riaad Moosa
-8183,actor,'Ric O''Barry'
+8183,actor,Ric O'Barry
 8184,actor,Ric Ocasek
 8185,actor,Ric Young
 8186,actor,Rica Matsumoto
@@ -8264,7 +8264,7 @@ feature_id,category,feature
 8262,actor,Richard Moll
 8263,actor,Richard Mulligan
 8264,actor,Richard Newman (actor)
-8265,actor,'Richard O''Brien'
+8265,actor,Richard O'Brien
 8266,actor,Richard Perle
 8267,actor,Richard Portnow
 8268,actor,Richard Pryor
@@ -8299,7 +8299,7 @@ feature_id,category,feature
 8297,actor,Rick Springfield
 8298,actor,Rick Worthy
 8299,actor,Rick Yune
-8300,actor,'Rickey D''Shon Collins'
+8300,actor,Rickey D'Shon Collins
 8301,actor,Ricki Lake
 8302,actor,Rickie Sorensen
 8303,actor,Ricky Gervais
@@ -8441,7 +8441,7 @@ feature_id,category,feature
 8439,actor,Robert Pugh
 8440,actor,Robert Quarry
 8441,actor,Robert Redford
-8442,actor,'Robert Ri''chard'
+8442,actor,Robert Ri'chard
 8443,actor,Robert Rodriguez
 8444,actor,Robert Romanus
 8445,actor,Robert Rusler
@@ -8469,7 +8469,7 @@ feature_id,category,feature
 8467,actor,Robert Wisdom
 8468,actor,Robert Wuhl
 8469,actor,Robert Young (actor)
-8470,actor,'Robert Z''Dar'
+8470,actor,Robert Z'Dar
 8471,actor,Roberta Collins
 8472,actor,Roberta Maxwell
 8473,actor,Roberto Benigni
@@ -8563,7 +8563,7 @@ feature_id,category,feature
 8561,actor,Ron Lester
 8562,actor,Ron Livingston
 8563,actor,Ron Moody
-8564,actor,'Ron O''Neal'
+8564,actor,Ron O'Neal
 8565,actor,Ron Paul
 8566,actor,Ron Perlman
 8567,actor,Ron Randell
@@ -8620,7 +8620,7 @@ feature_id,category,feature
 8618,actor,Rosey Grier
 8619,actor,Roshan Seth
 8620,actor,Rosie Huntington-Whiteley
-8621,actor,'Rosie O''Donnell'
+8621,actor,Rosie O'Donnell
 8622,actor,Rosie Perez
 8623,actor,Ross Alexander
 8624,actor,Ross Bagley
@@ -8714,8 +8714,8 @@ feature_id,category,feature
 8712,actor,Ryan McDonald (Canadian actor)
 8713,actor,Ryan Merriman
 8714,actor,Ryan Newman (actress)
-8715,actor,'Ryan O''Donohue'
-8716,actor,'Ryan O''Neal'
+8715,actor,Ryan O'Donohue
+8716,actor,Ryan O'Neal
 8717,actor,Ryan Phillippe
 8718,actor,Ryan Potter
 8719,actor,Ryan Reynolds
@@ -8930,7 +8930,7 @@ feature_id,category,feature
 8928,actor,Scotty Bowman
 8929,actor,Scotty Mattraw
 8930,actor,Scout Taylor-Compton
-8931,actor,'Screamin'' Jay Hawkins'
+8931,actor,Screamin' Jay Hawkins
 8932,actor,Sean Astin
 8933,actor,Sean Bean
 8934,actor,Sean Biggerstaff
@@ -8949,7 +8949,7 @@ feature_id,category,feature
 8947,actor,Sean Marshall (actor)
 8948,actor,Sean McGinley
 8949,actor,Sean Nelson (actor)
-8950,actor,'Sean O''Bryan'
+8950,actor,Sean O'Bryan
 8951,actor,Sean Patrick Flanery
 8952,actor,Sean Patrick Thomas
 8953,actor,Sean Penn
@@ -9021,7 +9021,7 @@ feature_id,category,feature
 9019,actor,Shannon Woodward
 9020,actor,Shannyn Sossamon
 9021,actor,Shaobo Qin
-9022,actor,'Shaquille O''Neal'
+9022,actor,Shaquille O'Neal
 9023,actor,Shareeka Epps
 9024,actor,Shari Headley
 9025,actor,Sharlto Copley
@@ -9558,7 +9558,7 @@ feature_id,category,feature
 9556,actor,Tats Lau
 9557,actor,Tatsuya Mihashi
 9558,actor,Tatsuya Nakadai
-9559,actor,'Tatum O''Neal'
+9559,actor,Tatum O'Neal
 9560,actor,Tatyana Pelttser
 9561,actor,Tawny Kitaen
 9562,actor,Taye Diggs
@@ -9628,7 +9628,7 @@ feature_id,category,feature
 9626,actor,Terry Michos
 9627,actor,Terry Moore (actress)
 9628,actor,Terry Notary
-9629,actor,'Terry O''Quinn'
+9629,actor,Terry O'Quinn
 9630,actor,Terry Pheto
 9631,actor,Terry-Thomas
 9632,actor,Teruyuki Kagawa
@@ -9790,7 +9790,7 @@ feature_id,category,feature
 9788,actor,Tom Courtenay
 9789,actor,Tom Cruise
 9790,actor,Tom Cullen
-9791,actor,'Tom D''Andrea'
+9791,actor,Tom D'Andrea
 9792,actor,Tom Drake
 9793,actor,Tom Everett
 9794,actor,Tom Everett Scott
@@ -9947,7 +9947,7 @@ feature_id,category,feature
 9945,actor,Trey Songz
 9946,actor,Trey Wilson
 9947,actor,Tricia Helfer
-9948,actor,'Tricia O''Neil'
+9948,actor,Tricia O'Neil
 9949,actor,Tricia Vessey
 9950,actor,Trieste Kelly Dunn
 9951,actor,Trilby Glover
@@ -10009,7 +10009,7 @@ feature_id,category,feature
 10007,actor,Ulrich Tukur
 10008,actor,Uma Thurman
 10009,actor,Una Merkel
-10010,actor,'Una O''Connor (actress)'
+10010,actor,Una O'Connor (actress)
 10011,actor,Unshō Ishizuka
 10012,actor,Upen Patel
 10013,actor,Urbano Barberini
@@ -10109,7 +10109,7 @@ feature_id,category,feature
 10107,actor,Vince Colosimo
 10108,actor,Vince Vaughn
 10109,actor,Vincent Cassel
-10110,actor,'Vincent D''Onofrio'
+10110,actor,Vincent D'Onofrio
 10111,actor,Vincent Gallo
 10112,actor,Vincent Gardenia
 10113,actor,Vincent Kartheiser
@@ -10142,7 +10142,7 @@ feature_id,category,feature
 10140,actor,Virginia Mayo
 10141,actor,Virginia McKenna
 10142,actor,Virginia North
-10143,actor,'Virginia O''Brien'
+10143,actor,Virginia O'Brien
 10144,actor,Virginia Vincent
 10145,actor,Virginie Ledoyen
 10146,actor,Vitamin C (singer)
@@ -10398,7 +10398,7 @@ feature_id,category,feature
 10396,actor,Yoshiyuki Morishita
 10397,actor,Yossele Rosenblatt
 10398,actor,Youki Kudoh
-10399,actor,'Youssou N''Dour'
+10399,actor,Youssou N'Dour
 10400,actor,Yu Nan
 10401,actor,Yui Ishikawa
 10402,actor,Yuji Okumoto
@@ -10444,7 +10444,7 @@ feature_id,category,feature
 10442,actor,Zachary Levi
 10443,actor,Zachary Quinto
 10444,actor,Zachary Scott
-10445,actor,'Zack O''Malley Greenburg'
+10445,actor,Zack O'Malley Greenburg
 10446,actor,Zackary Arthur
 10447,actor,Zahn McClarnon
 10448,actor,Zak Orth
@@ -10498,13 +10498,13 @@ feature_id,category,feature
 10496,actor,Érica Rivas
 10497,actor,Óscar Jaenada
 10498,actor,Đơn Dương (actor)
-10499,company,'"Aurora Productions, Hollywood"'
-10500,company,'"Fuji Television Network, Inc."'
-10501,company,'"MPH Entertainment, Inc."'
-10502,company,'"OLM, Inc."'
-10503,company,'"Paws, Inc."'
-10504,company,'"The Cannon Group, Inc."'
-10505,company,'"Wildwood Enterprises, Inc"'
+10499,company,"""Aurora Productions, Hollywood"""
+10500,company,"""Fuji Television Network, Inc."""
+10501,company,"""MPH Entertainment, Inc."""
+10502,company,"""OLM, Inc."""
+10503,company,"""Paws, Inc."""
+10504,company,"""The Cannon Group, Inc."""
+10505,company,"""Wildwood Enterprises, Inc"""
 10506,company,1492 Pictures
 10507,company,19 Entertainment
 10508,company,1984 Private Defense Contractors
@@ -11158,7 +11158,7 @@ feature_id,category,feature
 11156,company,Island Records
 11157,company,Island World
 11158,company,Isle of Man Film
-11159,company,'It''s a Laugh Productions'
+11159,company,It's a Laugh Productions
 11160,company,Ivan Reitman
 11161,company,JSTV
 11162,company,JVC
@@ -11379,7 +11379,7 @@ feature_id,category,feature
 11377,company,Millennium Media
 11378,company,Miller-Boyett Productions
 11379,company,Millimages
-11380,company,'Mind''s Eye Entertainment'
+11380,company,Mind's Eye Entertainment
 11381,company,Minister of Culture (France)
 11382,company,Ministry of Culture (Russia)
 11383,company,Mirabai Films
@@ -11814,7 +11814,7 @@ feature_id,category,feature
 11812,company,The Carsey-Werner Company
 11813,company,The Curiosity Company
 11814,company,The Directors Company
-11815,company,'The Donners'' Company'
+11815,company,The Donners' Company
 11816,company,The Film Department
 11817,company,The Filmgroup
 11818,company,The Geffen Company
@@ -11955,7 +11955,7 @@ feature_id,category,feature
 11953,company,Warner Bros. Inc.
 11954,company,Warner Bros. Pictures
 11955,company,Warner Bros. Pictures Japan
-11956,company,'Warner Bros. Pictures944,Columbia Pictures'
+11956,company,"Warner Bros. Pictures944,Columbia Pictures"
 11957,company,Warner Bros.-Seven Arts
 11958,company,Warner Independent Pictures
 11959,company,Warner Premiere
@@ -12001,8 +12001,8 @@ feature_id,category,feature
 11999,company,Zentropa Entertainments
 12000,company,Zik Zak Filmworks
 12001,company,Zoetrope Studios
-12002,composer,"""Weird"" Al Yankovic"
-12003,composer,'"Not Drowning, Waving"'
+12002,composer,"""""""Weird"""" Al Yankovic"""
+12003,composer,"""Not Drowning, Waving"""
 12004,composer,38 Special (band)
 12005,composer,A. R. Rahman
 12006,composer,AC/DC
@@ -12260,7 +12260,7 @@ feature_id,category,feature
 12258,composer,Carlo Rustichelli
 12259,composer,Carlo Siliotto
 12260,composer,Carlos Rafael Rivera
-12261,composer,'Carlos d''Alessio'
+12261,composer,Carlos d'Alessio
 12262,composer,Carly Simon
 12263,composer,Carmen Dragon
 12264,composer,Carmen Lombardo
@@ -12268,7 +12268,7 @@ feature_id,category,feature
 12266,composer,Carol Hall
 12267,composer,Carole King
 12268,composer,Carter Burwell
-12269,composer,'Cat''s Eyes'
+12269,composer,Cat's Eyes
 12270,composer,Cecil Copping
 12271,composer,Chad Fischer
 12272,composer,Chan Kwong-wing
@@ -12434,7 +12434,7 @@ feature_id,category,feature
 12432,composer,Dick Hyman
 12433,composer,Dickon Hinchliffe
 12434,composer,Dimitri Tiomkin
-12435,composer,'Director''s cut'
+12435,composer,Director's cut
 12436,composer,Dirk Brossé
 12437,composer,Disasterpeace
 12438,composer,Dmitri Shostakovich
@@ -12459,7 +12459,7 @@ feature_id,category,feature
 12457,composer,Duke Ellington
 12458,composer,Duncan Sheik
 12459,composer,Dust Brothers
-12460,composer,'Dustin O''Halloran'
+12460,composer,Dustin O'Halloran
 12461,composer,Dwight Yoakam
 12462,composer,Dylan Carlson (musician)
 12463,composer,ESG (band)
@@ -12651,7 +12651,7 @@ feature_id,category,feature
 12649,composer,Hans J. Salter
 12650,composer,Hans Zimmer
 12651,composer,Harald Kloser
-12652,composer,'Hard ''n Phirm'
+12652,composer,Hard 'n Phirm
 12653,composer,Harold Adamson
 12654,composer,Harold Arlen
 12655,composer,Harold Budd
@@ -12734,7 +12734,7 @@ feature_id,category,feature
 12732,composer,Jaime Mendoza-Nava
 12733,composer,Jake Monaco
 12734,composer,James Bernard (composer)
-12735,composer,'James D''Arcy'
+12735,composer,James D'Arcy
 12736,composer,James Dooley (composer)
 12737,composer,James Edward Barker
 12738,composer,James Horner
@@ -12806,7 +12806,7 @@ feature_id,category,feature
 12804,composer,Jim Dooley
 12805,composer,Jim Guthrie (singer-songwriter)
 12806,composer,Jim Johnston (composer)
-12807,composer,'Jim O''Rourke (musician)'
+12807,composer,Jim O'Rourke (musician)
 12808,composer,Jim Steinman
 12809,composer,Jim Williams (composer)
 12810,composer,Jimmie Haskell
@@ -12858,7 +12858,7 @@ feature_id,category,feature
 12856,composer,John Charles (composer)
 12857,composer,John Clifford White
 12858,composer,John Corigliano
-12859,composer,'John D''Andrea'
+12859,composer,John D'Andrea
 12860,composer,John D. H. Greenwood
 12861,composer,John Debney
 12862,composer,John Du Prez
@@ -13293,7 +13293,7 @@ feature_id,category,feature
 13291,composer,Patrick Jonsson
 13292,composer,Patrick Leonard
 13293,composer,Patrick Moraz
-13294,composer,'Patrick O''Hearn'
+13294,composer,Patrick O'Hearn
 13295,composer,Patrick Williams (composer)
 13296,composer,Paul Cantelon
 13297,composer,Paul Chihara
@@ -13412,7 +13412,7 @@ feature_id,category,feature
 13410,composer,Richard Hazard
 13411,composer,Richard M. Sherman
 13412,composer,Richard Marvin (composer)
-13413,composer,'Richard O''Brien'
+13413,composer,Richard O'Brien
 13414,composer,Richard Robbins (composer)
 13415,composer,Richard Rodgers
 13416,composer,Richard Rodney Bennett
@@ -13521,7 +13521,7 @@ feature_id,category,feature
 13519,composer,Sherman Brothers
 13520,composer,Sherman Edwards
 13521,composer,Shigeru Umebayashi
-13522,composer,'Shin''ichirō Ikebe'
+13522,composer,Shin'ichirō Ikebe
 13523,composer,Shinji Miyazaki
 13524,composer,Shirley Walker
 13525,composer,Shiro Sagisu
@@ -13761,9 +13761,9 @@ feature_id,category,feature
 13759,composer,Zubin Mehta
 13760,composer,Éric Serra
 13761,composer,İlhan Mimaroğlu
-13762,director,"Eric ""Bibo"" Bergeron"
-13763,director,'"John Stalberg, Jr."'
-13764,director,'"Zucker, Abrahams and Zucker"'
+13762,director,"""Eric """"Bibo"""" Bergeron"""
+13763,director,"""John Stalberg, Jr."""
+13764,director,"""Zucker, Abrahams and Zucker"""
 13765,director,Aaron Blaise
 13766,director,Aaron Harvey
 13767,director,Aaron Lipstadt
@@ -14276,7 +14276,7 @@ feature_id,category,feature
 14274,director,Dan Gilroy
 14275,director,Dan Harris (screenwriter)
 14276,director,Dan Ireland
-14277,director,'Dan O''Bannon'
+14277,director,Dan O'Bannon
 14278,director,Dan Scanlon
 14279,director,Dan Trachtenberg
 14280,director,Dan Zeff
@@ -14621,8 +14621,8 @@ feature_id,category,feature
 14619,director,Gaspar Noé
 14620,director,Gauri Shinde
 14621,director,Gavin Hood
-14622,director,'Gavin O''Connor (director)'
-14623,director,'Gavin O''Connor (filmmaker)'
+14622,director,Gavin O'Connor (director)
+14623,director,Gavin O'Connor (filmmaker)
 14624,director,Gee Malik Linton
 14625,director,Gen Sekiguchi
 14626,director,Gene Kelly
@@ -15035,7 +15035,7 @@ feature_id,category,feature
 15033,director,Joe Camp
 15034,director,Joe Carnahan
 15035,director,Joe Chappelle
-15036,director,'Joe D''Amato'
+15036,director,Joe D'Amato
 15037,director,Joe Dante
 15038,director,Joe Fab
 15039,director,Joe Johnston
@@ -15397,7 +15397,7 @@ feature_id,category,feature
 15395,director,Lilly Wachowski
 15396,director,Lionel Jeffries
 15397,director,Lisa Azuelos
-15398,director,'Lisa Barros D''Sa'
+15398,director,Lisa Barros D'Sa
 15399,director,Lisa Cholodenko
 15400,director,Lixin Fan
 15401,director,Liz Friedlander
@@ -15523,7 +15523,7 @@ feature_id,category,feature
 15521,director,Matthew Bright
 15522,director,Matthew Chapman (author)
 15523,director,Matthew Diamond
-15524,director,'Matthew O''Callaghan'
+15524,director,Matthew O'Callaghan
 15525,director,Matthew Robinson (director)
 15526,director,Matthew Ryan Hoge
 15527,director,Matthew Saville
@@ -15744,7 +15744,7 @@ feature_id,category,feature
 15742,director,Park Chan-wook
 15743,director,Park Kwang-hyun (film director)
 15744,director,Pascal Laugier
-15745,director,'Pat O''Connor (director)'
+15745,director,Pat O'Connor (director)
 15746,director,Pat Proft
 15747,director,Patrice Leconte
 15748,director,Patricia Birch
@@ -15845,7 +15845,7 @@ feature_id,category,feature
 15843,director,Peter Medak
 15844,director,Peter Mullan
 15845,director,Peter Newbrook
-15846,director,'Peter O''Fallon'
+15846,director,Peter O'Fallon
 15847,director,Peter R. Hunt
 15848,director,Peter Ramsey
 15849,director,Peter Segal
@@ -16062,7 +16062,7 @@ feature_id,category,feature
 16060,director,Roger Christian (filmmaker)
 16061,director,Roger Corman
 16062,director,Roger Donaldson
-16063,director,'Roger Gnoan M''Bala'
+16063,director,Roger Gnoan M'Bala
 16064,director,Roger Kumble
 16065,director,Roger Mainwood
 16066,director,Roger Michell
@@ -16356,7 +16356,7 @@ feature_id,category,feature
 16354,director,Terry Sanders
 16355,director,Terry Zwigoff
 16356,director,Tetsuya Nomura
-16357,director,'Thaddeus O''Sullivan'
+16357,director,Thaddeus O'Sullivan
 16358,director,The Malloys
 16359,director,The Spierig Brothers
 16360,director,The Vicious Brothers
@@ -16439,7 +16439,7 @@ feature_id,category,feature
 16437,director,Tommy Chong
 16438,director,Tommy Lee Jones
 16439,director,Tommy Lee Wallace
-16440,director,'Tommy O''Haver'
+16440,director,Tommy O'Haver
 16441,director,Tommy Wirkola
 16442,director,Tommy Wiseau
 16443,director,Tomohiko Itō (director)
@@ -16601,18 +16601,18 @@ feature_id,category,feature
 16599,genre,Thriller
 16600,genre,War
 16601,genre,Western
-16602,producer,'"Alan Ladd, Jr."'
-16603,producer,'"Carl Laemmle, Jr."'
-16604,producer,'"Frank Mancuso, Jr."'
-16605,producer,'"George Tillman, Jr."'
-16606,producer,'"Howard W. Koch, Jr."'
-16607,producer,'"John Knatchbull, 7th Baron Brabourne"'
-16608,producer,'"Lew Grade, Baron Grade"'
-16609,producer,'"Michael Pearson, 4th Viscount Cowdray"'
-16610,producer,'"Red Morris, 4th Baron Killanin"'
-16611,producer,'"Samuel Goldwyn, Jr."'
-16612,producer,'"Sarah, Duchess of York"'
-16613,producer,'"Sidney Bernstein, Baron Bernstein"'
+16602,producer,"""Alan Ladd, Jr."""
+16603,producer,"""Carl Laemmle, Jr."""
+16604,producer,"""Frank Mancuso, Jr."""
+16605,producer,"""George Tillman, Jr."""
+16606,producer,"""Howard W. Koch, Jr."""
+16607,producer,"""John Knatchbull, 7th Baron Brabourne"""
+16608,producer,"""Lew Grade, Baron Grade"""
+16609,producer,"""Michael Pearson, 4th Viscount Cowdray"""
+16610,producer,"""Red Morris, 4th Baron Killanin"""
+16611,producer,"""Samuel Goldwyn, Jr."""
+16612,producer,"""Sarah, Duchess of York"""
+16613,producer,"""Sidney Bernstein, Baron Bernstein"""
 16614,producer,50 Cent
 16615,producer,A. C. Lyles
 16616,producer,A. D. Peters
@@ -16781,7 +16781,7 @@ feature_id,category,feature
 16779,producer,Andrew Lloyd Webber
 16780,producer,Andrew Macdonald (producer)
 16781,producer,Andrew Niccol
-16782,producer,'Andrew O''Connor (actor)'
+16782,producer,Andrew O'Connor (actor)
 16783,producer,Andrew Rona
 16784,producer,Andrew S. Karsch
 16785,producer,Andrew Scheinman
@@ -17149,7 +17149,7 @@ feature_id,category,feature
 17147,producer,Christian Fechner
 17148,producer,Christina Ricci
 17149,producer,Christine Langan
-17150,producer,'Christine O''Malley'
+17150,producer,Christine O'Malley
 17151,producer,Christine Vachon
 17152,producer,Christoph Fisser
 17153,producer,Christopher Cain
@@ -17373,8 +17373,8 @@ feature_id,category,feature
 17371,producer,Demi Moore
 17372,producer,Denis Héroux
 17373,producer,Denis Leary
-17374,producer,'Denis O''Brien (producer)'
-17375,producer,'Denis O''Dell'
+17374,producer,Denis O'Brien (producer)
+17375,producer,Denis O'Dell
 17376,producer,Denise Di Novi
 17377,producer,Denise Robert
 17378,producer,Dennis Feldman
@@ -17537,7 +17537,7 @@ feature_id,category,feature
 17535,producer,Eva Longoria
 17536,producer,Eva Orner
 17537,producer,Evan Goldberg
-17538,producer,'Evelyn O''Neill'
+17538,producer,Evelyn O'Neill
 17539,producer,Everett Riskin
 17540,producer,Evzen Kolar
 17541,producer,Ezra Edelman
@@ -17646,7 +17646,7 @@ feature_id,category,feature
 17644,producer,Gary W. Goldstein
 17645,producer,Gary Wheeler (filmmaker)
 17646,producer,Gary Winick
-17647,producer,'Gavin O''Connor (director)'
+17647,producer,Gavin O'Connor (director)
 17648,producer,Gavin Polone
 17649,producer,Gee Malik Linton
 17650,producer,Gene Corman
@@ -17728,7 +17728,7 @@ feature_id,category,feature
 17726,producer,Greg Harrison
 17727,producer,Greg MacGillivray
 17728,producer,Greg McLean (film director)
-17729,producer,'Greg O''Connor'
+17729,producer,Greg O'Connor
 17730,producer,Greg Shapiro (producer)
 17731,producer,Gregg Araki
 17732,producer,Gregg Bishop
@@ -17903,7 +17903,7 @@ feature_id,category,feature
 17901,producer,Jacques Morali
 17902,producer,Jacqui Safra
 17903,producer,Jada Pinkett Smith
-17904,producer,'Jaimie D''Cruz'
+17904,producer,Jaimie D'Cruz
 17905,producer,Jake Eberts
 17906,producer,Jake Gyllenhaal
 17907,producer,Jake Johnson
@@ -18064,7 +18064,7 @@ feature_id,category,feature
 18062,producer,Joe Berlinger
 18063,producer,Joe Camp
 18064,producer,Joe Carnahan
-18065,producer,'Joe D''Amato'
+18065,producer,Joe D'Amato
 18066,producer,Joe Fab
 18067,producer,Joe Hale (animator)
 18068,producer,Joe Hill (writer)
@@ -18434,7 +18434,7 @@ feature_id,category,feature
 18432,producer,Lewis M. Allen
 18433,producer,Lewis Milestone
 18434,producer,Lex Lutzus
-18435,producer,'Liam O''Donnell (director)'
+18435,producer,Liam O'Donnell (director)
 18436,producer,Lianne Halfon
 18437,producer,Lili Fini Zanuck
 18438,producer,Lilly Burns
@@ -18493,7 +18493,7 @@ feature_id,category,feature
 18491,producer,Lynn Harris
 18492,producer,Lynn Hershman Leeson
 18493,producer,Lynn Loring
-18494,producer,'Lynn O''Donnell'
+18494,producer,Lynn O'Donnell
 18495,producer,Lynn Shelton
 18496,producer,Lynne Stopkewich
 18497,producer,Lélia Wanick Salgado
@@ -18560,7 +18560,7 @@ feature_id,category,feature
 18558,producer,Mark Levinson (film director)
 18559,producer,Mark Linfield
 18560,producer,Mark Morgan (producer)
-18561,producer,'Mark O''Keefe (screenwriter)'
+18561,producer,Mark O'Keefe (screenwriter)
 18562,producer,Mark Ordesky
 18563,producer,Mark Pitts
 18564,producer,Mark Polish
@@ -18992,7 +18992,7 @@ feature_id,category,feature
 18990,producer,Peter Spears
 18991,producer,Peter Weir
 18992,producer,Peter Yates
-18993,producer,'Philip D''Antoni'
+18993,producer,Philip D'Antoni
 18994,producer,Philip G. Epstein
 18995,producer,Philip Gefter
 18996,producer,Philip Hinchcliffe
@@ -19059,7 +19059,7 @@ feature_id,category,feature
 19057,producer,Raymond Griffith
 19058,producer,Raymond Wong (film presenter)
 19059,producer,Raymond Wong Pak-ming
-19060,producer,'Rebecca O''Brien'
+19060,producer,Rebecca O'Brien
 19061,producer,Redmond Morris
 19062,producer,Reese Witherspoon
 19063,producer,Reginald Hudlin
@@ -19426,7 +19426,7 @@ feature_id,category,feature
 19424,producer,Stanley Kramer
 19425,producer,Stanley Kubrick
 19426,producer,Stanley Nelson
-19427,producer,'Stanley O''Toole'
+19427,producer,Stanley O'Toole
 19428,producer,Stanley R. Jaffe
 19429,producer,Stanley Rubin
 19430,producer,Stanley Tucci
@@ -19674,7 +19674,7 @@ feature_id,category,feature
 19672,producer,Vin Diesel
 19673,producer,Vince McMahon
 19674,producer,Vince Vaughn
-19675,producer,'Vincent D''Onofrio'
+19675,producer,Vincent D'Onofrio
 19676,producer,Vincent Gallo
 19677,producer,Vincent Landay
 19678,producer,Vincent Newman
@@ -19761,244 +19761,244 @@ feature_id,category,feature
 19759,producer,Zane Weiner
 19760,producer,Zev Braun
 19761,producer,Éric Névé
-19762,subject,'"Anderson County, South Carolina"'
-19763,subject,'"Baker City, Oregon"'
-19764,subject,'"Barbary Coast, San Francisco"'
-19765,subject,'"Baton Rouge, Louisiana"'
-19766,subject,'"Beacon, New York"'
-19767,subject,'"Belmont, Bronx"'
-19768,subject,'"Best Film, London Film Festival winners"'
-19769,subject,'"Birdsville, Queensland"'
-19770,subject,'"Braintree, Massachusetts"'
-19771,subject,'"Bridgewater, Massachusetts"'
-19772,subject,'"Brigham City, Utah"'
-19773,subject,'"Bureau of Alcohol, Tobacco, Firearms and Explosives in fiction"'
-19774,subject,'"Burkittsville, Maryland"'
-19775,subject,'"Burlington, Massachusetts"'
-19776,subject,'"Byron Bay, New South Wales"'
-19777,subject,'"Carteret County, North Carolina"'
-19778,subject,'"Charlestown, Boston"'
-19779,subject,'"Chinatown, Los Angeles"'
-19780,subject,'"Chinatown, San Francisco in fiction"'
-19781,subject,'"City Island, Bronx"'
-19782,subject,'"Clifton, New Jersey"'
-19783,subject,'"Compton, California"'
-19784,subject,'"Corcoran, California"'
-19785,subject,'"Cottage Grove, Oregon"'
-19786,subject,'"Cultural depictions of Albert, Prince Consort"'
-19787,subject,'"Cultural depictions of Charles V, Holy Roman Emperor"'
-19788,subject,'"Cultural depictions of Gilbert du Motier, Marquis de Lafayette"'
-19789,subject,'"Cultural depictions of Herbert Kitchener, 1st Earl Kitchener"'
-19790,subject,'"Cultural depictions of John, King of England"'
-19791,subject,'"Cultural depictions of Joseph II, Holy Roman Emperor"'
-19792,subject,'"Cultural depictions of Louis Mountbatten, 1st Earl Mountbatten of Burma"'
-19793,subject,'"Culture in Reading, Berkshire"'
-19794,subject,'"Culture of Dubuque, Iowa"'
-19795,subject,'"Culture of Grand Rapids, Michigan"'
-19796,subject,'"Culture of Memphis, Tennessee"'
-19797,subject,'"Culture of Nashville, Tennessee"'
-19798,subject,'"Culture of New Haven, Connecticut"'
-19799,subject,'"Culture of Newark, New Jersey"'
-19800,subject,'"Culture of Orlando, Florida"'
-19801,subject,'"Culture of Tallahassee, Florida"'
-19802,subject,'"Culture of Winston-Salem, North Carolina"'
-19803,subject,'"Custer County, Colorado"'
-19804,subject,'"Documentary films about Hollywood, Los Angeles"'
-19805,subject,'"Dodge City, Kansas"'
-19806,subject,'"Druid Hills, Georgia"'
-19807,subject,'"Dubois County, Indiana"'
-19808,subject,'"Elizabethtown, Kentucky"'
-19809,subject,'"Essex, Massachusetts"'
-19810,subject,'"Fargo, North Dakota"'
-19811,subject,'"Films about Diana, Princess of Wales"'
-19812,subject,'"Films about Hollywood, Los Angeles"'
-19813,subject,'"Films about Mary, Queen of Scots"'
-19814,subject,'"Films directed by Ford Beebe, Jr."'
-19815,subject,'"Films set in Akron, Ohio"'
-19816,subject,'"Films set in Albany, New York"'
-19817,subject,'"Films set in Astoria, Oregon"'
-19818,subject,'"Films set in Atlantic City, New Jersey"'
-19819,subject,'"Films set in Austin, Texas"'
-19820,subject,'"Films set in Balochistan, Pakistan"'
-19821,subject,'"Films set in Bath, Somerset"'
-19822,subject,'"Films set in Beverly Hills, California"'
-19823,subject,'"Films set in Birmingham, West Midlands"'
-19824,subject,'"Films set in Buffalo, New York"'
-19825,subject,'"Films set in Bullhead City, Arizona"'
-19826,subject,'"Films set in Burbank, California"'
-19827,subject,'"Films set in Charleston, South Carolina"'
-19828,subject,'"Films set in Columbia, Missouri"'
-19829,subject,'"Films set in Columbus, Ohio"'
-19830,subject,'"Films set in Coral Gables, Florida"'
-19831,subject,'"Films set in El Paso, Texas"'
-19832,subject,'"Films set in Fairfax County, Virginia"'
-19833,subject,'"Films set in Florence, Arizona"'
-19834,subject,'"Films set in Frederick County, Maryland"'
-19835,subject,'"Films set in Fresno, California"'
-19836,subject,'"Films set in Gangwon Province, South Korea"'
-19837,subject,'"Films set in Hudson County, New Jersey"'
-19838,subject,'"Films set in Irvine, California"'
-19839,subject,'"Films set in Jersey City, New Jersey"'
-19840,subject,'"Films set in Kansas City, Missouri"'
-19841,subject,'"Films set in Koreatown, Los Angeles"'
-19842,subject,'"Films set in Langley, Virginia"'
-19843,subject,'"Films set in Long Beach, California"'
-19844,subject,'"Films set in Los Angeles County, California"'
-19845,subject,'"Films set in Louisville, Kentucky"'
-19846,subject,'"Films set in Madison, Wisconsin"'
-19847,subject,'"Films set in Malibu, California"'
-19848,subject,'"Films set in Maricopa County, Arizona"'
-19849,subject,'"Films set in Memphis, Tennessee"'
-19850,subject,'"Films set in Montgomery County, Maryland"'
-19851,subject,'"Films set in Nashville, Tennessee"'
-19852,subject,'"Films set in Oakland, California"'
-19853,subject,'"Films set in Orange County, California"'
-19854,subject,'"Films set in Orlando, Florida"'
-19855,subject,'"Films set in Palm Springs, California"'
-19856,subject,'"Films set in Palo Alto, California"'
-19857,subject,'"Films set in Pasadena, California"'
-19858,subject,'"Films set in Phoenix, Arizona"'
-19859,subject,'"Films set in Pima County, Arizona"'
-19860,subject,'"Films set in Polyarny, Murmansk Oblast"'
-19861,subject,'"Films set in Portland, Oregon"'
-19862,subject,'"Films set in Queens, New York"'
-19863,subject,'"Films set in Reno, Nevada"'
-19864,subject,'"Films set in Richmond, Virginia"'
-19865,subject,'"Films set in Riverside County, California"'
-19866,subject,'"Films set in Sacramento, California"'
-19867,subject,'"Films set in San Jose, California"'
-19868,subject,'"Films set in Santa Barbara, California"'
-19869,subject,'"Films set in Santa Cruz County, California"'
-19870,subject,'"Films set in Santa Monica, California"'
-19871,subject,'"Films set in Savannah, Georgia"'
-19872,subject,'"Films set in Scottsdale, Arizona"'
-19873,subject,'"Films set in Sun City, Arizona"'
-19874,subject,'"Films set in Sun Valley, Idaho"'
-19875,subject,'"Films set in Superior, Arizona"'
-19876,subject,'"Films set in Tampa, Florida"'
-19877,subject,'"Films set in Toledo, Spain"'
-19878,subject,'"Films set in Tombstone, Arizona"'
-19879,subject,'"Films set in Tucson, Arizona"'
-19880,subject,'"Films set in Tulsa, Oklahoma"'
-19881,subject,'"Films set in Washington, D.C."'
-19882,subject,'"Films set in Westchester County, New York"'
-19883,subject,'"Films set in Youngstown, Ohio"'
-19884,subject,'"Films shot at Warner Bros. Studios, Leavesden"'
-19885,subject,'"Films shot in Allentown, Pennsylvania"'
-19886,subject,'"Films shot in Astoria, Oregon"'
-19887,subject,'"Films shot in Atlantic City, New Jersey"'
-19888,subject,'"Films shot in Austin, Texas"'
-19889,subject,'"Films shot in Bend, Oregon"'
-19890,subject,'"Films shot in Beverly Hills, California"'
-19891,subject,'"Films shot in Big Bear Lake, California"'
-19892,subject,'"Films shot in Buffalo, New York"'
-19893,subject,'"Films shot in Burbank, California"'
-19894,subject,'"Films shot in Columbia, Missouri"'
-19895,subject,'"Films shot in Corpus Christi, Texas"'
-19896,subject,'"Films shot in Dedham, Massachusetts"'
-19897,subject,'"Films shot in El Paso, Texas"'
-19898,subject,'"Films shot in Erie, Pennsylvania"'
-19899,subject,'"Films shot in Eugene, Oregon"'
-19900,subject,'"Films shot in Fort Lee, New Jersey"'
-19901,subject,'"Films shot in Fort Worth, Texas"'
-19902,subject,'"Films shot in Halifax, Nova Scotia"'
-19903,subject,'"Films shot in Hamilton, Ontario"'
-19904,subject,'"Films shot in Harrisburg, Pennsylvania"'
-19905,subject,'"Films shot in Jacksonville, Florida"'
-19906,subject,'"Films shot in Kingston, Ontario"'
-19907,subject,'"Films shot in Lalitpur, Nepal"'
-19908,subject,'"Films shot in Lone Pine, California"'
-19909,subject,'"Films shot in Long Beach, California"'
-19910,subject,'"Films shot in Los Angeles County, California"'
-19911,subject,'"Films shot in Malibu, California"'
-19912,subject,'"Films shot in Mobile, Alabama"'
-19913,subject,'"Films shot in New Braunfels, Texas"'
-19914,subject,'"Films shot in Newark, New Jersey"'
-19915,subject,'"Films shot in Oakland, California"'
-19916,subject,'"Films shot in Pasadena, California"'
-19917,subject,'"Films shot in Phoenix, Arizona"'
-19918,subject,'"Films shot in Portland, Oregon"'
-19919,subject,'"Films shot in Punjab, India"'
-19920,subject,'"Films shot in Quincy, Massachusetts"'
-19921,subject,'"Films shot in Sacramento, California"'
-19922,subject,'"Films shot in Salvador, Bahia"'
-19923,subject,'"Films shot in San Jose, California"'
-19924,subject,'"Films shot in San Quentin, California"'
-19925,subject,'"Films shot in Santa Clarita, California"'
-19926,subject,'"Films shot in Santa Monica, California"'
-19927,subject,'"Films shot in Sault Ste. Marie, Ontario"'
-19928,subject,'"Films shot in Savannah, Georgia"'
-19929,subject,'"Films shot in Sun Valley, Idaho"'
-19930,subject,'"Films shot in Tazewell County, Virginia"'
-19931,subject,'"Films shot in Tucson, Arizona"'
-19932,subject,'"Films shot in Venice, Los Angeles"'
-19933,subject,'"Films shot in Ventura County, California"'
-19934,subject,'"Films shot in Washington, D.C."'
-19935,subject,'"Films shot in Youngstown, Ohio"'
-19936,subject,'"Films shot on the Gold Coast, Queensland"'
-19937,subject,'"Flint, Michigan"'
-19938,subject,'"Fort Lauderdale, Florida"'
-19939,subject,'"Franklin County, Virginia"'
-19940,subject,'"Grammy Award for Best Engineered Album, Non-Classical"'
-19941,subject,'"Highlands, New Jersey"'
-19942,subject,'"History of Birmingham, Alabama"'
-19943,subject,'"History of Cambridge, Massachusetts"'
-19944,subject,'"History of Oakland, California"'
-19945,subject,'"History of Paterson, New Jersey"'
-19946,subject,'"History of St. John''s, Newfoundland and Labrador"'
-19947,subject,'"Honesdale, Pennsylvania"'
-19948,subject,'"Hugo Award for Best Dramatic Presentation, Long Form winning works"'
-19949,subject,'"Hugo Award for Best Dramatic Presentation, Short Form-winning works"'
-19950,subject,'"Jackson, Mississippi"'
-19951,subject,'"Kingston, New York"'
-19952,subject,'"Lake Forest, Illinois"'
-19953,subject,'"Laurel Canyon, Los Angeles"'
-19954,subject,'"Lebanon, Tennessee"'
-19955,subject,'"Madison County, New York"'
-19956,subject,'"Manchester-by-the-Sea, Massachusetts"'
-19957,subject,'"Manhattan Beach, California"'
-19958,subject,'"Manitowoc County, Wisconsin"'
-19959,subject,'"Marfa, Texas"'
-19960,subject,'"Marlin, Texas"'
-19961,subject,'"Mass media in Middlesex County, Massachusetts"'
-19962,subject,'"Mass media in Norfolk County, Massachusetts"'
-19963,subject,'"Mass media in Suffolk County, Massachusetts"'
-19964,subject,'"Monsters, Inc."'
-19965,subject,'"Mystic, Connecticut"'
-19966,subject,'"Natchitoches, Louisiana"'
-19967,subject,'"Navarre, Florida"'
-19968,subject,'"North Beach, San Francisco"'
-19969,subject,'"OLM, Inc. animated films"'
-19970,subject,'"Ojai, California"'
-19971,subject,'"Panola County, Texas"'
-19972,subject,'"Paterson, New Jersey"'
-19973,subject,'"Pawtucket, Rhode Island"'
-19974,subject,'"Pitkin County, Colorado"'
-19975,subject,'"Prescott, Arizona"'
-19976,subject,'"Providence, Rhode Island"'
-19977,subject,'"Raglan, New Zealand"'
-19978,subject,'"Red Bank, New Jersey in fiction"'
-19979,subject,'"Rockaway Township, New Jersey"'
-19980,subject,'"Rockaway, Queens"'
-19981,subject,'"Roman Catholic Ecclesiastical Province of St. John''s, Newfoundland"'
-19982,subject,'"Rudolf, Crown Prince of Austria"'
-19983,subject,'"Salina, Kansas"'
-19984,subject,'"San Clemente, California"'
-19985,subject,'"San Dimas, California"'
-19986,subject,'"Scarborough, North Yorkshire"'
-19987,subject,'"Schenectady, New York"'
-19988,subject,'"Sports in El Paso, Texas"'
-19989,subject,'"St. Louis Park, Minnesota"'
-19990,subject,'"Star City, Arkansas"'
-19991,subject,'"Troy, New York"'
-19992,subject,'"Union County, New Jersey"'
-19993,subject,'"Washington County, Pennsylvania"'
-19994,subject,'"Waterford, Vermont"'
-19995,subject,'"West Orange, New Jersey"'
-19996,subject,'"William Collins, Sons books"'
-19997,subject,'"Woodstock, Illinois"'
-19998,subject,'"Works about the history of Hollywood, Los Angeles"'
-19999,subject,'"Yuma, Arizona"'
+19762,subject,"""Anderson County, South Carolina"""
+19763,subject,"""Baker City, Oregon"""
+19764,subject,"""Barbary Coast, San Francisco"""
+19765,subject,"""Baton Rouge, Louisiana"""
+19766,subject,"""Beacon, New York"""
+19767,subject,"""Belmont, Bronx"""
+19768,subject,"""Best Film, London Film Festival winners"""
+19769,subject,"""Birdsville, Queensland"""
+19770,subject,"""Braintree, Massachusetts"""
+19771,subject,"""Bridgewater, Massachusetts"""
+19772,subject,"""Brigham City, Utah"""
+19773,subject,"""Bureau of Alcohol, Tobacco, Firearms and Explosives in fiction"""
+19774,subject,"""Burkittsville, Maryland"""
+19775,subject,"""Burlington, Massachusetts"""
+19776,subject,"""Byron Bay, New South Wales"""
+19777,subject,"""Carteret County, North Carolina"""
+19778,subject,"""Charlestown, Boston"""
+19779,subject,"""Chinatown, Los Angeles"""
+19780,subject,"""Chinatown, San Francisco in fiction"""
+19781,subject,"""City Island, Bronx"""
+19782,subject,"""Clifton, New Jersey"""
+19783,subject,"""Compton, California"""
+19784,subject,"""Corcoran, California"""
+19785,subject,"""Cottage Grove, Oregon"""
+19786,subject,"""Cultural depictions of Albert, Prince Consort"""
+19787,subject,"""Cultural depictions of Charles V, Holy Roman Emperor"""
+19788,subject,"""Cultural depictions of Gilbert du Motier, Marquis de Lafayette"""
+19789,subject,"""Cultural depictions of Herbert Kitchener, 1st Earl Kitchener"""
+19790,subject,"""Cultural depictions of John, King of England"""
+19791,subject,"""Cultural depictions of Joseph II, Holy Roman Emperor"""
+19792,subject,"""Cultural depictions of Louis Mountbatten, 1st Earl Mountbatten of Burma"""
+19793,subject,"""Culture in Reading, Berkshire"""
+19794,subject,"""Culture of Dubuque, Iowa"""
+19795,subject,"""Culture of Grand Rapids, Michigan"""
+19796,subject,"""Culture of Memphis, Tennessee"""
+19797,subject,"""Culture of Nashville, Tennessee"""
+19798,subject,"""Culture of New Haven, Connecticut"""
+19799,subject,"""Culture of Newark, New Jersey"""
+19800,subject,"""Culture of Orlando, Florida"""
+19801,subject,"""Culture of Tallahassee, Florida"""
+19802,subject,"""Culture of Winston-Salem, North Carolina"""
+19803,subject,"""Custer County, Colorado"""
+19804,subject,"""Documentary films about Hollywood, Los Angeles"""
+19805,subject,"""Dodge City, Kansas"""
+19806,subject,"""Druid Hills, Georgia"""
+19807,subject,"""Dubois County, Indiana"""
+19808,subject,"""Elizabethtown, Kentucky"""
+19809,subject,"""Essex, Massachusetts"""
+19810,subject,"""Fargo, North Dakota"""
+19811,subject,"""Films about Diana, Princess of Wales"""
+19812,subject,"""Films about Hollywood, Los Angeles"""
+19813,subject,"""Films about Mary, Queen of Scots"""
+19814,subject,"""Films directed by Ford Beebe, Jr."""
+19815,subject,"""Films set in Akron, Ohio"""
+19816,subject,"""Films set in Albany, New York"""
+19817,subject,"""Films set in Astoria, Oregon"""
+19818,subject,"""Films set in Atlantic City, New Jersey"""
+19819,subject,"""Films set in Austin, Texas"""
+19820,subject,"""Films set in Balochistan, Pakistan"""
+19821,subject,"""Films set in Bath, Somerset"""
+19822,subject,"""Films set in Beverly Hills, California"""
+19823,subject,"""Films set in Birmingham, West Midlands"""
+19824,subject,"""Films set in Buffalo, New York"""
+19825,subject,"""Films set in Bullhead City, Arizona"""
+19826,subject,"""Films set in Burbank, California"""
+19827,subject,"""Films set in Charleston, South Carolina"""
+19828,subject,"""Films set in Columbia, Missouri"""
+19829,subject,"""Films set in Columbus, Ohio"""
+19830,subject,"""Films set in Coral Gables, Florida"""
+19831,subject,"""Films set in El Paso, Texas"""
+19832,subject,"""Films set in Fairfax County, Virginia"""
+19833,subject,"""Films set in Florence, Arizona"""
+19834,subject,"""Films set in Frederick County, Maryland"""
+19835,subject,"""Films set in Fresno, California"""
+19836,subject,"""Films set in Gangwon Province, South Korea"""
+19837,subject,"""Films set in Hudson County, New Jersey"""
+19838,subject,"""Films set in Irvine, California"""
+19839,subject,"""Films set in Jersey City, New Jersey"""
+19840,subject,"""Films set in Kansas City, Missouri"""
+19841,subject,"""Films set in Koreatown, Los Angeles"""
+19842,subject,"""Films set in Langley, Virginia"""
+19843,subject,"""Films set in Long Beach, California"""
+19844,subject,"""Films set in Los Angeles County, California"""
+19845,subject,"""Films set in Louisville, Kentucky"""
+19846,subject,"""Films set in Madison, Wisconsin"""
+19847,subject,"""Films set in Malibu, California"""
+19848,subject,"""Films set in Maricopa County, Arizona"""
+19849,subject,"""Films set in Memphis, Tennessee"""
+19850,subject,"""Films set in Montgomery County, Maryland"""
+19851,subject,"""Films set in Nashville, Tennessee"""
+19852,subject,"""Films set in Oakland, California"""
+19853,subject,"""Films set in Orange County, California"""
+19854,subject,"""Films set in Orlando, Florida"""
+19855,subject,"""Films set in Palm Springs, California"""
+19856,subject,"""Films set in Palo Alto, California"""
+19857,subject,"""Films set in Pasadena, California"""
+19858,subject,"""Films set in Phoenix, Arizona"""
+19859,subject,"""Films set in Pima County, Arizona"""
+19860,subject,"""Films set in Polyarny, Murmansk Oblast"""
+19861,subject,"""Films set in Portland, Oregon"""
+19862,subject,"""Films set in Queens, New York"""
+19863,subject,"""Films set in Reno, Nevada"""
+19864,subject,"""Films set in Richmond, Virginia"""
+19865,subject,"""Films set in Riverside County, California"""
+19866,subject,"""Films set in Sacramento, California"""
+19867,subject,"""Films set in San Jose, California"""
+19868,subject,"""Films set in Santa Barbara, California"""
+19869,subject,"""Films set in Santa Cruz County, California"""
+19870,subject,"""Films set in Santa Monica, California"""
+19871,subject,"""Films set in Savannah, Georgia"""
+19872,subject,"""Films set in Scottsdale, Arizona"""
+19873,subject,"""Films set in Sun City, Arizona"""
+19874,subject,"""Films set in Sun Valley, Idaho"""
+19875,subject,"""Films set in Superior, Arizona"""
+19876,subject,"""Films set in Tampa, Florida"""
+19877,subject,"""Films set in Toledo, Spain"""
+19878,subject,"""Films set in Tombstone, Arizona"""
+19879,subject,"""Films set in Tucson, Arizona"""
+19880,subject,"""Films set in Tulsa, Oklahoma"""
+19881,subject,"""Films set in Washington, D.C."""
+19882,subject,"""Films set in Westchester County, New York"""
+19883,subject,"""Films set in Youngstown, Ohio"""
+19884,subject,"""Films shot at Warner Bros. Studios, Leavesden"""
+19885,subject,"""Films shot in Allentown, Pennsylvania"""
+19886,subject,"""Films shot in Astoria, Oregon"""
+19887,subject,"""Films shot in Atlantic City, New Jersey"""
+19888,subject,"""Films shot in Austin, Texas"""
+19889,subject,"""Films shot in Bend, Oregon"""
+19890,subject,"""Films shot in Beverly Hills, California"""
+19891,subject,"""Films shot in Big Bear Lake, California"""
+19892,subject,"""Films shot in Buffalo, New York"""
+19893,subject,"""Films shot in Burbank, California"""
+19894,subject,"""Films shot in Columbia, Missouri"""
+19895,subject,"""Films shot in Corpus Christi, Texas"""
+19896,subject,"""Films shot in Dedham, Massachusetts"""
+19897,subject,"""Films shot in El Paso, Texas"""
+19898,subject,"""Films shot in Erie, Pennsylvania"""
+19899,subject,"""Films shot in Eugene, Oregon"""
+19900,subject,"""Films shot in Fort Lee, New Jersey"""
+19901,subject,"""Films shot in Fort Worth, Texas"""
+19902,subject,"""Films shot in Halifax, Nova Scotia"""
+19903,subject,"""Films shot in Hamilton, Ontario"""
+19904,subject,"""Films shot in Harrisburg, Pennsylvania"""
+19905,subject,"""Films shot in Jacksonville, Florida"""
+19906,subject,"""Films shot in Kingston, Ontario"""
+19907,subject,"""Films shot in Lalitpur, Nepal"""
+19908,subject,"""Films shot in Lone Pine, California"""
+19909,subject,"""Films shot in Long Beach, California"""
+19910,subject,"""Films shot in Los Angeles County, California"""
+19911,subject,"""Films shot in Malibu, California"""
+19912,subject,"""Films shot in Mobile, Alabama"""
+19913,subject,"""Films shot in New Braunfels, Texas"""
+19914,subject,"""Films shot in Newark, New Jersey"""
+19915,subject,"""Films shot in Oakland, California"""
+19916,subject,"""Films shot in Pasadena, California"""
+19917,subject,"""Films shot in Phoenix, Arizona"""
+19918,subject,"""Films shot in Portland, Oregon"""
+19919,subject,"""Films shot in Punjab, India"""
+19920,subject,"""Films shot in Quincy, Massachusetts"""
+19921,subject,"""Films shot in Sacramento, California"""
+19922,subject,"""Films shot in Salvador, Bahia"""
+19923,subject,"""Films shot in San Jose, California"""
+19924,subject,"""Films shot in San Quentin, California"""
+19925,subject,"""Films shot in Santa Clarita, California"""
+19926,subject,"""Films shot in Santa Monica, California"""
+19927,subject,"""Films shot in Sault Ste. Marie, Ontario"""
+19928,subject,"""Films shot in Savannah, Georgia"""
+19929,subject,"""Films shot in Sun Valley, Idaho"""
+19930,subject,"""Films shot in Tazewell County, Virginia"""
+19931,subject,"""Films shot in Tucson, Arizona"""
+19932,subject,"""Films shot in Venice, Los Angeles"""
+19933,subject,"""Films shot in Ventura County, California"""
+19934,subject,"""Films shot in Washington, D.C."""
+19935,subject,"""Films shot in Youngstown, Ohio"""
+19936,subject,"""Films shot on the Gold Coast, Queensland"""
+19937,subject,"""Flint, Michigan"""
+19938,subject,"""Fort Lauderdale, Florida"""
+19939,subject,"""Franklin County, Virginia"""
+19940,subject,"""Grammy Award for Best Engineered Album, Non-Classical"""
+19941,subject,"""Highlands, New Jersey"""
+19942,subject,"""History of Birmingham, Alabama"""
+19943,subject,"""History of Cambridge, Massachusetts"""
+19944,subject,"""History of Oakland, California"""
+19945,subject,"""History of Paterson, New Jersey"""
+19946,subject,"""History of St. John's, Newfoundland and Labrador"""
+19947,subject,"""Honesdale, Pennsylvania"""
+19948,subject,"""Hugo Award for Best Dramatic Presentation, Long Form winning works"""
+19949,subject,"""Hugo Award for Best Dramatic Presentation, Short Form-winning works"""
+19950,subject,"""Jackson, Mississippi"""
+19951,subject,"""Kingston, New York"""
+19952,subject,"""Lake Forest, Illinois"""
+19953,subject,"""Laurel Canyon, Los Angeles"""
+19954,subject,"""Lebanon, Tennessee"""
+19955,subject,"""Madison County, New York"""
+19956,subject,"""Manchester-by-the-Sea, Massachusetts"""
+19957,subject,"""Manhattan Beach, California"""
+19958,subject,"""Manitowoc County, Wisconsin"""
+19959,subject,"""Marfa, Texas"""
+19960,subject,"""Marlin, Texas"""
+19961,subject,"""Mass media in Middlesex County, Massachusetts"""
+19962,subject,"""Mass media in Norfolk County, Massachusetts"""
+19963,subject,"""Mass media in Suffolk County, Massachusetts"""
+19964,subject,"""Monsters, Inc."""
+19965,subject,"""Mystic, Connecticut"""
+19966,subject,"""Natchitoches, Louisiana"""
+19967,subject,"""Navarre, Florida"""
+19968,subject,"""North Beach, San Francisco"""
+19969,subject,"""OLM, Inc. animated films"""
+19970,subject,"""Ojai, California"""
+19971,subject,"""Panola County, Texas"""
+19972,subject,"""Paterson, New Jersey"""
+19973,subject,"""Pawtucket, Rhode Island"""
+19974,subject,"""Pitkin County, Colorado"""
+19975,subject,"""Prescott, Arizona"""
+19976,subject,"""Providence, Rhode Island"""
+19977,subject,"""Raglan, New Zealand"""
+19978,subject,"""Red Bank, New Jersey in fiction"""
+19979,subject,"""Rockaway Township, New Jersey"""
+19980,subject,"""Rockaway, Queens"""
+19981,subject,"""Roman Catholic Ecclesiastical Province of St. John's, Newfoundland"""
+19982,subject,"""Rudolf, Crown Prince of Austria"""
+19983,subject,"""Salina, Kansas"""
+19984,subject,"""San Clemente, California"""
+19985,subject,"""San Dimas, California"""
+19986,subject,"""Scarborough, North Yorkshire"""
+19987,subject,"""Schenectady, New York"""
+19988,subject,"""Sports in El Paso, Texas"""
+19989,subject,"""St. Louis Park, Minnesota"""
+19990,subject,"""Star City, Arkansas"""
+19991,subject,"""Troy, New York"""
+19992,subject,"""Union County, New Jersey"""
+19993,subject,"""Washington County, Pennsylvania"""
+19994,subject,"""Waterford, Vermont"""
+19995,subject,"""West Orange, New Jersey"""
+19996,subject,"""William Collins, Sons books"""
+19997,subject,"""Woodstock, Illinois"""
+19998,subject,"""Works about the history of Hollywood, Los Angeles"""
+19999,subject,"""Yuma, Arizona"""
 20000,subject,101 Dalmatians films
 20001,subject,12 Rounds films
 20002,subject,1492 Pictures films
@@ -20084,8 +20084,8 @@ feature_id,category,feature
 20082,subject,1930s biographical drama films
 20083,subject,1930s buddy comedy films
 20084,subject,1930s chase films
-20085,subject,'1930s children''s animated films'
-20086,subject,'1930s children''s films'
+20085,subject,1930s children's animated films
+20086,subject,1930s children's films
 20087,subject,1930s color films
 20088,subject,1930s comedy thriller films
 20089,subject,1930s crime comedy films
@@ -20161,7 +20161,7 @@ feature_id,category,feature
 20159,subject,1936 romantic drama films
 20160,subject,1936 war films
 20161,subject,1937 animated films
-20162,subject,'1937 children''s films'
+20162,subject,1937 children's films
 20163,subject,1937 crime drama films
 20164,subject,1937 drama films
 20165,subject,1937 fantasy films
@@ -20182,7 +20182,7 @@ feature_id,category,feature
 20180,subject,1939 Western (genre) films
 20181,subject,1939 adventure films
 20182,subject,1939 animated films
-20183,subject,'1939 children''s films'
+20183,subject,1939 children's films
 20184,subject,1939 comedy films
 20185,subject,1939 comedy-drama films
 20186,subject,1939 crime drama films
@@ -20230,8 +20230,8 @@ feature_id,category,feature
 20228,subject,1940s biographical films
 20229,subject,1940s black comedy films
 20230,subject,1940s buddy comedy films
-20231,subject,'1940s children''s animated films'
-20232,subject,'1940s children''s films'
+20231,subject,1940s children's animated films
+20232,subject,1940s children's films
 20233,subject,1940s comedy horror films
 20234,subject,1940s comedy mystery films
 20235,subject,1940s comedy road movies
@@ -20421,9 +20421,9 @@ feature_id,category,feature
 20419,subject,1950s buddy comedy films
 20420,subject,1950s business films
 20421,subject,1950s chase films
-20422,subject,'1950s children''s adventure films'
-20423,subject,'1950s children''s fantasy films'
-20424,subject,'1950s children''s films'
+20422,subject,1950s children's adventure films
+20423,subject,1950s children's fantasy films
+20424,subject,1950s children's films
 20425,subject,1950s comedy mystery films
 20426,subject,1950s comedy thriller films
 20427,subject,1950s coming-of-age drama films
@@ -20640,11 +20640,11 @@ feature_id,category,feature
 20638,subject,1960s buddy films
 20639,subject,1960s business films
 20640,subject,1960s chase films
-20641,subject,'1960s children''s adventure films'
-20642,subject,'1960s children''s animated films'
-20643,subject,'1960s children''s comedy films'
-20644,subject,'1960s children''s fantasy films'
-20645,subject,'1960s children''s films'
+20641,subject,1960s children's adventure films
+20642,subject,1960s children's animated films
+20643,subject,1960s children's comedy films
+20644,subject,1960s children's fantasy films
+20645,subject,1960s children's films
 20646,subject,1960s comedy horror films
 20647,subject,1960s comedy mystery films
 20648,subject,1960s comedy thriller films
@@ -20768,9 +20768,9 @@ feature_id,category,feature
 20766,subject,1963 romantic comedy films
 20767,subject,1963 war films
 20768,subject,1964 LGBT-related films
-20769,subject,'1964 New York World''s Fair'
+20769,subject,1964 New York World's Fair
 20770,subject,1964 animated films
-20771,subject,'1964 children''s films'
+20771,subject,1964 children's films
 20772,subject,1964 comedy films
 20773,subject,1964 comedy-drama films
 20774,subject,1964 drama films
@@ -20797,7 +20797,7 @@ feature_id,category,feature
 20795,subject,1965 soundtrack albums
 20796,subject,1965 television specials
 20797,subject,1965 war films
-20798,subject,'1965–66 NCAA University Division men''s basketball season'
+20798,subject,1965–66 NCAA University Division men's basketball season
 20799,subject,1966 American television series endings
 20800,subject,1966 Western (genre) films
 20801,subject,1966 animated films
@@ -20910,9 +20910,9 @@ feature_id,category,feature
 20908,subject,1970s buddy cop films
 20909,subject,1970s buddy films
 20910,subject,1970s chase films
-20911,subject,'1970s children''s animated films'
-20912,subject,'1970s children''s comedy films'
-20913,subject,'1970s children''s drama films'
+20911,subject,1970s children's animated films
+20912,subject,1970s children's comedy films
+20913,subject,1970s children's drama films
 20914,subject,1970s comedy horror films
 20915,subject,1970s comedy mystery films
 20916,subject,1970s comedy road movies
@@ -21221,12 +21221,12 @@ feature_id,category,feature
 21219,subject,1980s buddy films
 21220,subject,1980s business films
 21221,subject,1980s chase films
-21222,subject,'1980s children''s adventure films'
-21223,subject,'1980s children''s animated films'
-21224,subject,'1980s children''s comedy films'
-21225,subject,'1980s children''s drama films'
-21226,subject,'1980s children''s fantasy films'
-21227,subject,'1980s children''s films'
+21222,subject,1980s children's adventure films
+21223,subject,1980s children's animated films
+21224,subject,1980s children's comedy films
+21225,subject,1980s children's drama films
+21226,subject,1980s children's fantasy films
+21227,subject,1980s children's films
 21228,subject,1980s comedy horror films
 21229,subject,1980s comedy mystery films
 21230,subject,1980s comedy road movies
@@ -21362,7 +21362,7 @@ feature_id,category,feature
 21360,subject,1982 Western (genre) films
 21361,subject,1982 action thriller films
 21362,subject,1982 animated films
-21363,subject,'1982 children''s films'
+21363,subject,1982 children's films
 21364,subject,1982 comedy films
 21365,subject,1982 comedy-drama films
 21366,subject,1982 directorial debut films
@@ -21641,11 +21641,11 @@ feature_id,category,feature
 21639,subject,1990s buddy films
 21640,subject,1990s business films
 21641,subject,1990s chase films
-21642,subject,'1990s children''s adventure films'
-21643,subject,'1990s children''s animated films'
-21644,subject,'1990s children''s comedy films'
-21645,subject,'1990s children''s fantasy films'
-21646,subject,'1990s children''s films'
+21642,subject,1990s children's adventure films
+21643,subject,1990s children's animated films
+21644,subject,1990s children's comedy films
+21645,subject,1990s children's fantasy films
+21646,subject,1990s children's films
 21647,subject,1990s comedy horror films
 21648,subject,1990s comedy mystery films
 21649,subject,1990s comedy road movies
@@ -21888,7 +21888,7 @@ feature_id,category,feature
 21886,subject,1995 action films
 21887,subject,1995 action thriller films
 21888,subject,1995 animated films
-21889,subject,'1995 children''s films'
+21889,subject,1995 children's films
 21890,subject,1995 comedy films
 21891,subject,1995 comedy-drama films
 21892,subject,1995 computer-animated films
@@ -21973,7 +21973,7 @@ feature_id,category,feature
 21971,subject,1998 action thriller films
 21972,subject,1998 animated films
 21973,subject,1998 anime films
-21974,subject,'1998 children''s films'
+21974,subject,1998 children's films
 21975,subject,1998 comedy films
 21976,subject,1998 comedy-drama films
 21977,subject,1998 computer-animated films
@@ -22005,7 +22005,7 @@ feature_id,category,feature
 22003,subject,1999 action films
 22004,subject,1999 action thriller films
 22005,subject,1999 animated films
-22006,subject,'1999 children''s films'
+22006,subject,1999 children's films
 22007,subject,1999 comedy films
 22008,subject,1999 comedy-drama films
 22009,subject,1999 compilation albums
@@ -22165,12 +22165,12 @@ feature_id,category,feature
 22163,subject,2000s buddy films
 22164,subject,2000s business films
 22165,subject,2000s chase films
-22166,subject,'2000s children''s adventure films'
-22167,subject,'2000s children''s animated films'
-22168,subject,'2000s children''s comedy films'
-22169,subject,'2000s children''s drama films'
-22170,subject,'2000s children''s fantasy films'
-22171,subject,'2000s children''s films'
+22166,subject,2000s children's adventure films
+22167,subject,2000s children's animated films
+22168,subject,2000s children's comedy films
+22169,subject,2000s children's drama films
+22170,subject,2000s children's fantasy films
+22171,subject,2000s children's films
 22172,subject,2000s comedy horror films
 22173,subject,2000s comedy mystery films
 22174,subject,2000s comedy road movies
@@ -22363,7 +22363,7 @@ feature_id,category,feature
 22361,subject,2002 films
 22362,subject,2002 horror films
 22363,subject,2002 in Christianity
-22364,subject,'2002 in women''s association football'
+22364,subject,2002 in women's association football
 22365,subject,2002 independent films
 22366,subject,2002 martial arts films
 22367,subject,2002 multilingual films
@@ -22520,7 +22520,7 @@ feature_id,category,feature
 22518,subject,2006 horror films
 22519,subject,2006 in Christianity
 22520,subject,2006 in the environment
-22521,subject,'2006 in women''s association football'
+22521,subject,2006 in women's association football
 22522,subject,2006 independent films
 22523,subject,2006 martial arts films
 22524,subject,2006 multilingual films
@@ -22787,11 +22787,11 @@ feature_id,category,feature
 22785,subject,2010s buddy films
 22786,subject,2010s business films
 22787,subject,2010s chase films
-22788,subject,'2010s children''s adventure films'
-22789,subject,'2010s children''s animated films'
-22790,subject,'2010s children''s comedy films'
-22791,subject,'2010s children''s fantasy films'
-22792,subject,'2010s children''s films'
+22788,subject,2010s children's adventure films
+22789,subject,2010s children's animated films
+22790,subject,2010s children's comedy films
+22791,subject,2010s children's fantasy films
+22792,subject,2010s children's films
 22793,subject,2010s comedy horror films
 22794,subject,2010s comedy mystery films
 22795,subject,2010s comedy road movies
@@ -23273,7 +23273,7 @@ feature_id,category,feature
 23271,subject,4DX films
 23272,subject,60 Minutes
 23273,subject,A Band Apart films
-23274,subject,'A Bug''s Life'
+23274,subject,A Bug's Life
 23275,subject,A Cinderella Story (film series)
 23276,subject,A Clockwork Orange
 23277,subject,A Nightmare on Elm Street (franchise) films
@@ -23548,34 +23548,34 @@ feature_id,category,feature
 23546,subject,American buddy films
 23547,subject,American business films
 23548,subject,American chase films
-23549,subject,'American children''s adventure films'
-23550,subject,'American children''s animated action films'
-23551,subject,'American children''s animated action television series'
-23552,subject,'American children''s animated adventure films'
-23553,subject,'American children''s animated adventure television series'
-23554,subject,'American children''s animated comedy films'
-23555,subject,'American children''s animated comedy television series'
-23556,subject,'American children''s animated comic science fiction films'
-23557,subject,'American children''s animated drama films'
-23558,subject,'American children''s animated drama television series'
-23559,subject,'American children''s animated fantasy films'
-23560,subject,'American children''s animated fantasy television series'
-23561,subject,'American children''s animated films'
-23562,subject,'American children''s animated horror television series'
-23563,subject,'American children''s animated musical films'
-23564,subject,'American children''s animated musical television series'
-23565,subject,'American children''s animated mystery films'
-23566,subject,'American children''s animated mystery television series'
-23567,subject,'American children''s animated science fantasy films'
-23568,subject,'American children''s animated science fiction films'
-23569,subject,'American children''s animated space adventure films'
-23570,subject,'American children''s animated superhero films'
-23571,subject,'American children''s animated superhero television series'
-23572,subject,'American children''s comedy films'
-23573,subject,'American children''s drama films'
-23574,subject,'American children''s fantasy films'
-23575,subject,'American children''s films'
-23576,subject,'American children''s musical films'
+23549,subject,American children's adventure films
+23550,subject,American children's animated action films
+23551,subject,American children's animated action television series
+23552,subject,American children's animated adventure films
+23553,subject,American children's animated adventure television series
+23554,subject,American children's animated comedy films
+23555,subject,American children's animated comedy television series
+23556,subject,American children's animated comic science fiction films
+23557,subject,American children's animated drama films
+23558,subject,American children's animated drama television series
+23559,subject,American children's animated fantasy films
+23560,subject,American children's animated fantasy television series
+23561,subject,American children's animated films
+23562,subject,American children's animated horror television series
+23563,subject,American children's animated musical films
+23564,subject,American children's animated musical television series
+23565,subject,American children's animated mystery films
+23566,subject,American children's animated mystery television series
+23567,subject,American children's animated science fantasy films
+23568,subject,American children's animated science fiction films
+23569,subject,American children's animated space adventure films
+23570,subject,American children's animated superhero films
+23571,subject,American children's animated superhero television series
+23572,subject,American children's comedy films
+23573,subject,American children's drama films
+23574,subject,American children's fantasy films
+23575,subject,American children's films
+23576,subject,American children's musical films
 23577,subject,American comedy films
 23578,subject,American comedy horror films
 23579,subject,American comedy mystery films
@@ -23632,7 +23632,7 @@ feature_id,category,feature
 23630,subject,American feminist comedy films
 23631,subject,American feminist films
 23632,subject,American filmmakers
-23633,subject,'American films about Alzheimer''s disease'
+23633,subject,American films about Alzheimer's disease
 23634,subject,American films about Halloween
 23635,subject,American films about cannabis
 23636,subject,American films about revenge
@@ -23927,7 +23927,7 @@ feature_id,category,feature
 23925,subject,Animated films based on actual events
 23926,subject,Animated films based on animated series
 23927,subject,Animated films based on animated television series
-23928,subject,'Animated films based on children''s books'
+23928,subject,Animated films based on children's books
 23929,subject,Animated films based on classical mythology
 23930,subject,Animated films based on comics
 23931,subject,Animated films based on literature
@@ -24137,12 +24137,12 @@ feature_id,category,feature
 24135,subject,Australian biographical drama films
 24136,subject,Australian black comedy films
 24137,subject,Australian buddy films
-24138,subject,'Australian children''s adventure films'
-24139,subject,'Australian children''s animated films'
-24140,subject,'Australian children''s drama films'
-24141,subject,'Australian children''s fantasy films'
-24142,subject,'Australian children''s films'
-24143,subject,'Australian children''s musical films'
+24138,subject,Australian children's adventure films
+24139,subject,Australian children's animated films
+24140,subject,Australian children's drama films
+24141,subject,Australian children's fantasy films
+24142,subject,Australian children's films
+24143,subject,Australian children's musical films
 24144,subject,Australian comedy films
 24145,subject,Australian comedy horror films
 24146,subject,Australian comedy-drama films
@@ -24475,7 +24475,7 @@ feature_id,category,feature
 24473,subject,Biorobotics in fiction
 24474,subject,Bipolar disorder in fiction
 24475,subject,Bisexuality-related films
-24476,subject,'Bishop''s College School'
+24476,subject,Bishop's College School
 24477,subject,Black Bear Pictures films
 24478,subject,Black British films
 24479,subject,Black British mass media
@@ -24552,7 +24552,7 @@ feature_id,category,feature
 24550,subject,Bourne (film series)
 24551,subject,Bouvier family
 24552,subject,Boxing mass media
-24553,subject,'Br''er Rabbit'
+24553,subject,Br'er Rabbit
 24554,subject,Brain transplantation in fiction
 24555,subject,Brain–computer interfacing in fiction
 24556,subject,Brandywine Productions films
@@ -24634,12 +24634,12 @@ feature_id,category,feature
 24632,subject,British buddy comedy-drama films
 24633,subject,British buddy films
 24634,subject,British chase films
-24635,subject,'British children''s adventure films'
-24636,subject,'British children''s animated films'
-24637,subject,'British children''s comedy films'
-24638,subject,'British children''s drama films'
-24639,subject,'British children''s fantasy films'
-24640,subject,'British children''s films'
+24635,subject,British children's adventure films
+24636,subject,British children's animated films
+24637,subject,British children's comedy films
+24638,subject,British children's drama films
+24639,subject,British children's fantasy films
+24640,subject,British children's films
 24641,subject,British comedy films
 24642,subject,British comedy horror films
 24643,subject,British comedy mystery films
@@ -24856,13 +24856,13 @@ feature_id,category,feature
 24854,subject,Caiaphas
 24855,subject,California Angels
 24856,subject,California Institute of Technology
-24857,subject,'California''s Great America'
+24857,subject,California's Great America
 24858,subject,Call Me by Your Name
 24859,subject,Camcorder films
 24860,subject,Cameroonian drama films
 24861,subject,Camino de Santiago
 24862,subject,Camp Rock
-24863,subject,'Caméra d''Or winners'
+24863,subject,Caméra d'Or winners
 24864,subject,Canadian 3D films
 24865,subject,Canadian Armed Forces in films
 24866,subject,Canadian Christmas comedy films
@@ -24898,9 +24898,9 @@ feature_id,category,feature
 24896,subject,Canadian black comedy films
 24897,subject,Canadian body horror films
 24898,subject,Canadian boxing films
-24899,subject,'Canadian children''s comedy films'
-24900,subject,'Canadian children''s fantasy films'
-24901,subject,'Canadian children''s films'
+24899,subject,Canadian children's comedy films
+24900,subject,Canadian children's fantasy films
+24901,subject,Canadian children's films
 24902,subject,Canadian comedy films
 24903,subject,Canadian comedy horror films
 24904,subject,Canadian comedy road movies
@@ -25023,7 +25023,7 @@ feature_id,category,feature
 25021,subject,Carandiru Penitentiary
 25022,subject,Caravan Pictures films
 25023,subject,Care Bears films
-25024,subject,'Carlito''s Way'
+25024,subject,Carlito's Way
 25025,subject,Carolco Pictures films
 25026,subject,Carrie (franchise)
 25027,subject,Cars (franchise)
@@ -25071,7 +25071,7 @@ feature_id,category,feature
 25069,subject,Charles Horman
 25070,subject,Charlie Dog films
 25071,subject,Charlie and the Chocolate Factory
-25072,subject,'Charlie''s Angels (franchise)'
+25072,subject,Charlie's Angels (franchise)
 25073,subject,Charlton Comics titles
 25074,subject,Cheech & Chong (film series)
 25075,subject,Cheerleading films
@@ -25089,15 +25089,15 @@ feature_id,category,feature
 25087,subject,Child superheroes
 25088,subject,Child versions of cartoon characters
 25089,subject,Child welfare
-25090,subject,'Child''s Play (franchise) films'
+25090,subject,Child's Play (franchise) films
 25091,subject,Children of the Corn
-25092,subject,'Children''s Christmas films'
-25093,subject,'Children''s animated films'
-25094,subject,'Children''s comedy-drama films'
-25095,subject,'Children''s drama films'
-25096,subject,'Children''s fantasy films'
-25097,subject,'Children''s horror films'
-25098,subject,'Children''s science fiction films'
+25092,subject,Children's Christmas films
+25093,subject,Children's animated films
+25094,subject,Children's comedy-drama films
+25095,subject,Children's drama films
+25096,subject,Children's fantasy films
+25097,subject,Children's horror films
+25098,subject,Children's science fiction films
 25099,subject,Chilean drama films
 25100,subject,Chilean thriller drama films
 25101,subject,China Film Group Corporation films
@@ -25787,7 +25787,7 @@ feature_id,category,feature
 25785,subject,Czech action drama films
 25786,subject,Czech action horror films
 25787,subject,Czech adventure films
-25788,subject,'Czech children''s films'
+25788,subject,Czech children's films
 25789,subject,Czech comedy films
 25790,subject,Czech crime films
 25791,subject,Czech crossover films
@@ -25822,7 +25822,7 @@ feature_id,category,feature
 25820,subject,DMG Entertainment films
 25821,subject,DNA Films films
 25822,subject,DNA Productions films
-25823,subject,'Dad''s Army'
+25823,subject,Dad's Army
 25824,subject,Daffy Duck films
 25825,subject,Daiei Film films
 25826,subject,Dallas Cowboys
@@ -25986,7 +25986,7 @@ feature_id,category,feature
 25984,subject,Documentary films about Los Angeles
 25985,subject,Documentary films about Madonna
 25986,subject,Documentary films about Massachusetts
-25987,subject,'Documentary films about McDonald''s'
+25987,subject,Documentary films about McDonald's
 25988,subject,Documentary films about Michigan
 25989,subject,Documentary films about Missouri
 25990,subject,Documentary films about Montana
@@ -26229,7 +26229,7 @@ feature_id,category,feature
 26227,subject,Dutch action films
 26228,subject,Dutch animated short films
 26229,subject,Dutch avant-garde and experimental films
-26230,subject,'Dutch children''s films'
+26230,subject,Dutch children's films
 26231,subject,Dutch comedy horror films
 26232,subject,Dutch comedy-drama films
 26233,subject,Dutch coming-of-age films
@@ -26263,7 +26263,7 @@ feature_id,category,feature
 26261,subject,Ealing Studios films
 26262,subject,Early color films
 26263,subject,Early sound films
-26264,subject,'Earth''s Children'
+26264,subject,Earth's Children
 26265,subject,Easter Bunny in film
 26266,subject,Easter Bunny in television
 26267,subject,Easter egg (media)
@@ -26306,7 +26306,7 @@ feature_id,category,feature
 26304,subject,Empire State Building in fiction
 26305,subject,Empire of Japan
 26306,subject,Enchanted (film)
-26307,subject,'Ender''s Game series'
+26307,subject,Ender's Game series
 26308,subject,Enforced disappearance
 26309,subject,English Civil War films
 26310,subject,English nationalism
@@ -26438,7 +26438,7 @@ feature_id,category,feature
 26436,subject,Fast & Furious films
 26437,subject,Faster-than-light travel in fiction
 26438,subject,Father of the Bride (franchise)
-26439,subject,'Father''s Day'
+26439,subject,Father's Day
 26440,subject,Features based on short films
 26441,subject,Febiofest award winners
 26442,subject,Federal Theatre Project
@@ -26452,7 +26452,7 @@ feature_id,category,feature
 26450,subject,Festivals in San Diego
 26451,subject,Fiction about God
 26452,subject,Fiction about Haitian Vodou
-26453,subject,'Fiction about Halley''s Comet'
+26453,subject,Fiction about Halley's Comet
 26454,subject,Fiction about Louisiana Voodoo
 26455,subject,Fiction about amnesia
 26456,subject,Fiction about animal communication
@@ -26524,9 +26524,9 @@ feature_id,category,feature
 26522,subject,Fiction set in the Roman Empire
 26523,subject,Fiction set on Europa (moon)
 26524,subject,Fiction set on Io (moon)
-26525,subject,'Fiction set on Jupiter''s moons'
+26525,subject,Fiction set on Jupiter's moons
 26526,subject,Fiction set on Rhea (moon)
-26527,subject,'Fiction set on Saturn''s moons'
+26527,subject,Fiction set on Saturn's moons
 26528,subject,Fiction set on Triton (moon)
 26529,subject,Fiction set on desert planets
 26530,subject,Fiction set on ocean planets
@@ -26728,7 +26728,7 @@ feature_id,category,feature
 26726,subject,Film controversies in the United Kingdom
 26727,subject,Film controversies in the United States
 26728,subject,Film noir
-26729,subject,'Film portrayals of Jesus'' death and resurrection'
+26729,subject,Film portrayals of Jesus' death and resurrection
 26730,subject,Film producers from Texas
 26731,subject,Film scores
 26732,subject,Film serials
@@ -26749,7 +26749,7 @@ feature_id,category,feature
 26747,subject,Films about Al Capone
 26748,subject,Films about Alessandro Cagliostro
 26749,subject,Films about Alexander the Great
-26750,subject,'Films about Alzheimer''s disease'
+26750,subject,Films about Alzheimer's disease
 26751,subject,Films about American military personnel
 26752,subject,Films about American politicians
 26753,subject,Films about American slavery
@@ -26820,7 +26820,7 @@ feature_id,category,feature
 26818,subject,Films about Martin Luther
 26819,subject,Films about Martin Luther King Jr.
 26820,subject,Films about McCarthyism
-26821,subject,'Films about McDonald''s'
+26821,subject,Films about McDonald's
 26822,subject,Films about Mexican drug cartels
 26823,subject,Films about Michael Moore
 26824,subject,Films about Mormonism
@@ -27025,7 +27025,7 @@ feature_id,category,feature
 27023,subject,Films about corruption in the United States
 27024,subject,Films about cougars
 27025,subject,Films about couples
-27026,subject,'Films about coups d''état'
+27026,subject,Films about coups d'état
 27027,subject,Films about courtesans in India
 27028,subject,Films about cousins
 27029,subject,Films about cricket in India
@@ -27523,7 +27523,7 @@ feature_id,category,feature
 27521,subject,Films about the Israel Defense Forces
 27522,subject,Films about the KGB
 27523,subject,Films about the Klondike Gold Rush
-27524,subject,'Films about the Korean People''s Army'
+27524,subject,Films about the Korean People's Army
 27525,subject,Films about the Ku Klux Klan
 27526,subject,Films about the Los Angeles Police Department
 27527,subject,Films about the Manhattan Project
@@ -27535,7 +27535,7 @@ feature_id,category,feature
 27533,subject,Films about the New York Yankees
 27534,subject,Films about the Paralympics
 27535,subject,Films about the Peace Corps
-27536,subject,'Films about the People''s Liberation Army'
+27536,subject,Films about the People's Liberation Army
 27537,subject,Films about the Royal Air Force
 27538,subject,Films about the Royal Navy
 27539,subject,Films about the Russian Mafia
@@ -27551,7 +27551,7 @@ feature_id,category,feature
 27549,subject,Films about the United States Air Force
 27550,subject,Films about the United States Army
 27551,subject,Films about the United States Army Air Forces
-27552,subject,'Films about the United States Army''s psychological operations units'
+27552,subject,Films about the United States Army's psychological operations units
 27553,subject,Films about the United States Coast Guard
 27554,subject,Films about the United States Marine Corps
 27555,subject,Films about the United States Navy
@@ -27641,7 +27641,7 @@ feature_id,category,feature
 27639,subject,Films about women in India
 27640,subject,Films about women in the Indian diaspora
 27641,subject,Films about women in the United States
-27642,subject,'Films about women''s sports'
+27642,subject,Films about women's sports
 27643,subject,Films about wormholes
 27644,subject,Films about writers
 27645,subject,Films adapted into comics
@@ -27653,12 +27653,12 @@ feature_id,category,feature
 27651,subject,Films banned in Nepal
 27652,subject,Films based on 2000 AD (comics)
 27653,subject,Films based on A Christmas Carol
-27654,subject,'Films based on A Connecticut Yankee in King Arthur''s Court'
+27654,subject,Films based on A Connecticut Yankee in King Arthur's Court
 27655,subject,Films based on A Little Princess
-27656,subject,'Films based on A Midsummer Night''s Dream'
+27656,subject,Films based on A Midsummer Night's Dream
 27657,subject,Films based on A Tale of Two Cities
 27658,subject,Films based on Adventures of Huckleberry Finn
-27659,subject,'Films based on Aesop''s Fables'
+27659,subject,Films based on Aesop's Fables
 27660,subject,Films based on Aladdin
 27661,subject,Films based on Ali Baba
 27662,subject,Films based on Alice in Wonderland
@@ -27675,14 +27675,14 @@ feature_id,category,feature
 27673,subject,Films based on Argentine novels
 27674,subject,Films based on Around the World in Eighty Days
 27675,subject,Films based on As You Like It
-27676,subject,'Films based on Assassin''s Creed'
+27676,subject,Films based on Assassin's Creed
 27677,subject,Films based on Australian novels
 27678,subject,Films based on Austrian novels
 27679,subject,Films based on Beauty and the Beast
 27680,subject,Films based on Belgian comics
 27681,subject,Films based on Beowulf
 27682,subject,Films based on Black Beauty
-27683,subject,'Films based on Brewster''s Millions'
+27683,subject,Films based on Brewster's Millions
 27684,subject,Films based on British comics
 27685,subject,Films based on British horror novels
 27686,subject,Films based on British novels
@@ -27691,7 +27691,7 @@ feature_id,category,feature
 27689,subject,Films based on Canadian novels
 27690,subject,Films based on Canadian plays
 27691,subject,Films based on Celtic mythology
-27692,subject,'Films based on Charles Perrault''s Cinderella'
+27692,subject,Films based on Charles Perrault's Cinderella
 27693,subject,Films based on Chilean novels
 27694,subject,Films based on Chinese novels
 27695,subject,Films based on Cinderella
@@ -27717,8 +27717,8 @@ feature_id,category,feature
 27715,subject,Films based on Goldilocks and the Three Bears
 27716,subject,Films based on Great Expectations
 27717,subject,Films based on Greek novels
-27718,subject,'Films based on Grimms'' Fairy Tales'
-27719,subject,'Films based on Gulliver''s Travels'
+27718,subject,Films based on Grimms' Fairy Tales
+27719,subject,Films based on Gulliver's Travels
 27720,subject,Films based on Hamlet
 27721,subject,Films based on Hansel and Gretel
 27722,subject,Films based on Harvey Comics
@@ -27738,7 +27738,7 @@ feature_id,category,feature
 27736,subject,Films based on Journey to the Center of the Earth
 27737,subject,Films based on Journey to the West
 27738,subject,Films based on King Lear
-27739,subject,'Films based on King Solomon''s Mines'
+27739,subject,Films based on King Solomon's Mines
 27740,subject,Films based on Little Orphan Annie
 27741,subject,Films based on Little Red Riding Hood
 27742,subject,Films based on Lottie and Lisa
@@ -27841,7 +27841,7 @@ feature_id,category,feature
 27839,subject,Films based on autobiographies
 27840,subject,Films based on biographical novels
 27841,subject,Films based on biographies
-27842,subject,'Films based on children''s books'
+27842,subject,Films based on children's books
 27843,subject,Films based on classical mythology
 27844,subject,Films based on comic strips
 27845,subject,Films based on crime novels
@@ -28523,7 +28523,7 @@ feature_id,category,feature
 28521,subject,Films directed by Dan Harris (screenwriter)
 28522,subject,Films directed by Dan Ireland
 28523,subject,Films directed by Dan Kuenster
-28524,subject,'Films directed by Dan O''Bannon'
+28524,subject,Films directed by Dan O'Bannon
 28525,subject,Films directed by Dan Scanlon
 28526,subject,Films directed by Dan Trachtenberg
 28527,subject,Films directed by Daniel Algrant
@@ -28812,7 +28812,7 @@ feature_id,category,feature
 28810,subject,Films directed by Gaspar Noé
 28811,subject,Films directed by Gauri Shinde
 28812,subject,Films directed by Gavin Hood
-28813,subject,'Films directed by Gavin O''Connor'
+28813,subject,Films directed by Gavin O'Connor
 28814,subject,Films directed by Gene Kelly
 28815,subject,Films directed by Gene Saks
 28816,subject,Films directed by Gene Wilder
@@ -29121,7 +29121,7 @@ feature_id,category,feature
 29119,subject,Films directed by Jim Kouf
 29120,subject,Films directed by Jim McBride
 29121,subject,Films directed by Jim Mickle
-29122,subject,'Films directed by Jim O''Hanlon'
+29122,subject,Films directed by Jim O'Hanlon
 29123,subject,Films directed by Jim Sharman
 29124,subject,Films directed by Jim Sheridan
 29125,subject,Films directed by Jim Wynorski
@@ -29137,7 +29137,7 @@ feature_id,category,feature
 29135,subject,Films directed by Joe Camp
 29136,subject,Films directed by Joe Carnahan
 29137,subject,Films directed by Joe Chappelle
-29138,subject,'Films directed by Joe D''Amato'
+29138,subject,Films directed by Joe D'Amato
 29139,subject,Films directed by Joe Dante
 29140,subject,Films directed by Joe Johnston
 29141,subject,Films directed by Joe Lynch
@@ -29427,7 +29427,7 @@ feature_id,category,feature
 29425,subject,Films directed by Liliana Cavani
 29426,subject,Films directed by Lionel Jeffries
 29427,subject,Films directed by Lisa Azuelos
-29428,subject,'Films directed by Lisa Barros D''Sa and Glenn Leyburn'
+29428,subject,Films directed by Lisa Barros D'Sa and Glenn Leyburn
 29429,subject,Films directed by Lisa Cholodenko
 29430,subject,Films directed by Lloyd Bacon
 29431,subject,Films directed by Lloyd Kaufman
@@ -29520,7 +29520,7 @@ feature_id,category,feature
 29518,subject,Films directed by Matthew Bright
 29519,subject,Films directed by Matthew Chapman
 29520,subject,Films directed by Matthew Diamond
-29521,subject,'Films directed by Matthew O''Callaghan'
+29521,subject,Films directed by Matthew O'Callaghan
 29522,subject,Films directed by Matthew Saville
 29523,subject,Films directed by Matthew Vaughn
 29524,subject,Films directed by Max Landis
@@ -29700,7 +29700,7 @@ feature_id,category,feature
 29698,subject,Films directed by Paris Barclay
 29699,subject,Films directed by Park Chan-wook
 29700,subject,Films directed by Pascal Laugier
-29701,subject,'Films directed by Pat O''Connor'
+29701,subject,Films directed by Pat O'Connor
 29702,subject,Films directed by Patrice Leconte
 29703,subject,Films directed by Patricia Rozema
 29704,subject,Films directed by Patrick Brice
@@ -30180,7 +30180,7 @@ feature_id,category,feature
 30178,subject,Films directed by Terry Jones
 30179,subject,Films directed by Terry Sanders
 30180,subject,Films directed by Terry Zwigoff
-30181,subject,'Films directed by Thaddeus O''Sullivan'
+30181,subject,Films directed by Thaddeus O'Sullivan
 30182,subject,Films directed by The Malloys
 30183,subject,Films directed by The Wachowskis
 30184,subject,Films directed by Theodore Melfi
@@ -30244,7 +30244,7 @@ feature_id,category,feature
 30242,subject,Films directed by Tommy Chong
 30243,subject,Films directed by Tommy Lee Jones
 30244,subject,Films directed by Tommy Lee Wallace
-30245,subject,'Films directed by Tommy O''Haver'
+30245,subject,Films directed by Tommy O'Haver
 30246,subject,Films directed by Tommy Wirkola
 30247,subject,Films directed by Tony Bancroft
 30248,subject,Films directed by Tony Bill
@@ -31044,7 +31044,7 @@ feature_id,category,feature
 31042,subject,Films scored by Don Ellis
 31043,subject,Films scored by Douglas Pipes
 31044,subject,Films scored by Duke Ellington
-31045,subject,'Films scored by Dustin O''Halloran'
+31045,subject,Films scored by Dustin O'Halloran
 31046,subject,Films scored by Eduard Artemyev
 31047,subject,Films scored by Edward Shearmur
 31048,subject,Films scored by Edward Ward (composer)
@@ -31932,7 +31932,7 @@ feature_id,category,feature
 31930,subject,Films set in Manila
 31931,subject,Films set in Manitoba
 31932,subject,Films set in Marseille
-31933,subject,'Films set in Martha''s Vineyard'
+31933,subject,Films set in Martha's Vineyard
 31934,subject,Films set in Martinique
 31935,subject,Films set in Maryland
 31936,subject,Films set in Massachusetts
@@ -32405,7 +32405,7 @@ feature_id,category,feature
 32403,subject,Films set in universities and colleges
 32404,subject,Films set in water parks
 32405,subject,Films set in zoos
-32406,subject,'Films set on Devil''s Island'
+32406,subject,Films set on Devil's Island
 32407,subject,Films set on aircraft
 32408,subject,Films set on aircraft carriers
 32409,subject,Films set on airplanes
@@ -32696,7 +32696,7 @@ feature_id,category,feature
 32694,subject,Films shot in Manila
 32695,subject,Films shot in Manitoba
 32696,subject,Films shot in Marseille
-32697,subject,'Films shot in Martha''s Vineyard'
+32697,subject,Films shot in Martha's Vineyard
 32698,subject,Films shot in Martinique
 32699,subject,Films shot in Maryland
 32700,subject,Films shot in Massachusetts
@@ -33141,7 +33141,7 @@ feature_id,category,feature
 33139,subject,Films with screenplays by Dan Harris (screenwriter)
 33140,subject,Films with screenplays by Dan Mazeau
 33141,subject,Films with screenplays by Dan Mazer
-33142,subject,'Films with screenplays by Dan O''Bannon'
+33142,subject,Films with screenplays by Dan O'Bannon
 33143,subject,Films with screenplays by Dan Scanlon
 33144,subject,Films with screenplays by Dan Schneider
 33145,subject,Films with screenplays by Daniel Myrick
@@ -33555,7 +33555,7 @@ feature_id,category,feature
 33553,subject,Films with screenplays by Matthew Bright
 33554,subject,Films with screenplays by Matthew Jacobs
 33555,subject,Films with screenplays by Matthew Michael Carnahan
-33556,subject,'Films with screenplays by Matthew O''Callaghan'
+33556,subject,Films with screenplays by Matthew O'Callaghan
 33557,subject,Films with screenplays by Matthew Robbins
 33558,subject,Films with screenplays by Matthew Vaughn
 33559,subject,Films with screenplays by Max Borenstein
@@ -33586,7 +33586,7 @@ feature_id,category,feature
 33584,subject,Films with screenplays by Michael Mann
 33585,subject,Films with screenplays by Michael McCullers
 33586,subject,Films with screenplays by Michael McKean
-33587,subject,'Films with screenplays by Michael O''Donoghue'
+33587,subject,Films with screenplays by Michael O'Donoghue
 33588,subject,Films with screenplays by Michael Palin
 33589,subject,Films with screenplays by Michael Piller
 33590,subject,Films with screenplays by Michael Tolkin
@@ -33812,7 +33812,7 @@ feature_id,category,feature
 33810,subject,Films with screenplays by Stuart Beattie
 33811,subject,Films with screenplays by Sue C. Nichols
 33812,subject,Films with screenplays by Susannah Grant
-33813,subject,'Films with screenplays by Suso Cecchi d''Amico'
+33813,subject,Films with screenplays by Suso Cecchi d'Amico
 33814,subject,Films with screenplays by Suzan-Lori Parks
 33815,subject,Films with screenplays by Sylvester Stallone
 33816,subject,Films with screenplays by T. E. B. Clarke
@@ -34010,9 +34010,9 @@ feature_id,category,feature
 34008,subject,French black-and-white films
 34009,subject,French buddy comedy films
 34010,subject,French buddy drama films
-34011,subject,'French children''s comedy films'
-34012,subject,'French children''s fantasy films'
-34013,subject,'French children''s films'
+34011,subject,French children's comedy films
+34012,subject,French children's fantasy films
+34013,subject,French children's films
 34014,subject,French comedy films
 34015,subject,French comedy horror films
 34016,subject,French comedy mystery films
@@ -34206,9 +34206,9 @@ feature_id,category,feature
 34204,subject,German biographical films
 34205,subject,German black comedy films
 34206,subject,German black-and-white films
-34207,subject,'German children''s comedy films'
-34208,subject,'German children''s fantasy films'
-34209,subject,'German children''s films'
+34207,subject,German children's comedy films
+34208,subject,German children's fantasy films
+34209,subject,German children's films
 34210,subject,German comedy films
 34211,subject,German comedy horror films
 34212,subject,German comedy road movies
@@ -34390,7 +34390,7 @@ feature_id,category,feature
 34388,subject,Guantanamo Bay Naval Base
 34389,subject,Guantanamo Bay detention camp
 34390,subject,Guaraní-language films
-34391,subject,'Guardians of Ga''Hoole'
+34391,subject,Guardians of Ga'Hoole
 34392,subject,Guardians of the Galaxy (film series)
 34393,subject,Guardians of the Galaxy films
 34394,subject,Guerrilla warfare in film
@@ -34401,7 +34401,7 @@ feature_id,category,feature
 34399,subject,Gun fu films
 34400,subject,Gun politics
 34401,subject,Gun violence in fiction
-34402,subject,'Guns N'' Roses songs'
+34402,subject,Guns N' Roses songs
 34403,subject,Gus Grissom
 34404,subject,Gustav Klimt
 34405,subject,Guy Lombardo songs
@@ -34592,7 +34592,7 @@ feature_id,category,feature
 34590,subject,Human-derived fictional species
 34591,subject,Human-vampire romance in fiction
 34592,subject,Human-zombie romance in fiction
-34593,subject,'Hundred Years'' War films'
+34593,subject,Hundred Years' War films
 34594,subject,Hungarian Revolution of 1956 films
 34595,subject,Hungarian World War II films
 34596,subject,Hungarian crime films
@@ -34768,7 +34768,7 @@ feature_id,category,feature
 34766,subject,Irish biographical films
 34767,subject,Irish black comedy films
 34768,subject,Irish boxing films
-34769,subject,'Irish children''s films'
+34769,subject,Irish children's films
 34770,subject,Irish comedy films
 34771,subject,Irish comedy horror films
 34772,subject,Irish comedy mystery films
@@ -34841,7 +34841,7 @@ feature_id,category,feature
 34839,subject,Italian black comedy films
 34840,subject,Italian black-and-white films
 34841,subject,Italian buddy comedy films
-34842,subject,'Italian children''s films'
+34842,subject,Italian children's films
 34843,subject,Italian comedy films
 34844,subject,Italian comedy horror films
 34845,subject,Italian comedy mystery films
@@ -35246,7 +35246,7 @@ feature_id,category,feature
 35244,subject,Live and Let Die (film)
 35245,subject,Live video albums
 35246,subject,Live-action films based on DC Comics
-35247,subject,'Live-action films based on Disney''s animated films'
+35247,subject,Live-action films based on Disney's animated films
 35248,subject,Live-action films based on Jay Ward cartoons
 35249,subject,Live-action films based on Marvel Comics
 35250,subject,Live-action films based on animated series
@@ -35277,7 +35277,7 @@ feature_id,category,feature
 35275,subject,Lottery fraud in fiction
 35276,subject,Louis Delluc Prize winners
 35277,subject,Louis Theroux
-35278,subject,'Louis Theroux''s BBC Two specials'
+35278,subject,Louis Theroux's BBC Two specials
 35279,subject,Louisiana Purchase Exposition
 35280,subject,Love Live!
 35281,subject,Love stories
@@ -35321,7 +35321,7 @@ feature_id,category,feature
 35319,subject,Macedonian drama films
 35320,subject,Macedonian-language films
 35321,subject,Mackinac Island
-35322,subject,'Macy''s'
+35322,subject,Macy's
 35323,subject,Mad Max films
 35324,subject,Mad scientist films
 35325,subject,Madagascar (franchise)
@@ -35410,7 +35410,7 @@ feature_id,category,feature
 35408,subject,Mayan-language films
 35409,subject,Mazes
 35410,subject,McCarthyism
-35411,subject,'McHale''s Navy'
+35411,subject,McHale's Navy
 35412,subject,McMurdo Station
 35413,subject,Mecha anime and manga
 35414,subject,Mecha films
@@ -35643,7 +35643,7 @@ feature_id,category,feature
 35641,subject,National Film Development Corporation of India films
 35642,subject,National Geographic (American TV channel) original programming
 35643,subject,National Lampoon films
-35644,subject,'National Lampoon''s Vacation (film series)'
+35644,subject,National Lampoon's Vacation (film series)
 35645,subject,National Society of Film Critics Award for Best Film winners
 35646,subject,National Treasure (film series)
 35647,subject,Native American action films
@@ -35692,7 +35692,7 @@ feature_id,category,feature
 35690,subject,New Zealand biographical drama films
 35691,subject,New Zealand biographical films
 35692,subject,New Zealand black comedy films
-35693,subject,'New Zealand children''s films'
+35693,subject,New Zealand children's films
 35694,subject,New Zealand comedy films
 35695,subject,New Zealand comedy horror films
 35696,subject,New Zealand coming-of-age comedy films
@@ -35739,7 +35739,7 @@ feature_id,category,feature
 35737,subject,Ninja parody
 35738,subject,Nippon TV films
 35739,subject,No Game No Life
-35740,subject,'Noah''s Ark in film'
+35740,subject,Noah's Ark in film
 35741,subject,Non-fiction books about film directors and producers
 35742,subject,Non-narrative films
 35743,subject,Nonlinear narrative films
@@ -35790,7 +35790,7 @@ feature_id,category,feature
 35788,subject,Occidental College
 35789,subject,Occult detective fiction
 35790,subject,Occupied Japan
-35791,subject,'Ocean''s (film series)'
+35791,subject,Ocean's (film series)
 35792,subject,Oceanaria
 35793,subject,Octopussy
 35794,subject,Odd Lot Entertainment films
@@ -35801,8 +35801,8 @@ feature_id,category,feature
 35799,subject,Okinawa under United States occupation
 35800,subject,Oklahoma!
 35801,subject,Ole Miss Rebels football
-35802,subject,'On Her Majesty''s Secret Service'
-35803,subject,'One Flew Over the Cuckoo''s Nest'
+35802,subject,On Her Majesty's Secret Service
+35803,subject,One Flew Over the Cuckoo's Nest
 35804,subject,One Race Films films
 35805,subject,One-character films
 35806,subject,One-shot films
@@ -35856,7 +35856,7 @@ feature_id,category,feature
 35854,subject,Pakistani-American films
 35855,subject,Palace Pictures films
 35856,subject,Palestinian drama films
-35857,subject,'Palme d''Or winners'
+35857,subject,Palme d'Or winners
 35858,subject,Pan-Européenne films
 35859,subject,Panama Canal
 35860,subject,Panamanian science fiction films
@@ -36053,7 +36053,7 @@ feature_id,category,feature
 36051,subject,Primetime Emmy Award-winning television series
 36052,subject,Prince (musician)
 36053,subject,Prince of Persia
-36054,subject,'Princess Patricia''s Canadian Light Infantry'
+36054,subject,Princess Patricia's Canadian Light Infantry
 36055,subject,Princeton University
 36056,subject,Prison Break episodes
 36057,subject,Prison comedy films
@@ -36320,8 +36320,8 @@ feature_id,category,feature
 36318,subject,Saban Films films
 36319,subject,Sailing films
 36320,subject,Saint Barthélemy culture
-36321,subject,'Saint Patrick''s Day fiction'
-36322,subject,'Saint Patrick''s Day films'
+36321,subject,Saint Patrick's Day fiction
+36322,subject,Saint Patrick's Day films
 36323,subject,Saints and Soldiers films
 36324,subject,Salary controversies in film
 36325,subject,Salem witch trials in fiction
@@ -36338,7 +36338,7 @@ feature_id,category,feature
 36336,subject,Sandman in film
 36337,subject,Santa Claus in film
 36338,subject,Santa Claus in television
-36339,subject,'Santa Claus''s reindeer'
+36339,subject,Santa Claus's reindeer
 36340,subject,Santa Ynez Valley
 36341,subject,Sarah Silverman
 36342,subject,Saturday Night Live films
@@ -36437,7 +36437,7 @@ feature_id,category,feature
 36435,subject,Seti I
 36436,subject,Seven Bucks Productions films
 36437,subject,Seven Samurai
-36438,subject,'Seven Years'' War films'
+36438,subject,Seven Years' War films
 36439,subject,Seven deadly sins in popular culture
 36440,subject,Sex and the City
 36441,subject,Sexual orientation change efforts
@@ -36606,7 +36606,7 @@ feature_id,category,feature
 36604,subject,South Korean anthology films
 36605,subject,South Korean black comedy films
 36606,subject,South Korean chase films
-36607,subject,'South Korean children''s films'
+36607,subject,South Korean children's films
 36608,subject,South Korean comedy films
 36609,subject,South Korean comedy horror films
 36610,subject,South Korean drama films
@@ -36679,7 +36679,7 @@ feature_id,category,feature
 36677,subject,Spanish biographical films
 36678,subject,Spanish black comedy films
 36679,subject,Spanish black-and-white films
-36680,subject,'Spanish children''s films'
+36680,subject,Spanish children's films
 36681,subject,Spanish comedy films
 36682,subject,Spanish comedy-drama films
 36683,subject,Spanish coming-of-age drama films
@@ -36751,7 +36751,7 @@ feature_id,category,feature
 36749,subject,Squatting in film
 36750,subject,Squatting in the United States
 36751,subject,Srinivasa Ramanujan
-36752,subject,'St Trinian''s films'
+36752,subject,St Trinian's films
 36753,subject,Stage 6 Films films
 36754,subject,Staines-upon-Thames
 36755,subject,Stand-up comedy concert films
@@ -37035,7 +37035,7 @@ feature_id,category,feature
 37033,subject,Television shows written by Ben Elton
 37034,subject,Television shows written by Charles M. Schulz
 37035,subject,Television shows written by Richard Curtis
-37036,subject,'Telstra People''s Choice Award winners'
+37036,subject,Telstra People's Choice Award winners
 37037,subject,Temple Hill Entertainment films
 37038,subject,Ten Commandments
 37039,subject,Ten-pin bowling films
@@ -37068,7 +37068,7 @@ feature_id,category,feature
 37066,subject,The Bad Seed
 37067,subject,The Beach Boys songs
 37068,subject,The Beatles in film
-37069,subject,'The Beatles'' Yellow Submarine'
+37069,subject,The Beatles' Yellow Submarine
 37070,subject,The Beverly Hillbillies
 37071,subject,The Big Lebowski
 37072,subject,The Blob (film series)
@@ -37096,7 +37096,7 @@ feature_id,category,feature
 37094,subject,The Divergent Series
 37095,subject,The Doors
 37096,subject,The Dukes of Hazzard films
-37097,subject,'The Emperor''s New Groove'
+37097,subject,The Emperor's New Groove
 37098,subject,The Equalizer (franchise)
 37099,subject,The Evil Dead (franchise) films
 37100,subject,The Exorcist
@@ -37114,12 +37114,12 @@ feature_id,category,feature
 37112,subject,The Grapes of Wrath
 37113,subject,The Green Hornet films
 37114,subject,The Grudge (film series)
-37115,subject,'The Handmaid''s Tale'
+37115,subject,The Handmaid's Tale
 37116,subject,The Hangover (film series)
 37117,subject,The Help
 37118,subject,The Hill School
 37119,subject,The Hills Have Eyes
-37120,subject,'The Hitchhiker''s Guide to the Galaxy'
+37120,subject,The Hitchhiker's Guide to the Galaxy
 37121,subject,The Hobbit (film series)
 37122,subject,The Holocaust in France
 37123,subject,The Holocaust in Hungary
@@ -37291,7 +37291,7 @@ feature_id,category,feature
 37289,subject,Top Gun
 37290,subject,Topcraft
 37291,subject,Tornasol Films films
-37292,subject,'Toronto International Film Festival People''s Choice Award winners'
+37292,subject,Toronto International Film Festival People's Choice Award winners
 37293,subject,Toronto Maple Leafs
 37294,subject,Torture in films
 37295,subject,Total Recall (1990 film)
@@ -37312,7 +37312,7 @@ feature_id,category,feature
 37310,subject,Transmedia storytelling
 37311,subject,Transporter (franchise)
 37312,subject,Trapp family
-37313,subject,'Travel to the Earth''s center'
+37313,subject,Travel to the Earth's center
 37314,subject,Treasure Island films
 37315,subject,Treasure Planet
 37316,subject,Treasure hunt films
@@ -37357,10 +37357,10 @@ feature_id,category,feature
 37355,subject,UGC films
 37356,subject,UK Film Council films
 37357,subject,UK Singles Chart number-one singles
-37358,subject,'UK miners'' strike (1984–1985)'
+37358,subject,UK miners' strike (1984–1985)
 37359,subject,UNITE HERE
 37360,subject,USA Films films
-37361,subject,'UTEP Miners men''s basketball'
+37361,subject,UTEP Miners men's basketball
 37362,subject,UTV Motion Pictures films
 37363,subject,Ukraine in fiction
 37364,subject,Ukrainian-American culture
@@ -37418,7 +37418,7 @@ feature_id,category,feature
 37416,subject,Uxoricide in fiction
 37417,subject,V for Vendetta
 37418,subject,VH1 films
-37419,subject,'Valentine''s Day in films'
+37419,subject,Valentine's Day in films
 37420,subject,Valérian and Laureline
 37421,subject,Vampire Hunter D
 37422,subject,Vampire comedy films
@@ -37524,7 +37524,7 @@ feature_id,category,feature
 37522,subject,Washington Redskins
 37523,subject,Watergate scandal in film
 37524,subject,Watership Down
-37525,subject,'Wayne''s World'
+37525,subject,Wayne's World
 37526,subject,Weather Underground
 37527,subject,Weintraub Entertainment Group films
 37528,subject,Weird Science
@@ -37586,12 +37586,12 @@ feature_id,category,feature
 37584,subject,Women in the United States
 37585,subject,Women in the United States Navy
 37586,subject,Women spies in fiction
-37587,subject,'Women''s association football films'
-37588,subject,'Women''s baseball'
-37589,subject,'Women''s professional wrestling films'
-37590,subject,'Women''s rights'
-37591,subject,'Women''s rights in Iran'
-37592,subject,'Women''s suffrage in the United Kingdom'
+37587,subject,Women's association football films
+37588,subject,Women's baseball
+37589,subject,Women's professional wrestling films
+37590,subject,Women's rights
+37591,subject,Women's rights in Iran
+37592,subject,Women's suffrage in the United Kingdom
 37593,subject,Wonder Woman (film series)
 37594,subject,Wonder Woman films
 37595,subject,Wonderland Sound and Vision films
@@ -37699,7 +37699,7 @@ feature_id,category,feature
 37697,subject,Works based on Buffy the Vampire Slayer
 37698,subject,Works based on Electronic Arts video games
 37699,subject,Works based on Gone with the Wind
-37700,subject,'Works based on Grimms'' Fairy Tales'
+37700,subject,Works based on Grimms' Fairy Tales
 37701,subject,Works based on Harry Potter
 37702,subject,Works based on Heart of Darkness
 37703,subject,Works based on Konami video games
@@ -37715,7 +37715,7 @@ feature_id,category,feature
 37713,subject,Works based on The Masque of the Red Death
 37714,subject,Works based on The Neverending Story
 37715,subject,Works based on The Red Shoes (fairy tale)
-37716,subject,'Works based on The Sorcerer''s Apprentice'
+37716,subject,Works based on The Sorcerer's Apprentice
 37717,subject,Works based on The Steadfast Tin Soldier
 37718,subject,Works based on The Vampire Chronicles
 37719,subject,Works based on Twilight (novel series)
@@ -37779,7 +37779,7 @@ feature_id,category,feature
 37777,subject,World War II war crimes trials films
 37778,subject,World War Z (franchise)
 37779,subject,World of Wonder (company) films
-37780,subject,'World''s fairs in fiction'
+37780,subject,World's fairs in fiction
 37781,subject,Worldview Entertainment films
 37782,subject,Wreck-It Ralph
 37783,subject,Wrestling films
@@ -37821,16 +37821,16 @@ feature_id,category,feature
 37819,subject,Zombies and revenants in popular culture
 37820,subject,Zoophilia in culture
 37821,subject,Zorro films
-37822,subject,'Zorro films942,1940s American films'
+37822,subject,"Zorro films942,1940s American films"
 37823,subject,Zulu-language films
 37824,subject,Éric Rohmer
-37825,writer,"""Weird Al"" Yankovic"
-37826,writer,'"Daniel Petrie, Jr."'
-37827,writer,'"Edward T. Lowe, Jr."'
-37828,writer,'"Jack Epps, Jr."'
-37829,writer,"Mark ""Chopper"" Read"
-37830,writer,'"William Broyles, Jr."'
-37831,writer,'"William Wisher, Jr."'
+37825,writer,"""""""Weird Al"""" Yankovic"""
+37826,writer,"""Daniel Petrie, Jr."""
+37827,writer,"""Edward T. Lowe, Jr."""
+37828,writer,"""Jack Epps, Jr."""
+37829,writer,"""Mark """"Chopper"""" Read"""
+37830,writer,"""William Broyles, Jr."""
+37831,writer,"""William Wisher, Jr."""
 37832,writer,A. A. Milne
 37833,writer,A. B. Guthrie Jr.
 37834,writer,A. I. Bezzerides
@@ -37851,7 +37851,7 @@ feature_id,category,feature
 37849,writer,Abhijat Joshi
 37850,writer,Abi Morgan
 37851,writer,Achmed Abdullah
-37852,writer,'Adam ''Tex'' Davis'
+37852,writer,Adam 'Tex' Davis
 37853,writer,Adam Brooks (filmmaker)
 37854,writer,Adam Cozad
 37855,writer,Adam Elliot
@@ -38261,7 +38261,7 @@ feature_id,category,feature
 38259,writer,Brannon Braga
 38260,writer,Brenda Chapman
 38261,writer,Brendan McCarthy
-38262,writer,'Brendan O''Brien (screenwriter)'
+38262,writer,Brendan O'Brien (screenwriter)
 38263,writer,Brent Butt
 38264,writer,Brent Forrester
 38265,writer,Brent Maddock
@@ -38489,7 +38489,7 @@ feature_id,category,feature
 38487,writer,Christian Alvart
 38488,writer,Christian Gudegast
 38489,writer,Christian Sesma
-38490,writer,'Christine O''Malley'
+38490,writer,Christine O'Malley
 38491,writer,Christopher Bertolini
 38492,writer,Christopher Browne (screenwriter)
 38493,writer,Christopher Crowe (screenwriter)
@@ -38621,7 +38621,7 @@ feature_id,category,feature
 38619,writer,Dan Harris (screenwriter)
 38620,writer,Dan Mazeau
 38621,writer,Dan Mazer
-38622,writer,'Dan O''Bannon'
+38622,writer,Dan O'Bannon
 38623,writer,Dan Rosen
 38624,writer,Dan Scanlon
 38625,writer,Dan Schneider
@@ -39198,7 +39198,7 @@ feature_id,category,feature
 39196,writer,Gauri Shinde
 39197,writer,Gavin Hood
 39198,writer,Gavin Lambert
-39199,writer,'Gavin O''Connor (director)'
+39199,writer,Gavin O'Connor (director)
 39200,writer,Gavin Scott
 39201,writer,Gavin Scott (screenwriter)
 39202,writer,Gee Malik Linton
@@ -39306,7 +39306,7 @@ feature_id,category,feature
 39304,writer,Greg Marcks
 39305,writer,Greg McLean (film director)
 39306,writer,Greg Mottola
-39307,writer,'Greg O''Connor'
+39307,writer,Greg O'Connor
 39308,writer,Greg Pritikin
 39309,writer,Greg Taylor (author)
 39310,writer,Gregg Araki
@@ -39729,7 +39729,7 @@ feature_id,category,feature
 39727,writer,Jerome Kass
 39728,writer,Jerry Belson
 39729,writer,Jerry Juhl
-39730,writer,'Jerry O''Connell'
+39730,writer,Jerry O'Connell
 39731,writer,Jerry Stahl
 39732,writer,Jerry Wald
 39733,writer,Jerry Zucker
@@ -39741,7 +39741,7 @@ feature_id,category,feature
 39739,writer,Jesse Lasky Jr.
 39740,writer,Jesse Peretz
 39741,writer,Jessica Bendinger
-39742,writer,'Jessica O''Toole'
+39742,writer,Jessica O'Toole
 39743,writer,Jessica Sharzer
 39744,writer,Jessica Yu
 39745,writer,Jessie Nelson (filmmaker)
@@ -39793,7 +39793,7 @@ feature_id,category,feature
 39791,writer,Joe Camp
 39792,writer,Joe Carnahan
 39793,writer,Joe Cornish
-39794,writer,'Joe D''Amato'
+39794,writer,Joe D'Amato
 39795,writer,Joe Eszterhas
 39796,writer,Joe Fab
 39797,writer,Joe Frank
@@ -39937,7 +39937,7 @@ feature_id,category,feature
 39935,writer,John Steppling (playwright)
 39936,writer,John Stockwell (actor)
 39937,writer,John Swartzwelder
-39938,writer,'John Taintor Foote942,Elizabeth Reinhardt'
+39938,writer,"John Taintor Foote942,Elizabeth Reinhardt"
 39939,writer,John Thomas (screenwriter)
 39940,writer,John Tobias
 39941,writer,John Turman
@@ -40322,7 +40322,7 @@ feature_id,category,feature
 40320,writer,Lewis Friedman
 40321,writer,Lewis John Carlino
 40322,writer,Liam Lynch (musician)
-40323,writer,'Liam O''Donnell (director)'
+40323,writer,Liam O'Donnell (director)
 40324,writer,Liev Schreiber
 40325,writer,Lila Garrett
 40326,writer,Liliana Cavani
@@ -40453,9 +40453,9 @@ feature_id,category,feature
 40451,writer,Mark Medoff
 40452,writer,Mark Miller (actor)
 40453,writer,Mark Neveldine and Brian Taylor
-40454,writer,'Mark O''Halloran (writer)'
-40455,writer,'Mark O''Keefe (screenwriter)'
-40456,writer,'Mark O''Rowe'
+40454,writer,Mark O'Halloran (writer)
+40455,writer,Mark O'Keefe (screenwriter)
+40456,writer,Mark O'Rowe
 40457,writer,Mark Osborne (filmmaker)
 40458,writer,Mark Peploe
 40459,writer,Mark Poirier
@@ -40523,7 +40523,7 @@ feature_id,category,feature
 40521,writer,Matthew Hansen
 40522,writer,Matthew Jacobs
 40523,writer,Matthew Michael Carnahan
-40524,writer,'Matthew O''Callaghan'
+40524,writer,Matthew O'Callaghan
 40525,writer,Matthew Peterman
 40526,writer,Matthew Robbins (screenwriter)
 40527,writer,Matthew Robinson (director)
@@ -40636,7 +40636,7 @@ feature_id,category,feature
 40634,writer,Michael Mitnick
 40635,writer,Michael Moore
 40636,writer,Michael Nankin
-40637,writer,'Michael O''Donoghue'
+40637,writer,Michael O'Donoghue
 40638,writer,Michael Palin
 40639,writer,Michael Patrick Jann
 40640,writer,Michael Patrick King
@@ -40853,7 +40853,7 @@ feature_id,category,feature
 40851,writer,Owen Wilson
 40852,writer,Oz Perkins
 40853,writer,P. J. Hogan
-40854,writer,'P. J. O''Rourke'
+40854,writer,P. J. O'Rourke
 40855,writer,Pablo Fenjves
 40856,writer,Paddy Chayefsky
 40857,writer,Paddy Considine
@@ -41138,7 +41138,7 @@ feature_id,category,feature
 41136,writer,Richard Maltby Jr.
 41137,writer,Richard Matheson
 41138,writer,Richard Nelson (playwright)
-41139,writer,'Richard O''Brien'
+41139,writer,Richard O'Brien
 41140,writer,Richard Outten
 41141,writer,Richard P. Henrick
 41142,writer,Richard Pike Bissell
@@ -41642,7 +41642,7 @@ feature_id,category,feature
 41640,writer,Susanna Fogel
 41641,writer,Susanna Moore
 41642,writer,Susannah Grant
-41643,writer,'Suso Cecchi d''Amico'
+41643,writer,Suso Cecchi d'Amico
 41644,writer,Suzan-Lori Parks
 41645,writer,Suzanne Collins
 41646,writer,Sy Bartlett
@@ -41991,7 +41991,7 @@ feature_id,category,feature
 41989,writer,Willie Morris
 41990,writer,Willis Goldbeck
 41991,writer,Willis Hall
-41992,writer,'Willis O''Brien'
+41992,writer,Willis O'Brien
 41993,writer,Willy Russell
 41994,writer,Wim Wenders
 41995,writer,Wings Hauser
