@@ -61,8 +61,9 @@ CATEGORIES = [
 #	VARIABILI GLOBALI
 
 movies_features_map = {}
-user_id = 1
+user_id = 3
 all_ratings = {}
+top_feature_list = []
 
 #	########################################################################	#
 #	ALTRE FUNZIONI
@@ -161,20 +162,57 @@ def extract_user_top_features(feature_means, top_n):
             "rating": float(feature_rating_value)
         })
 
-    # stampa le top features
-    print("\nTop Features:")
-    # Usiamo un contatore 'i' solo per stampare la posizione di debug, sebbene il campo 'rating' sia ora il rating
-    for i, f in enumerate(top_features_list, start=1):
-        print(f"Position {i}: [{f['category']}] {f['name']} (id={f['id']}, rating/rank={f['rating']:.2f})")
-
     return top_features_list
 
     # end
 
-def extract_xxx():
-	pass
+def mab_softmax_predictions(top_features_list, temperature=0.5, k=3):
+    """
+    Esegue MAB softmax prediction per le top features.
 
-	# end
+    Args:
+        top_features_list: lista di features con dentro "movies" come lista di triple (movieId, rating, seen_bool)
+        temperature: parametro tau della softmax (default 0.5)
+        k: numero di film da estrarre per feature
+
+    Returns:
+        predictions: dizionario feature_id -> lista di predizioni [(movieId, rating, seen_bool, prob)]
+    """
+
+    predictions = {}
+
+    for f in top_features_list:
+        movies = f.get("movies", [])
+        if not movies:
+            continue
+
+        # estrai solo i rating
+        ratings = np.array([m[1] for m in movies], dtype=float)
+
+        # softmax con temperatura tau
+        exp_r = np.exp(ratings / temperature)
+        probs = exp_r / np.sum(exp_r)
+
+        # campiona k film in base alle probabilità
+        chosen_idx = np.random.choice(len(movies), size=min(k, len(movies)), replace=False, p=probs)
+
+        chosen_movies = []
+        for idx in chosen_idx:
+            chosen_movies.append((
+                movies[idx][0],   # movieId
+                movies[idx][1],   # rating
+                movies[idx][2],   # visto o meno
+                probs[idx]        # probabilità softmax
+            ))
+
+        predictions[f["id"]] = {
+            "feature_name": f["name"],
+            "category": f["category"],
+            "movies": chosen_movies
+        }
+
+    return predictions
+
 
 def get_movie_recommendations():
 
@@ -287,7 +325,7 @@ class RecSys_HTTPServer:
         print("4")
 
         # 5b) Filtro: consideriamo solo le feature con almeno top_n valori non nulli
-        valid_mask = count_per_feature >= top_n
+        valid_mask = count_per_feature >= 4 * top_n
         feature_means = feature_means * valid_mask  # azzera le feature con meno supporto
         print("5b")
 
@@ -298,8 +336,11 @@ class RecSys_HTTPServer:
 
         # Estrae le top features dell'utente
         top_features_list = extract_user_top_features(feature_means, top_n)
-        print("\nTop features extracted:")
-        print(top_features_list)
+        # stampa le top features
+        print("\nTop Features:")
+        # Usiamo un contatore 'i' solo per stampare la posizione di debug, sebbene il campo 'rating' sia ora il rating
+        for i, f in enumerate(top_features_list, start=1):
+            print(f"Position {i}: [{f['category']}] {f['name']} (id={f['id']}, rating/rank={f['rating']:.2f})")
 
         for f in top_features_list:
             feat_id = f["id"]
