@@ -63,7 +63,7 @@ CATEGORIES = [
 movies_features_map = {}
 user_id = 3
 all_ratings = {}
-top_feature_list = []
+top_features_list = []
 
 #	########################################################################	#
 #	ALTRE FUNZIONI
@@ -216,34 +216,40 @@ def mab_softmax_predictions(top_features_list, temperature=0.5, k=3):
 
 def get_movie_recommendations():
 
-	recommendations = {}
-
-	# # Test
-	# selected_categories = ["actors", "directors"]
-	# available_features = {"Sylvester Stallone"}
-
-	# Seleziona casualmente le categorie da raccomandare.
-	selected_categories = random.choices(CATEGORIES, k=SUBJECTS_SELECTION)
-
-	for cat in selected_categories:
-
-		# Verifica che la categoria non sia vuota.
-		if movies_features_map[cat]:
-
-			# Estrai solo le feature che non sono ancora state scelte per quella categoria.
-			available_features = set(movies_features_map[cat].keys()) - set(recommendations.get(cat, {}).keys())
-
-			if available_features:
-
-				# Seleziona casualmente le features da raccomandare.
-				feature = random.choice(list(available_features))
-
-				# Aggiorna la raccomandazione con la lista di film relativa alla feature della categoria selezionata.
-				recommendations.setdefault(cat, {})[feature] = movies_features_map[cat][feature]
-
-	return recommendations
+	pass
 
 	# end
+
+# def get_movie_recommendations():
+
+# 	recommendations = {}
+
+# 	# # Test
+# 	# selected_categories = ["actors", "directors"]
+# 	# available_features = {"Sylvester Stallone"}
+
+# 	# Seleziona casualmente le categorie da raccomandare.
+# 	selected_categories = random.choices(CATEGORIES, k=SUBJECTS_SELECTION)
+
+# 	for cat in selected_categories:
+
+# 		# Verifica che la categoria non sia vuota.
+# 		if movies_features_map[cat]:
+
+# 			# Estrai solo le feature che non sono ancora state scelte per quella categoria.
+# 			available_features = set(movies_features_map[cat].keys()) - set(recommendations.get(cat, {}).keys())
+
+# 			if available_features:
+
+# 				# Seleziona casualmente le features da raccomandare.
+# 				feature = random.choice(list(available_features))
+
+# 				# Aggiorna la raccomandazione con la lista di film relativa alla feature della categoria selezionata.
+# 				recommendations.setdefault(cat, {})[feature] = movies_features_map[cat][feature]
+
+# 	return recommendations
+
+# 	# end
 
 #	########################################################################	#
 #	CLASSI
@@ -415,9 +421,6 @@ class RecSys_HTTPServer:
         server = HTTPServer((ADDRESS, PORT), RecSys_RequestHandler)
         print("Server in esecuzione su " + str(ADDRESS) + ":" + str(PORT) + "...")
 
-        return
-
-
         try:
             server.serve_forever()
         except KeyboardInterrupt:
@@ -456,6 +459,23 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 		try:
 
+			if urlparse(self.path).path.endswith('/get-users'):
+				with open("./data/CSVs/existing_ratings.csv", newline='', encoding='utf-8') as f:
+					next(f)
+					reader = csv.DictReader(f, fieldnames=['userId'])
+					user_ids = {row['userId'] for row in reader if row['userId'].isdigit()}
+
+				output = json.dumps(sorted(list(user_ids)))
+
+				self.send_response(200) # OK
+				self._send_cors_headers()
+				self.send_header('Content-type', 'application/json')
+				self.end_headers()
+				self.wfile.write(output.encode(encoding='utf_8'))
+				return
+
+				# end if '/get-users'
+
 			if urlparse(self.path).path.endswith('/get-recommendations'):
 				recs = get_movie_recommendations()
 				output = json.dumps(recs)
@@ -465,6 +485,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				self.send_header('Content-type', 'application/json')
 				self.end_headers()
 				self.wfile.write(output.encode(encoding='utf_8'))
+				return
 
 				# end if '/get-recommendations'
 
@@ -497,6 +518,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.send_header('Content-type', 'image/jpeg')
 					self.end_headers()
 					self.wfile.write(f.read())
+					return
 
 				# end if '/download-movie-poster'
 
@@ -558,6 +580,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				self.send_header('Content-type', 'application/json')
 				self.end_headers()
 				self.wfile.write(output.encode(encoding='utf_8'))
+				return
 
 				# end if '/get-movie-info'
 
@@ -566,6 +589,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				self._send_cors_headers()
 				self.send_header('Content-type', 'text/plain')
 				self.end_headers()
+				return
 
 				# end
 

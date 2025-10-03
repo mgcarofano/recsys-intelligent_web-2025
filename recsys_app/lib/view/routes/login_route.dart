@@ -22,9 +22,10 @@
 
 import 'dart:math' as math;
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:knowledge_recsys/recsys_main.dart';
+import 'package:knowledge_recsys/services/base_client.dart';
 import 'package:knowledge_recsys/services/validators.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_text_form_field.dart';
@@ -52,39 +53,48 @@ class _LoginRouteState extends State<LoginRoute> {
 
   _onSubmit() async {
     if (_loginFormKey.currentState!.validate()) {
-      // showDialog(
-      //   barrierDismissible: false,
-      //   context: context,
-      //   builder: (dialogContext) => PopScope(
-      //     onPopInvokedWithResult: (didPop, _) => Future.value(false),
-      //     child: const RecSysLoadingDialog(alertMessage: 'Login in corso...'),
-      //   ),
-      // );
-
       final userID = userIDController.value.text;
-
       _loginFormKey.currentState!.reset();
       userIDController.clear();
 
       if (!mounted) return;
 
-      if (true) {
-        // TODO: controllare se esiste l'utente
-        // TODO: convertire String in Int
+      var data = await BaseClient.instance.getUsers().catchError((err) {
+        // debugPrint('\n--- ERRORE ---\n$err\n-----\n');
+        if (!mounted) return null;
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              content: Text(err.toString()),
+              duration: const Duration(seconds: 3),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        return null;
+      });
+
+      // debugPrint("$data");
+      if (data == null) return;
+
+      final userList = toList(data);
+
+      if (userList.contains(userID)) {
+        if (!mounted) return;
         context.go('/home', extra: userID);
+      } else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              content: Text('Utente non trovato!'),
+              duration: const Duration(seconds: 3),
+            ),
+          );
       }
-      // else {
-      //   context.pop();
-      //   ScaffoldMessenger.of(context)
-      //     ..hideCurrentSnackBar()
-      //     ..showSnackBar(
-      //       SnackBar(
-      //         behavior: SnackBarBehavior.floating,
-      //         content: Text('Utente non trovato!'),
-      //         duration: const Duration(seconds: 3),
-      //       ),
-      //     );
-      // }
     }
   }
 
@@ -98,7 +108,7 @@ class _LoginRouteState extends State<LoginRoute> {
       resizeToAvoidBottomInset: false,
       body: LayoutBuilder(
         builder: (context, constraints) {
-          double containerWidth = constraints.maxWidth * 0.4;
+          double containerWidth = constraints.maxWidth * 0.3;
           containerWidth = math.max(400, containerWidth);
           return Center(
             child: Container(
@@ -127,33 +137,9 @@ class _LoginRouteState extends State<LoginRoute> {
                           ).textTheme.headlineLarge?.copyWith(),
                           textAlign: TextAlign.center,
                         ),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text:
-                                    "Vuoi testare l'applicazione manualmente? ",
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.bodyMedium?.copyWith(),
-                              ),
-                              TextSpan(
-                                text: "Clicca qui",
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    if (!mounted) return;
-                                    context.go('/home', extra: 0);
-                                  },
-                              ),
-                            ],
-                          ),
+                        Text(
+                          "Inserisci l'ID dell'utente per iniziare",
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
                     ),

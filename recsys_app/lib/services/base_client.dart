@@ -119,6 +119,8 @@ class BaseClient {
     }
   }
 
+  Future<dynamic> getUsers() async => _getRequest('/get-users');
+
   Future<dynamic> getMovieRecommendations() async =>
       _getRequest('/get-recommendations');
 
