@@ -36,6 +36,7 @@ TIMEOUT = 30
 
 SUBJECTS_SELECTION = 3
 MOVIE_RECOMMENDATIONS = 5
+TOP_N = 5
 
 POSTER_DIR = Path('./data/movie_posters')
 CSV_PATH_MAPPING = {
@@ -60,380 +61,258 @@ CATEGORIES = [
 #	########################################################################	#
 #	VARIABILI GLOBALI
 
-movies_features_map = {}
-user_id = 3
-all_ratings = {}
+# Identificativo dell'utente di cui si vogliono verificare le raccomandazioni.
+user_id = 0
+
+# Lista di features con "movies" come lista di triple (movieId, rating, seen_bool).
 top_features_list = []
+
+# ...
+movie_features_matrix = load_npz('./data/movie_vectors_sparse.npz')
+
+# ...
+movie_index_df = pd.read_csv('./data/movie_index.csv', dtype=int)
+
+# Vettore di 4 elementi che identifica una feature (id, category, name, rating).
+feature_index = pd.read_csv("./data/feature_index.csv")
+
+# ...
+real_ratings_df = pd.read_csv('./data/CSVs/existing_ratings.csv')
 
 #	########################################################################	#
 #	ALTRE FUNZIONI
 
-def compute_movie_features_ratings():
-    # 1) Matrice film-features (M x F) e mapping
-    movie_features_matrix = load_npz('./data/movie_vectors_sparse.npz')  # CSR matrix (M x F)
-    M, F = movie_features_matrix.shape
+def extract_user_top_features(feature_means):
 
-    mapping_df = pd.read_csv('./data/movie_index.csv')
-    mapping_df['movie_id'] = mapping_df['movie_id'].astype(int)
-    mapping_df['matrix_id'] = mapping_df['matrix_id'].astype(int)
-    movie_id_to_index = dict(zip(mapping_df['movie_id'], mapping_df['matrix_id']))
+	# 5. ordinare il vettore 1xF dei rating sulle features
+	top_indices = np.argsort(-feature_means)[:TOP_N] # ordina in desc, prende TOP_N
 
-    # 2a) Estrai i rating dello user
-    ratings_df = pd.read_csv('./data/CSVs/existing_ratings.csv')
-    user_real_ratings = ratings_df[ratings_df["userId"] == user_id][["movieId", "rating"]]
+	# Non usiamo 'rating' qui, ma usiamo 'idx' per accedere sia al DataFrame che a feature_means
+	for idx in top_indices:
+		row = feature_index.iloc[idx]
 
-    # 2b) Estrai i rating predetti per lo user
-    comp_path = f'./data/ratings_complemented/ratings_complemented_user_{user_id}.csv'
-    user_predicted_ratings = pd.read_csv(comp_path)
+		# Prende il valore di rating (media) per la feature all'indice 'idx'
+		feature_rating_value = feature_means[idx]
 
-    # 2c) Crea i dizionari {movieId: rating}
-    real_ratings = dict(zip(
-        user_real_ratings['movieId'].astype(int),
-        user_real_ratings['rating'].astype(float)
-    ))
-    comp_ratings = dict(zip(
-        user_predicted_ratings['movieId'].astype(int),
-        user_predicted_ratings['rating'].astype(float)
-    ))
-
-    # 3) Unione dei rating reali con quelli predetti
-    all_ratings = comp_ratings.copy()
-    all_ratings.update(real_ratings)
-
-    # 3b) Vettore dei rating (M x 1), riempito con 0 dove non ci sono rating
-    movie_ratings = np.zeros(M, dtype=float)
-    for movie_id, rating in all_ratings.items():
-        idx = movie_id_to_index.get(movie_id)
-        if idx is not None and 0 <= idx < M:
-            movie_ratings[idx] = rating
-
-    # 4) Calcolo feature_means in modo ottimizzato (O(NNZ), ovvero proporzionale al numero di elementi non-nulli nella matrice sparsa)
-    sum_per_feature = movie_features_matrix.T.dot(movie_ratings)
-
-    # Conteggio del numero di film per ogni feature (numero di 1 in colonna)
-    count_per_feature = movie_features_matrix.T.dot(np.ones(M, dtype=float))
-
-    # Media dei rating per feature (ignorando divisione per 0)
-    feature_means = np.divide(
-        sum_per_feature,
-        count_per_feature,
-        out=np.zeros_like(sum_per_feature, dtype=float),
-        where=(count_per_feature != 0)
-    )
-
-    return feature_means, movie_ratings
-
-	#	2. unire ratings calcolati e assegnati da U (dim. Mx1)
-	#	3. calcolare hadamard prodotto di M (ratings) moltiplicato M*F (matrice movies-features)
-	#	4a. calcolare la media sulla matrice M*F per ogni feature -> vettore 1xF
-	#	4b. calcolare la media sulla matrice M*F per ogni feature -> vettore Mx1
+		top_features_list.append({
+			"id": int(row["feature_id"]),
+			"category": row["category"],
+			"name": row["feature"],
+			# Inseriamo il valore del rating (float) nel campo 'rating', come richiesto
+			"rating": float(feature_rating_value)
+		})
 
 	# end
 
-def extract_user_top_features(feature_means, top_n):
+def load_user_ratings():
 
-    # if cat == "genres" and row['value'] == "(no genres listed)":
+	global user_id
 
-    # # Filtra le features più importanti.
-    # # filtered_features = {
-    # #     feat: sorted(list(films))
-    # #     for feat, films in features.items() if len(films) >= MOVIE_RECOMMENDATIONS
-    # # }
+	# print("2a")
+	real = real_ratings_df[real_ratings_df["userId"] == user_id][["movieId", "rating"]]
+	real = dict(zip(real['movieId'].astype(int), real['rating'].astype(float)))
 
-    # 5. ordinare il vettore 1xF dei rating sulle features
-    top_indices = np.argsort(-feature_means)[:top_n]  # ordina in desc, prende top_n
+	# print("2b")
+	comp = pd.read_csv(f'./data/ratings_complemented/ratings_complemented_user_{user_id}.csv')
+	comp = dict(zip(comp['movieId'].astype(int), comp['rating'].astype(float)))
 
-    # 6. accedere a feature_index.csv e ritornare un vettore di 3 features (id, category, name, rating)
-    feature_index = pd.read_csv("./data/feature_index.csv")
-
-    top_features_list = []
-    # Non usiamo 'rating' qui, ma usiamo 'idx' per accedere sia al DataFrame che a feature_means
-    for idx in top_indices:
-        row = feature_index.iloc[idx]
-
-        # Prende il valore di rating (media) per la feature all'indice 'idx'
-        feature_rating_value = feature_means[idx]
-
-        top_features_list.append({
-            "id": int(row["feature_id"]),
-            "category": row["category"],
-            "name": row["feature"],
-            # Inseriamo il valore del rating (float) nel campo 'rating', come richiesto
-            "rating": float(feature_rating_value)
-        })
-
-    return top_features_list
-
-    # end
-
-def mab_softmax_predictions(top_features_list, temperature=0.5, k=3):
-    """
-    Esegue MAB softmax prediction per le top features.
-
-    Args:
-        top_features_list: lista di features con dentro "movies" come lista di triple (movieId, rating, seen_bool)
-        temperature: parametro tau della softmax (default 0.5)
-        k: numero di film da estrarre per feature
-
-    Returns:
-        predictions: dizionario feature_id -> lista di predizioni [(movieId, rating, seen_bool, prob)]
-    """
-
-    predictions = {}
-
-    for f in top_features_list:
-        movies = f.get("movies", [])
-        if not movies:
-            continue
-
-        # estrai solo i rating
-        ratings = np.array([m[1] for m in movies], dtype=float)
-
-        # softmax con temperatura tau
-        exp_r = np.exp(ratings / temperature)
-        probs = exp_r / np.sum(exp_r)
-
-        # campiona k film in base alle probabilità
-        chosen_idx = np.random.choice(len(movies), size=min(k, len(movies)), replace=False, p=probs)
-
-        chosen_movies = []
-        for idx in chosen_idx:
-            chosen_movies.append((
-                movies[idx][0],   # movieId
-                movies[idx][1],   # rating
-                movies[idx][2],   # visto o meno
-                probs[idx]        # probabilità softmax
-            ))
-
-        predictions[f["id"]] = {
-            "feature_name": f["name"],
-            "category": f["category"],
-            "movies": chosen_movies
-        }
-
-    return predictions
-
-
-def get_movie_recommendations():
-
-	pass
+	return real, comp
 
 	# end
 
-# def get_movie_recommendations():
+def compute_feature_means(matrix, ratings, min_support=4):
+    
+	# print("4")
+	sum_per_feature = matrix.T.dot(ratings)
+	count_per_feature = matrix.T.dot(np.ones(matrix.shape[0], dtype=float))
 
-# 	recommendations = {}
+	means = np.divide(
+		sum_per_feature,
+		count_per_feature,
+		out = np.zeros_like(sum_per_feature),
+		where = (count_per_feature != 0)
+	)
 
-# 	# # Test
-# 	# selected_categories = ["actors", "directors"]
-# 	# available_features = {"Sylvester Stallone"}
+	mask = count_per_feature >= (min_support * TOP_N)
 
-# 	# Seleziona casualmente le categorie da raccomandare.
-# 	selected_categories = random.choices(CATEGORIES, k=SUBJECTS_SELECTION)
+	# print("5b")
+	return means * mask
 
-# 	for cat in selected_categories:
+	# end
 
-# 		# Verifica che la categoria non sia vuota.
-# 		if movies_features_map[cat]:
+def attach_movies_to_features(top_features, matrix, real_ratings, comp_ratings):
 
-# 			# Estrai solo le feature che non sono ancora state scelte per quella categoria.
-# 			available_features = set(movies_features_map[cat].keys()) - set(recommendations.get(cat, {}).keys())
+	# print("6")
+	for f in top_features:
+		feat_id = f["id"]
+		col = matrix[:, feat_id].toarray().ravel()
+		indices = np.where(col == 1)[0]
 
-# 			if available_features:
+		movies = []
+		for idx in indices:
+			movie_row = movie_index_df[movie_index_df["matrix_id"] == idx]
+			if movie_row.empty:
+				continue
+			m_id = int(movie_row["movie_id"].iloc[0])
+			if m_id in real_ratings:
+				movies.append((m_id, real_ratings[m_id], True))
+			elif m_id in comp_ratings:
+				movies.append((m_id, comp_ratings[m_id], False))
 
-# 				# Seleziona casualmente le features da raccomandare.
-# 				feature = random.choice(list(available_features))
+		f["movies"] = movies
+	
+	# end
 
-# 				# Aggiorna la raccomandazione con la lista di film relativa alla feature della categoria selezionata.
-# 				recommendations.setdefault(cat, {})[feature] = movies_features_map[cat][feature]
+def extract_user_preferences():
 
-# 	return recommendations
+	#	################################################################	#
+	#	INIZIALIZZAZIONE DELLE VARIABILI
 
-# 	# end
+	global top_features_list, user_id
+	top_features_list.clear()
+
+	#	################################################################	#
+	#	ESTRAZIONE DELLE FEATURE E RATINGS FILM PER L'UTENTE
+
+	# movie_features_matrix, movie_id_to_index, mapping = load_movie_features()
+	movie_id_to_index = dict(zip(movie_index_df['movie_id'], movie_index_df['matrix_id']))
+	M, _ = movie_features_matrix.shape
+
+	# Utilizzo "dict unpacking" per unire tutti i rating in un unico dizionario.
+	real_ratings, comp_ratings = load_user_ratings()
+	all_ratings = {**comp_ratings, **real_ratings}
+
+	#	################################################################	#
+	#	CREZIONE VETTORE DEI RATING
+	#	Ordinato secondo la matrice delle features, e riempito con 0 dove non ci sono rating.
+
+	# print("3b")
+	movie_ratings = np.zeros(M, dtype=float)
+	for movie_id, rating in all_ratings.items():
+		idx = movie_id_to_index.get(movie_id)
+		if idx is not None and 0 <= idx < M:
+			movie_ratings[idx] = rating
+
+	# # Debug output
+	# non_zero_ratings = np.count_nonzero(movie_ratings)
+	# print(f"DEBUG: Non-zero movie ratings: {non_zero_ratings}")
+
+	#	################################################################	#
+	#	CALCOLO RATING MEDIO DELLE FEATURES
+	#	Il tempo di esecuzione è proporzionale al numero di elementi non-nulli nella matrice sparsa, cioè O(NNZ).
+
+	feature_means = compute_feature_means(movie_features_matrix, movie_ratings)
+
+	# print("Feature means:", feature_means.shape)
+	# print("Movie ratings:", movie_ratings.shape)
+	# print("OK: feature and movie ratings extracted!")
+	
+	#	################################################################	#
+	#	ESTRAZIONE DELLE TOP FEATURES DELL'UTENTE
+
+	extract_user_top_features(feature_means)
+
+	#	################################################################	#
+	#	ASSOCIAZIONE DEI MOVIE ALLE FEATURES ESTRATTE
+
+	attach_movies_to_features(
+		top_features_list,
+		movie_features_matrix,
+		real_ratings,
+		comp_ratings
+	)
+
+	#	################################################################	#
+	#	STAMPA FINALE
+
+	# Usiamo un contatore 'i' solo per stampare la posizione di debug, sebbene il campo 'rating' sia ora il rating
+	print("\nTop Features:")
+	for i, f in enumerate(top_features_list, start=1):
+		print(f"Position {i}: [{f['category']}] {f['name']} (id={f['id']}, rating/rank={f['rating']:.2f})")
+
+	print("\nTop features extracted with movies:")
+	for f in top_features_list:
+		print(f"\nFeature: {f['name']} (id={f['id']}, cat={f['category']})")
+		for m in f["movies"][:10]:  # stampane max 10 per leggibilità
+			print(f"  MovieId={m[0]}, Rating={m[1]}, Seen={m[2]}")
+	
+	# end
+
+def mab_softmax_predictions(temperature=0.5, k=3):
+	"""
+	Esegue MAB softmax prediction per le top features.
+
+	Args:
+		temperature: parametro tau della softmax (default 0.5)
+		k: numero di film da estrarre per feature (default 3)
+
+	Returns:
+		predictions: dizionario feature_id -> lista di predizioni [(movieId, rating, seen_bool, prob)]
+	"""
+
+	predictions = {}
+	min_k = k
+
+	for f in top_features_list:
+		movies = f.get("movies", [])
+		if not movies:
+			continue
+
+		if k == 0:
+			min_k = len(movies)
+
+		# estrai solo i rating
+		ratings = np.array([m[1] for m in movies], dtype=float)
+
+		# softmax con temperatura tau
+		exp_r = np.exp(ratings / temperature)
+		probs = exp_r / np.sum(exp_r)
+
+		# campiona k film in base alle probabilità
+		chosen_idx = np.random.choice(len(movies), size=min(min_k, len(movies)), replace=False, p=probs)
+
+		chosen_movies = []
+		for idx in chosen_idx:
+			chosen_movies.append((
+				movies[idx][0],   # movieId
+				movies[idx][1],   # rating
+				movies[idx][2],   # visto o meno
+				probs[idx]        # probabilità softmax
+			))
+
+		predictions[f["id"]] = {
+			"feature_name": f["name"],
+			"category": f["category"],
+			"movies": chosen_movies
+		}
+
+	return predictions
+
+	# end
 
 #	########################################################################	#
 #	CLASSI
 
 class RecSys_HTTPServer:
 
-    def __init__(self):
+	def __init__(self):
 
-        # ################################################################ #
-        # ANALISI DEL DATASET
-        top_n = 5
-        # Estrae le feature e i ratings film per l'utente
+		server = HTTPServer((ADDRESS, PORT), RecSys_RequestHandler)
+		print("Server in esecuzione su " + str(ADDRESS) + ":" + str(PORT) + "...")
 
-        # 1) Matrice film-features (M x F) e mapping
-        movie_features_matrix = load_npz('./data/movie_vectors_sparse.npz')  # CSR matrix (M x F)
-        M, F = movie_features_matrix.shape
+		try:
+			server.serve_forever()
+		except KeyboardInterrupt:
+			pass
 
-        mapping_df = pd.read_csv('./data/movie_index.csv')
-        mapping_df['movie_id'] = mapping_df['movie_id'].astype(int)
-        mapping_df['matrix_id'] = mapping_df['matrix_id'].astype(int)
-        movie_id_to_index = dict(zip(mapping_df['movie_id'], mapping_df['matrix_id']))
-        print("1")
+		print('Interruzione del server in corso...')
+		server.server_close()
+		print('Arrivederci!')
+		exit(1)
 
-        # 2a) Estrai i rating dello user
-        ratings_df = pd.read_csv('./data/CSVs/existing_ratings.csv')
-        user_real_ratings = ratings_df[ratings_df["userId"] == user_id][["movieId", "rating"]]
-        print("2a")
+		# end
 
-        # 2b) Estrai i rating predetti per lo user
-        comp_path = f'./data/ratings_complemented/ratings_complemented_user_{user_id}.csv'
-        user_predicted_ratings = pd.read_csv(comp_path)
-        print("2b")
-
-        # 2c) Crea i dizionari {movieId: rating}
-        real_ratings = dict(zip(
-         user_real_ratings['movieId'].astype(int),
-         user_real_ratings['rating'].astype(float)
-        ))
-        # print(f"real ratings {real_ratings}")
-        comp_ratings = dict(zip(
-         user_predicted_ratings['movieId'].astype(int),
-         user_predicted_ratings['rating'].astype(float)
-        ))
-        # print(f"comp ratings {comp_ratings}")
-        print("2c")
-
-        # 3) Unione dei rating reali con quelli predetti
-        all_ratings = comp_ratings.copy()
-        all_ratings.update(real_ratings)
-        print("3")
-        # print(f"all_ratings {all_ratings}")
-        # print(f"DEBUG: Comp Ratings Count: {len(comp_ratings)}")
-        # print(f"DEBUG: Real Ratings Count: {len(real_ratings)}")
-        # print(f"DEBUG: All Ratings Count: {len(all_ratings)}")
-
-        # 3b) Vettore dei rating (M x 1), riempito con 0 dove non ci sono rating
-        movie_ratings = np.zeros(M, dtype=float)
-        for movie_id, rating in all_ratings.items():
-          idx = movie_id_to_index.get(movie_id)
-          if idx is not None and 0 <= idx < M:
-            movie_ratings[idx] = rating
-        non_zero_ratings = np.count_nonzero(movie_ratings)
-        print(f"DEBUG: Non-zero movie ratings: {non_zero_ratings}")
-        print("3b")
-
-        # 4) Calcolo feature_means in modo ottimizzato (O(NNZ), ovvero proporzionale al numero di elementi non-nulli nella matrice sparsa)
-        sum_per_feature = movie_features_matrix.T.dot(movie_ratings)
-
-        # Conteggio del numero di film per ogni feature (numero di 1 in colonna)
-        count_per_feature = movie_features_matrix.T.dot(np.ones(M, dtype=float))
-
-        # Media dei rating per feature (ignorando divisione per 0)
-        feature_means = np.divide(
-         sum_per_feature,
-         count_per_feature,
-         out=np.zeros_like(sum_per_feature, dtype=float),
-         where=(count_per_feature != 0)
-        )
-        print("4")
-
-        # 5b) Filtro: consideriamo solo le feature con almeno top_n valori non nulli
-        valid_mask = count_per_feature >= 4 * top_n
-        feature_means = feature_means * valid_mask  # azzera le feature con meno supporto
-        print("5b")
-
-        print("Feature means:", feature_means.shape)
-        print("Movie ratings:", movie_ratings.shape)
-        print("OK: feature and movie ratings extracted!")
-
-
-        # Estrae le top features dell'utente
-        top_features_list = extract_user_top_features(feature_means, top_n)
-        # stampa le top features
-        print("\nTop Features:")
-        # Usiamo un contatore 'i' solo per stampare la posizione di debug, sebbene il campo 'rating' sia ora il rating
-        for i, f in enumerate(top_features_list, start=1):
-            print(f"Position {i}: [{f['category']}] {f['name']} (id={f['id']}, rating/rank={f['rating']:.2f})")
-
-        for f in top_features_list:
-            feat_id = f["id"]
-
-            # prendi la colonna corrispondente alla feature
-            if 0 <= feat_id < F:
-                col = movie_features_matrix[:, feat_id].toarray().flatten()  # colonna Mx1
-
-                # trova gli indici con valore 1
-                matrix_indices = np.where(col == 1)[0]
-
-                movies_list = []
-                for idx in matrix_indices:
-                    # trova movieId dal matrix_id
-                    movie_row = mapping_df[mapping_df["matrix_id"] == idx]
-                    if movie_row.empty:
-                        continue
-                    movie_id = int(movie_row["movie_id"].iloc[0])
-
-                    # cerca rating reale o complementare
-                    if movie_id in real_ratings:
-                        movies_list.append((movie_id, real_ratings[movie_id], True))
-                    elif movie_id in comp_ratings:
-                        movies_list.append((movie_id, comp_ratings[movie_id], False))
-
-                # aggiungi la lista di triple alla feature
-                f["movies"] = movies_list
-
-        # stampa aggiornato
-        print("\nTop features extracted with movies:")
-        for f in top_features_list:
-            print(f"\nFeature: {f['name']} (id={f['id']}, cat={f['category']})")
-            for m in f["movies"][:10]:  # stampane max 10 per leggibilità
-                print(f"  MovieId={m[0]}, Rating={m[1]}, Seen={m[2]}")
-
-        # # Recupera tutti i movieId e le feature per ogni categoria
-        # movies_features_map = {}
-        # for cat in CATEGORIES:
-        #     features = {}
-        #     with open(CSV_PATH_MAPPING[cat], newline='', encoding='utf-8') as f:
-        #         next(f)
-        #         reader = csv.DictReader(f, fieldnames=['movieId', 'value'])
-        #         for row in reader:
-        #             m_id, feat = row['movieId'], row['value']
-        #             if m_id and m_id.isdigit() and feat:
-        #                 # Ottieni il rating da ratings_complemented (se esiste)
-        #                 # rating = ratings_complemented.set_index("movieId")["rating"].get(m_id_int, None)
-
-        #                 # Salva sia il movieId che il rating nella struttura
-        #                 features.setdefault(feat, []).append({
-        #                     "movieId": m_id,
-        #                     # "rating": rating
-        #                 })
-
-        #         # Aggiungi la categoria solo se non è vuota.
-        #         if features:
-        #             movies_features_map[cat] = features
-
-        # ################################################################ #
-        # STAMPA TUTTI I MOVIE DELLE TOP FEATURES
-        # print("\nMovies for top features:")
-        # for f in top_features_list:
-        #     cat = f["category"]
-        #     feat_name = f["name"]
-        #     if cat in movies_features_map and feat_name in movies_features_map[cat]:
-        #         print(f"\nCategory: {cat}, Feature: {feat_name}")
-        #         for movie_entry in movies_features_map[cat][feat_name]:
-        #             print(f"MovieId: {movie_entry['movieId']}, Rating: {movie_entry['rating']}")
-
-        # ################################################################ #mo
-        # INIZIALIZZAZIONE ED ESECUZIONE DEL SERVER
-        server = HTTPServer((ADDRESS, PORT), RecSys_RequestHandler)
-        print("Server in esecuzione su " + str(ADDRESS) + ":" + str(PORT) + "...")
-
-        try:
-            server.serve_forever()
-        except KeyboardInterrupt:
-            pass
-
-        print('Interruzione del server in corso...')
-        server.server_close()
-        print('Arrivederci!')
-        exit(1)
-
-        # end
-
-    # end class
+	# end class
 
 class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
@@ -477,7 +356,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				# end if '/get-users'
 
 			if urlparse(self.path).path.endswith('/get-recommendations'):
-				recs = get_movie_recommendations()
+				recs = mab_softmax_predictions(temperature=0.5, k=3)
 				output = json.dumps(recs)
 
 				self.send_response(200) # OK
@@ -627,7 +506,9 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.end_headers()
 					return
 
+				global user_id
 				user_id = data
+				extract_user_preferences()
 
 				self.send_response(201, 'Utente loggato con successo!') # CREATED
 				self._send_cors_headers()
@@ -694,7 +575,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 #	MAIN
 
 if __name__ == "__main__":
-    RecSys_HTTPServer()
+		RecSys_HTTPServer()
 	# end
 
 #	########################################################################	#
