@@ -81,8 +81,27 @@ class _LoginRouteState extends State<LoginRoute> {
       final userList = toList(data);
 
       if (userList.contains(userID)) {
-        if (!mounted) return;
-        context.go('/home', extra: userID);
+        BaseClient.instance
+            .loginUser(userId: userID)
+            .then((_) {
+              if (!mounted) return;
+              context.go('/home', extra: userID);
+            })
+            .catchError((err) {
+              // debugPrint('\n--- ERRORE ---\n$err\n-----\n');
+              if (!mounted) return null;
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text(err.toString()),
+                    duration: const Duration(seconds: 3),
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                  ),
+                );
+              return null;
+            });
       } else {
         if (!mounted) return;
         ScaffoldMessenger.of(context)

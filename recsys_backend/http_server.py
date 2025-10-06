@@ -31,21 +31,21 @@ user_id = ""
 top_features_list = []
 
 # Matrice sparsa contenente la rappresentazione vettoriale di un film secondo le sue features.
-movie_features_matrix = load_npz('./data/movie_vectors_sparse.npz')
+movie_features_matrix = load_npz(MOVIE_SIMILARIITY_MATRIX_PATH)
 M, _ = movie_features_matrix.shape
 
 # Dataframe che mette in relazione l'id di un film con l'indice all'interno della matrice movie/features.
-movie_index_df = pd.read_csv('./data/movie_index.csv', dtype=int)
+movie_index_df = pd.read_csv(MOVIE_INDEX_PATH, dtype=int)
 movie_id_to_index = dict(zip(
 	movie_index_df['movie_id'],
 	movie_index_df['matrix_id']
 ))
 
 # Dataframe di features identificate da 3 elementi (id, category, name).
-feature_index = pd.read_csv("./data/feature_index.csv")
+feature_index = pd.read_csv(FEATURE_INDEX_PATH)
 
 # Dataframe contenente tutti i rating assegnati dagli utenti ai film della lista "existing_movies.csv"
-real_ratings_df = pd.read_csv('./data/CSVs/existing_ratings.csv')
+real_ratings_df = pd.read_csv(EXISTING_RATINGS_PATH)
 
 #	########################################################################	#
 #	ALTRE FUNZIONI
@@ -303,7 +303,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 		try:
 
 			if urlparse(self.path).path.endswith('/get-users'):
-				with open("./data/CSVs/existing_ratings.csv", newline='', encoding='utf-8') as f:
+				with open(EXISTING_RATINGS_PATH, newline='', encoding='utf-8') as f:
 					next(f)
 					reader = csv.DictReader(f, fieldnames=['userId'])
 					user_ids = {row['userId'] for row in reader if row['userId'].isdigit()}
@@ -372,7 +372,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 				if 'type' in params.keys():
 					selected_type = params['type']
-					if selected_type not in CATEGORIES_PATH_MAPPING:
+					if selected_type not in CATEGORIES:
 						self.send_response(400, 'Informazione non disponibile.') # BAD REQUEST
 						self._send_cors_headers()
 						self.send_header('Content-type', 'text/plain')
@@ -388,9 +388,16 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 				results = {}
 
-				for key, path in CATEGORIES_PATH_MAPPING.items():
+				for key in CATEGORIES:
 					if selected_type != "" and selected_type != key:
 						continue
+						
+					if key == 'title':
+						path = EXISTING_MOVIES_PATH
+					elif key == 'description':
+						path = MOVIES_ABSTRACT_PATH
+					else:
+						path = CATEGORIES_PATH_MAPPING[key]
 
 					with open(path, newline='', encoding='utf-8') as f:
 						collecting = False
@@ -507,9 +514,8 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 #	MAIN
 
 if __name__ == "__main__":
-		RecSys_HTTPServer()
+	RecSys_HTTPServer()
 	# end
 
 #	########################################################################	#
 #	RIFERIMENTI
-

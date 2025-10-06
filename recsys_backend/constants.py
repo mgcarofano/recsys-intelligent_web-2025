@@ -36,19 +36,19 @@ TOP_FEATURES = 5
 #	########################################################################	#
 #	PERCORSI UTILI
 
-# ...
+# Indica il percorso del file NPY contenente l'anteprima della matrice di similarità tra film.
 MOVIE_SIMILARIITY_PREVIEW_PATH = Path('./data/movie_cosine_similarity.npy')
 
-# ...
+# Indica il percorso del file NPZ contenente la matrice di similarità tra film.
 MOVIE_SIMILARIITY_MATRIX_PATH = Path('./data/movie_cosine_similarity.npz')
 
-# ...
+# Indica il percorso del file NPZ contenente la matrice sparsa film x feature.
 MOVIE_FEATURE_MATRIX_PATH = Path('./data/movie_vectors_sparse.npz')
 
-# ...
+# Indica il percorso del file CSV contenente l'indice di tutte le feature disponibili.
 FEATURE_INDEX_PATH = Path('./data/feature_index.csv')
 
-# ...
+# Indica il percorso del file CSV che mappa gli ID dei film con i loro indici nella matrice di similarità.
 MOVIE_INDEX_PATH = Path('./data/movie_index.csv')
 
 # Percorso della directory contenente i poster dei film.
@@ -62,13 +62,13 @@ ML_DATASET_PATH_MAPPING = {
     'tags': Path('./data/ml-latest-small/tags.csv')
 }
 
-# ...
+# Indica il percorso del file CSV contenente i titoli dei film.
 EXISTING_MOVIES_PATH = Path('./data/CSVs/existing_movies.csv')
 
-# ...
+# Indica il percorso del file CSV contenente le valutazioni (ratings) dei film.
 EXISTING_RATINGS_PATH = Path('./data/CSVs/existing_ratings.csv')
 
-# ...
+# Indica il percorso del file CSV contenente le descrizioni (abstract) dei film.
 MOVIES_ABSTRACT_PATH = Path('./data/CSVs/movie_abstracts.csv')
 
 # Mappa che associa ad ogni categoria di feature il relativo file CSV.
@@ -82,3 +82,6 @@ CATEGORIES_PATH_MAPPING = {
 	'subjects': Path('./data/CSVs/movie_subjects.csv'),
 	'writers': Path('./data/CSVs/movie_writers.csv'),
 }
+
+# Lista di categorie delle feature.
+CATEGORIES = ['title', 'description'] + [cat for cat in CATEGORIES_PATH_MAPPING.keys()]

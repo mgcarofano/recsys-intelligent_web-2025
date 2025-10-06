@@ -234,8 +234,8 @@ class BaseClient {
     }
   }
 
-  Future<dynamic> postUserPreferences({required List<String> idMovies}) async =>
-      _postRequest('/update-preferences', {'idMovies': idMovies});
+  Future<dynamic> loginUser({required String userId}) async =>
+      _postRequest('/login-user', {'userId': userId});
 }
 
 //	############################################################################

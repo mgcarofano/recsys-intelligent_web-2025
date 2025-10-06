@@ -81,27 +81,40 @@ class _HomeRouteState extends State<HomeRoute> {
     // debugPrint("$dataMap");
 
     return Future.wait(
-      dataMap.entries.expand((entry) {
-        final category = entry.key;
+      dataMap.entries.map((entry) async {
+        final featureData = entry.value as Map<String, dynamic>;
 
-        final featuresMap = entry.value as Map<String, dynamic>;
-        // debugPrint("$featuresMap");
+        final featureName = featureData["feature_name"] as String;
+        final featureRating = featureData["feature_rating"] as double;
+        final category = featureData["category"] as String;
 
-        return featuresMap.entries.map((featureData) async {
-          final featureName = featureData.key;
-          final ids = List<String>.from(featureData.value ?? []);
-          // debugPrint("$featureName, $ids");
+        final movieEntries = List<dynamic>.from(featureData["movies"] ?? []);
+        // debugPrint("$movieEntries");
 
-          // final movies = await fetchMoviesFromIds(ids);
-          final movies = await fetchMoviesFromIds(ids.take(5).toList());
+        final allIds = movieEntries
+            .map((movieEntry) => movieEntry["movie_id"].toString())
+            .toList();
+        final extras = Map<String, Map<String, dynamic>>.fromEntries(
+          movieEntries.map((movieData) {
+            return MapEntry(movieData["movie_id"].toString(), {
+              "movie_rating": movieData["movie_rating"],
+              "seen": movieData["seen"],
+              "softmax_prob": movieData["softmax_prob"],
+            });
+          }),
+        );
+        // debugPrint("$extras");
 
-          return Carousel(
-            category: category,
-            featureName: featureName,
-            movies: movies,
-            allIds: ids,
-          );
-        });
+        final movies = await fetchMoviesFromIds(allIds.take(5).toList());
+
+        return Carousel(
+          category: category,
+          featureName: featureName,
+          featureRating: featureRating,
+          allIds: allIds,
+          movies: movies,
+          nerdStats: extras,
+        );
       }),
     );
   }

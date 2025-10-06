@@ -20,7 +20,7 @@ from constants import *
 #   ########################################################################    #
 #   CARICA GLI ID DEI FILM
 
-movies_df = pd.read_csv(CATEGORIES_PATH_MAPPING['title'])
+movies_df = pd.read_csv(EXISTING_MOVIES_PATH)
 movie_ids = movies_df['movieID'].astype(str).tolist()
 movie_id_to_index = {mid: i for i, mid in enumerate(movie_ids)}
 
@@ -35,8 +35,6 @@ all_features = []
 print("Scanning dei metadata files per costruire la lista delle feature e il mapping...")
 
 for category, file_path in CATEGORIES_PATH_MAPPING.items():
-    if category in ['title', 'description']:
-        continue
     print(f"Reading {file_path} ...")
     with open(file_path, 'r', encoding='utf-8') as f:
         for line in f:

@@ -7,8 +7,8 @@
 
 """
 
-#	########################################################################	#
-#	LIBRERIE
+#   ########################################################################   #
+#   LIBRERIE
 
 from constants import *
 
@@ -17,7 +17,7 @@ import numpy as np
 from scipy.sparse import load_npz
 from sklearn.metrics.pairwise import cosine_similarity
 
-#	########################################################################	#
+#   ########################################################################   #
 #   CARICAMENTO DEI DATI NECESSARI
 
 print("Loading ratings and similarity matrix...")
@@ -25,13 +25,13 @@ ratings_df = pd.read_csv(EXISTING_RATINGS_PATH)
 movies_df = pd.read_csv(EXISTING_MOVIES_PATH)
 X = load_npz(MOVIE_FEATURE_MATRIX_PATH)
 
-#	########################################################################	#
+#   ########################################################################   #
 #   CALCOLO DELLA SIMILARITÀ COSENO TRA TUTTI I FILM
 
 movie_ids = movies_df['movieID'].astype(int).tolist()
 sim_matrix = cosine_similarity(X, dense_output=True)
 
-#	########################################################################	#
+#   ########################################################################   #
 #   COSTRUZIONE DEI RATING COMPLEMENTATI UTENTE PER UTENTE
 
 # Creiamo un DataFrame per accedere comodamente alla similarità tra film

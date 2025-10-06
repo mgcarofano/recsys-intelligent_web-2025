@@ -9,25 +9,25 @@
 
 """
 
-#	########################################################################	#
-#	LIBRERIE
+#   ########################################################################   #
+#   LIBRERIE
 
 import pandas as pd
 from constants import *
 
-#	########################################################################	#
+#   ########################################################################   #
 #   CARICAMENTO DEI DATASET
 
 ratings = pd.read_csv(ML_DATASET_PATH_MAPPING['ratings'])
 existing_movies = pd.read_csv(EXISTING_MOVIES_PATH)
 
-#	########################################################################	#
+#   ########################################################################   #
 #   FILTRAGGIO DEI RATING
 #   Si lasciano solo quelli relativi ai film presenti in 'existing_movies'.
 
 filtered_ratings = ratings[ratings["movieId"].isin(existing_movies["movieID"])]
 
-#	########################################################################	#
+#   ########################################################################   #
 #   SALVATAGGIO DELL'OUTPUT
 
 filtered_ratings.to_csv(EXISTING_RATINGS_PATH, index=False)
