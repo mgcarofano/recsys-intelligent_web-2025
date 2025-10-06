@@ -1,31 +1,42 @@
-import os
+"""
+
+    build_ratings_complemented.py \n
+    by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
+
+    Questo script stima i ratings per i film che l'utente non ha ancora valutato. Siccome il motore di raccomandazione implementato è knowledge-based, il rating viene stimato utilizzando la similarità coseno tra i film basata sulle loro feature. I risultati sono salvati in file CSV separati per ogni utente.
+
+"""
+
+#	########################################################################	#
+#	LIBRERIE
+
+from constants import *
+
 import pandas as pd
 import numpy as np
 from scipy.sparse import load_npz
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Configurazione dei percorsi
-BASE_FOLDER = "/home/olexandro/IW_Project/recsys-intelligent_web-2025/recsys_backend/data"
-ratings_path = os.path.join(BASE_FOLDER, "CSVs", "existing_ratings.csv")
-similarity_matrix_path = os.path.join(BASE_FOLDER, "movie_cosine_similarity.npz")
-movies_path = os.path.join(BASE_FOLDER, "CSVs", "existing_movies.csv")
+#	########################################################################	#
+#   CARICAMENTO DEI DATI NECESSARI
 
-output_path = os.path.join(BASE_FOLDER, "ratings_complemented.csv")
-
-# Caricamento dei dati necessari
 print("Loading ratings and similarity matrix...")
-ratings_df = pd.read_csv(ratings_path)
-movies_df = pd.read_csv(movies_path)
+ratings_df = pd.read_csv(EXISTING_RATINGS_PATH)
+movies_df = pd.read_csv(EXISTING_MOVIES_PATH)
+X = load_npz(MOVIE_FEATURE_MATRIX_PATH)
 
-# Carichiamo la matrice film-feature e calcoliamo la similarità coseno tra tutti i film
-X = load_npz(os.path.join(BASE_FOLDER, "movie_vectors_sparse.npz"))
+#	########################################################################	#
+#   CALCOLO DELLA SIMILARITÀ COSENO TRA TUTTI I FILM
+
 movie_ids = movies_df['movieID'].astype(int).tolist()
 sim_matrix = cosine_similarity(X, dense_output=True)
+
+#	########################################################################	#
+#   COSTRUZIONE DEI RATING COMPLEMENTATI UTENTE PER UTENTE
 
 # Creiamo un DataFrame per accedere comodamente alla similarità tra film
 sim_df = pd.DataFrame(sim_matrix, index=movie_ids, columns=movie_ids)
 
-# Costruzione dei rating complementati utente per utente
 for user_id, group in ratings_df.groupby("userId"):
     print(f"Predicting user {user_id}..")
 
@@ -56,12 +67,15 @@ for user_id, group in ratings_df.groupby("userId"):
             pred = float(np.clip(pred, 1.0, 5.0))
             complemented_rows.append((user_id, mid, pred))
 
+            # end if
+
+        # end for mid
+
     # Salvataggio dei rating complementati in un file CSV specifico per l'utente
-    output_path_user = os.path.join(
-        BASE_FOLDER,
-        "ratings_complemented",
-        f"ratings_complemented_user_{user_id}.csv"
-    )
+    output_path_user = Path(f'./data/ratings_complemented/ratings_complemented_user_{user_id}.csv')
     comp_df = pd.DataFrame(complemented_rows, columns=["userId", "movieId", "rating"])
     comp_df.to_csv(output_path_user, index=False)
+
     print(f"Saved complemented ratings to {output_path_user} !")
+
+    # end for user_id, group

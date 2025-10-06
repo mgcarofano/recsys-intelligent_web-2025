@@ -8,3 +8,4 @@ recsys_backend/data/ratings_complemented.csv
 >>>>>>> b3c2994acadccf2c30f65a3a92302e3bc85518f5
 recsys_backend/data/movie_cosine_similarity.npy
 recsys_backend/data/movie_cosine_similarity.npz
+/recsys_backend/__pycache__

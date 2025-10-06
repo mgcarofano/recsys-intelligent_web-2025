@@ -1,6 +1,6 @@
 """
 
-	http_server.py
+	http_server.py \n
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
 	Implementa il server HTTP e il motore di raccomandazione dei film. Gestisce le richieste del client tramite API REST (GET/POST), calcola le raccomandazioni personalizzate in base alle feature dei film e i ratings dell'utente loggato e restituisce i risultati in formato JSON.
@@ -10,9 +10,10 @@
 #	########################################################################	#
 #	LIBRERIE
 
+from constants import *
+
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qsl
-from pathlib import Path
 import json
 
 import csv
@@ -21,55 +22,10 @@ import pandas as pd
 from scipy.sparse import load_npz
 
 #	########################################################################	#
-#	COSTANTI
-
-# Indirizzo su cui il server è in ascolto (0.0.0.0 = tutte le interfacce).
-ADDRESS = '0.0.0.0'
-
-# Porta di ascolto del server.
-PORT = 8000
-
-# Timeout massimo per le richieste HTTP (in secondi).
-TIMEOUT = 30
-
-# Minimo numero di film in cui appare una certa feature per poter essere considerata raccomandabile.
-MIN_SUPPORT = 20
-
-# Numero di film raccomandati per ogni feature.
-MOVIE_RECOMMENDATIONS = 3
-
-# Numero di feature raccomandate all’utente.
-TOP_FEATURES = 5
-
-# Percorso della directory contenente i poster dei film.
-POSTER_DIR = Path('./data/movie_posters')
-
-# Mappa che associa ad ogni categoria di feature il relativo file CSV.
-CSV_PATH_MAPPING = {
-	'title': Path('./data/CSVs/existing_movies.csv'),
-	'description': Path('./data/CSVs/movie_abstracts.csv'),
-	'actors': Path('./data/CSVs/movie_actors.csv'),
-	'composers': Path('./data/CSVs/movie_composers.csv'),
-	'directors': Path('./data/CSVs/movie_directors.csv'),
-	'genres': Path('./data/CSVs/movie_genres.csv'),
-	'producers': Path('./data/CSVs/movie_producers.csv'),
-	'production_companies': Path('./data/CSVs/movie_production_companies.csv'),
-	'subjects': Path('./data/CSVs/movie_subjects.csv'),
-	'writers': Path('./data/CSVs/movie_writers.csv'),
-}
-
-# Lista di categorie delle feature. Include tutte le categorie tranne 'title' e 'description' che non non rappresentano vere e proprie feature semantiche.
-CATEGORIES = [
-	cat
-	for cat in CSV_PATH_MAPPING.keys()
-	if cat not in ['title', 'description']
-]
-
-#	########################################################################	#
 #	VARIABILI GLOBALI
 
 # Identificativo dell'utente di cui si vogliono verificare le raccomandazioni.
-user_id = 0
+user_id = ""
 
 # Lista di features, caratterizzate da (id, category, name, average_rating), a cui sono collegati i movies, caratterizzati da (movieId, rating, seen_bool), che includono tale feature.
 top_features_list = []
@@ -245,13 +201,16 @@ def extract_user_preferences():
 	
 	# end
 
-def mab_softmax_predictions(temperature=0.5, k=3):
+def mab_softmax_predictions(
+		temperature : float = 0.5,
+		k : int = MOVIE_RECOMMENDATIONS
+	):
 	"""
 	Esegue MAB softmax prediction per le top features.
 
 	Args:
-		temperature: parametro tau della softmax (default 0.5)
-		k: numero di film da estrarre per feature (default 3)
+		temperature: parametro tau della softmax.
+		k: numero di film da estrarre per feature.
 
 	Returns:
 		predictions: dizionario feature_id -> lista di predizioni [(movieId, rating, seen_bool, prob)]
@@ -265,7 +224,7 @@ def mab_softmax_predictions(temperature=0.5, k=3):
 		if not movies:
 			continue
 
-		if k == 0:
+		if k <= 0:
 			min_k = len(movies)
 
 		# estrai solo i rating
@@ -280,14 +239,15 @@ def mab_softmax_predictions(temperature=0.5, k=3):
 		chosen_idx = np.random.choice(len(movies), size=sample_size, replace=False, p=probs)
 
 		predictions[f["id"]] = {
-			"feature_name": f["name"],
 			"category": f["category"],
-			"movies": [(
-				movies[idx][0], # movieId
-				movies[idx][1], # rating
-				movies[idx][2], # seen
-				probs[idx] # probabilità softmax
-			) for idx in chosen_idx]
+			"feature_name": f["name"],
+			"feature_rating": f["rating"],
+			"movies": [{
+				"movie_id": movies[idx][0],
+				"movie_rating": movies[idx][1],
+				"seen": movies[idx][2],
+				"softmax_prob": probs[idx]
+			} for idx in chosen_idx]
 		}
 
 	return predictions
@@ -360,7 +320,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				# end if '/get-users'
 
 			if urlparse(self.path).path.endswith('/get-recommendations'):
-				recs = mab_softmax_predictions(temperature=0.5, k=MOVIE_RECOMMENDATIONS)
+				recs = mab_softmax_predictions()
 				output = json.dumps(recs)
 
 				self.send_response(200) # OK
@@ -408,10 +368,11 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 			elif urlparse(self.path).path.endswith('/get-movie-info'):
 				params = dict(parse_qsl(urlparse(self.path).query))
 				selected_id = params['id']
+				selected_type = ""
 
 				if 'type' in params.keys():
 					selected_type = params['type']
-					if selected_type not in CSV_PATH_MAPPING:
+					if selected_type not in CATEGORIES_PATH_MAPPING:
 						self.send_response(400, 'Informazione non disponibile.') # BAD REQUEST
 						self._send_cors_headers()
 						self.send_header('Content-type', 'text/plain')
@@ -427,8 +388,8 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 				results = {}
 
-				for key, path in CSV_PATH_MAPPING.items():
-					if 'selected_type' in locals() and selected_type != key:
+				for key, path in CATEGORIES_PATH_MAPPING.items():
+					if selected_type != "" and selected_type != key:
 						continue
 
 					with open(path, newline='', encoding='utf-8') as f:
@@ -446,7 +407,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 						if info_values:
 							results[key] = info_values
 
-					if 'selected_type' in locals() and selected_type == key:
+					if selected_type != "" and selected_type == key:
 						break
 
 				if not results:
@@ -488,7 +449,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 		try:
 
-			if urlparse(self.path).path.endswith('/update-user'):
+			if urlparse(self.path).path.endswith('/login-user'):
 				ctype = self.headers.get('Content-Type')
 				content_len = int(self.headers.get('Content-Length', 0))
 
@@ -500,11 +461,11 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					return
 
 				body = self.rfile.read(content_len).decode('utf-8')
-				data = json.loads(body)
+				data = json.loads(body)["userId"]
 				# print(data)
 
-				if not isinstance(data, int):
-					self.send_response(400, 'Il payload deve essere un intero.') # BAD REQUEST
+				if not data or not isinstance(data, str):
+					self.send_response(400, 'Il payload deve essere una stringa.') # BAD REQUEST
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
@@ -514,13 +475,13 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				user_id = data
 				extract_user_preferences()
 
-				self.send_response(201, 'Utente loggato con successo!') # CREATED
+				self.send_response(201, f'Utente <{data}> loggato con successo!') # CREATED
 				self._send_cors_headers()
 				self.end_headers()
 				# print(str(self.user_prefs))
 				return
 
-				# end if '/update-user'
+				# end if '/login-user'
 
 			else:
 				self.send_response(404, 'Impossibile eseguire tale richiesta.') # NOT FOUND
