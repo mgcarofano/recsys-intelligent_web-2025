@@ -55,7 +55,7 @@ def load_user_ratings():
 	global user_id
 
 	# print("2a")
-	real = real_ratings_df[real_ratings_df["userId"] == user_id][["movieId", "rating"]]
+	real = real_ratings_df[real_ratings_df["userId"] == int(user_id)][["movieId", "rating"]]
 	real = dict(zip(real['movieId'].astype(int), real['rating'].astype(float)))
 
 	# print("2b")

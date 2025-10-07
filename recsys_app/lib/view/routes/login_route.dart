@@ -150,7 +150,7 @@ class _LoginRouteState extends State<LoginRoute> {
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          "Inserisci l'ID dell'utente per iniziare",
+                          "Inserisci il tuo ID utente per iniziare",
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
