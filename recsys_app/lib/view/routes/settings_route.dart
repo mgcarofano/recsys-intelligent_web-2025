@@ -3,7 +3,7 @@
 	settings_route.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	La classe SettingsRoute mostra le impostazioni dell'applicazione, dove
+	La classe SettingsRoute mostra una schermata dove
   l'utente può modificare i parametri del sistema di raccomandazione e altre
   opzioni legate alla personalizzazione dell'esperienza utente.
 

@@ -53,7 +53,9 @@ class RecSysAlertDialog extends StatelessWidget {
     return AlertDialog(
       icon: Icon(topIcon, size: 25.0, color: Colors.grey.shade50),
       title: Center(child: Text(alertTitle)),
-      content: Text(alertMessage),
+      content: SingleChildScrollView(
+        child: SelectableText(alertMessage, textAlign: TextAlign.center),
+      ),
       actions: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(

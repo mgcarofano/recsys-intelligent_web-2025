@@ -3,7 +3,7 @@
 	recsys_carousel.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	...
+	La classe RecSysCarousel crea un widget personalizzato per visualizzare una lista orizzontale di film raccomandati, con un titolo che fornisce la caratteristica principale per cui sono stati selezionati e una serie di card per ognuno di essi. Il widget supporta il caricamento asincrono di ulteriori film e la navigazione verso una pagina dedicata alla caratteristica selezionata.
 
 */
 
@@ -20,6 +20,7 @@ import 'package:knowledge_recsys/model/carousel_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
 import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_loading_dialog.dart';
+import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_movie_card.dart';
 
 //	############################################################################
@@ -49,43 +50,25 @@ class RecSysCarousel extends StatefulWidget {
 
 class _RecSysCarouselState extends State<RecSysCarousel> {
   late List<Movie> displayedMovies;
-
-  final List<Movie> initialMovies = List<Movie>.empty(growable: true);
-  final List<Movie> moreMovies = List<Movie>.empty(growable: true);
-
-  bool expanded = false;
   bool loading = false;
 
   @override
   void initState() {
     super.initState();
-    initialMovies.clear();
-    initialMovies.addAll(widget.carousel.movies);
-    displayedMovies = initialMovies;
+    displayedMovies = widget.carousel.movies;
   }
 
   Future<void> _loadAllMovies() async {
-    if (loading || expanded) return;
+    final feature = widget.carousel.feature;
+    final List<String> recommendedIds = displayedMovies
+        .map((m) => m.idMovie)
+        .toList();
 
-    setState(() => loading = true);
-
-    if (moreMovies.isEmpty) {
-      moreMovies.clear();
-      moreMovies.addAll(await fetchMoviesFromIds(widget.carousel.allIds));
-    }
-
-    setState(() {
-      displayedMovies = moreMovies;
-      expanded = true;
-      loading = false;
-    });
-  }
-
-  void _collapse() {
-    setState(() {
-      displayedMovies = initialMovies;
-      expanded = false;
-    });
+    if (!mounted) return;
+    context.push(
+      '/feature/${feature.featureId}',
+      extra: {'feature': feature, 'recommendedIds': recommendedIds},
+    );
   }
 
   String _buildCategoryTitle({
@@ -115,56 +98,53 @@ class _RecSysCarouselState extends State<RecSysCarousel> {
   }
 
   Widget _buildCarouselHeader(Carousel c) {
+    final carouselTitle = _buildCategoryTitle(
+      category: c.feature.category,
+      params: [c.feature.name, c.allIds.length.toString()],
+    );
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: Text(
-            _buildCategoryTitle(
-              category: c.category,
-              params: [c.featureName, c.allIds.length.toString()],
+          child: Tooltip(
+            message: carouselTitle,
+            child: Text(
+              carouselTitle,
+              style: Theme.of(context).textTheme.headlineMedium,
+              overflow: TextOverflow.ellipsis,
             ),
-            style: Theme.of(context).textTheme.headlineMedium,
-            overflow: TextOverflow.ellipsis,
           ),
         ),
-        if (c.allIds.length > maxColumns)
-          TextButton.icon(
-            onPressed: expanded ? _collapse : _loadAllMovies,
-            icon: Icon(expanded ? Icons.expand_less : Icons.expand_more),
-            label: Text(
-              expanded ? "Mostra meno" : "Mostra tutto",
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
+        TextButton.icon(
+          onPressed: _loadAllMovies,
+          icon: Icon(Icons.add_to_queue),
+          label: Text(
+            "Mostra tutto",
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
+        ),
       ],
     );
   }
 
   Widget _buildCarouselMoviesList(Carousel c, double h, int columns) {
-    if (!expanded)
-      return SizedBox(
-        height: h,
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          itemCount: min(c.movies.length, maxColumns),
-          separatorBuilder: (_, __) => const SizedBox(width: 32),
-          itemBuilder: (context, i) => RecSysMovieCard(movie: c.movies[i]),
-        ),
-      );
-    else
-      return GridView.builder(
-        itemCount: c.movies.length,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: columns,
-          mainAxisSpacing: 32,
-          crossAxisSpacing: 32,
-          childAspectRatio: 1,
-        ),
-        itemBuilder: (context, i) => RecSysMovieCard(movie: c.movies[i]),
-      );
+    return SizedBox(
+      height: h,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: min(c.movies.length, maxColumns),
+        separatorBuilder: (_, __) => const SizedBox(width: 32),
+        itemBuilder: (context, i) {
+          final m = c.movies[i];
+          return RecSysMovieCard(
+            feature: c.feature,
+            nerdStats: c.nerdStats[m.idMovie],
+            movie: m,
+          );
+        },
+      ),
+    );
   }
 
   @override

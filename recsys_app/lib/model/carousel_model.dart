@@ -3,7 +3,7 @@
 	carousel_model.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	...
+	La classe Carousel rappresenta un carosello di film raccomandati, associato a una particolare caratteristica (feature) del sistema di raccomandazione. La classe Carousel viene utilizzata per organizzare e visualizzare le raccomandazioni di film in modo strutturato e intuitivo per l'utente.
 
 */
 
@@ -22,20 +22,17 @@
 //	############################################################################
 //	CLASSI e ROUTE
 
+import 'package:knowledge_recsys/model/feature_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
 
 class Carousel {
-  final String category;
-  final String featureName;
-  final double featureRating;
+  final Feature feature;
   final List<String> allIds;
   final List<Movie> movies;
   final Map<String, Map<String, dynamic>> nerdStats;
 
   Carousel({
-    required this.category,
-    required this.featureName,
-    required this.featureRating,
+    required this.feature,
     required this.allIds,
     required this.movies,
     required this.nerdStats,
@@ -43,9 +40,7 @@ class Carousel {
 
   Carousel copyWith({List<Movie>? movies}) {
     return Carousel(
-      category: category,
-      featureName: featureName,
-      featureRating: featureRating,
+      feature: feature,
       allIds: allIds,
       movies: movies ?? this.movies,
       nerdStats: nerdStats,
@@ -55,9 +50,8 @@ class Carousel {
   @override
   String toString() {
     return '''Carousel{
-      category: $category,
-      featureName: $featureName,
-      featureRating: $featureRating,
+      feature: $feature,
+      nerdStats: $nerdStats,
       allIds: $allIds
     }''';
   }

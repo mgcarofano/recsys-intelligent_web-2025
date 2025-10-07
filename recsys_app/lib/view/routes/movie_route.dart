@@ -3,11 +3,7 @@
 	movie_route.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	La classe MovieRoute rappresenta la schermata dei dettagli di un film, dove
-  l'utente può visualizzare le informazioni principali (e.g. titolo,
-  descrizione, anno di uscita, ...), una breve spiegazione del motivo per cui
-  il film è stato raccomandato e altri parametri più specifici propri del
-  sistema di raccomandazione.
+	La classe MovieRoute rappresenta la schermata dei dettagli di un film, dove l'utente può visualizzare tutti i metadati (e.g. titolo, descrizione, anno di uscita, ...) del film selezionato.
 
 */
 
@@ -22,8 +18,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:knowledge_recsys/cache/poster_cache.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
-import 'package:knowledge_recsys/recsys_main.dart';
-import 'package:knowledge_recsys/view/widgets/recsys_alert_dialog.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 
 //	############################################################################
@@ -135,37 +129,12 @@ class _MovieRouteState extends State<MovieRoute> {
     );
   }
 
-  Future<void> handleAppBarClick(MovieRouteAction action) async {
-    switch (action) {
-      case MovieRouteAction.showNerdStats:
-        showDialog(
-          context: context,
-          builder: (context) => RecSysAlertDialog(
-            topIcon: Icons.bar_chart,
-            alertTitle: 'Statistiche per nerd',
-            alertMessage: "...",
-            cancelText: "Ok",
-          ),
-        );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: RecSysAppBar(
-        title: "Informazioni",
-        alignment: Alignment.topLeft,
-        actions: [
-          IconButton(
-            onPressed: () => handleAppBarClick(MovieRouteAction.showNerdStats),
-            icon: const Icon(Icons.bar_chart),
-            tooltip: "Statistiche per nerd",
-          ),
-        ],
-      ),
+      appBar: RecSysAppBar(title: "Informazioni", alignment: Alignment.topLeft),
       body: SingleChildScrollView(
         child: Column(
           children: [

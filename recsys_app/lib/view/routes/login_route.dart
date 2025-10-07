@@ -3,14 +3,7 @@
 	login_route.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	La classe LoginRoute rappresenta la schermata di login dell'applicazione,
-  dove l'utente può scegliere se testare l'applicazione con:
-  - una simulazione automatica a partire dai rating di uno specifico utente
-  del dataset MovieLens Small, oppure
-  - una simulazione manuale, che parte da un'inizializzazione random delle
-  preferenze.
-  L'utente viene reindirizzato alla schermata principale dell'applicazione una
-  volta effettuato l'accesso.
+	La classe LoginRoute rappresenta la schermata di login dell'applicazione, dove l'utente può inserire il proprio identificativo per accedere al sistema e inizializzare la piattaforma di raccomandazione in base ai rating che ha fornito. L'utente, quindi, viene reindirizzato alla schermata principale dell'applicazione una volta effettuato l'accesso.
 
 */
 

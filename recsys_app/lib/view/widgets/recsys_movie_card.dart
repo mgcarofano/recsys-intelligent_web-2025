@@ -4,11 +4,9 @@
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
 	La classe RecSysMovieCard rappresenta una card che visualizza le informazioni
-  su un film raccomandato dal sistema, inclusi il titolo, la descrizione e i
-  subjects associati. La card include anche la copertina del film, che viene
-  scaricata dal server se non è già presente nella cache locale.
-  L'utente può cliccare sulla card per selezionarla in modo da aggiornare le
-  proprie preferenze e migliorare le raccomandazioni future.
+  su un film raccomandato dal sistema, inclusi il titolo, la descrizione e
+  alcuni features associate. La card include anche la copertina del film, che
+  viene scaricata dal server se non è già presente nella cache locale.
 
 */
 
@@ -18,13 +16,16 @@
 //	############################################################################
 //	LIBRERIE
 
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/cache/poster_cache.dart';
+import 'package:knowledge_recsys/model/feature_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
+import 'package:knowledge_recsys/view/widgets/recsys_alert_dialog.dart';
 import 'package:soft_edge_blur/soft_edge_blur.dart';
 
 //	############################################################################
@@ -37,15 +38,17 @@ import 'package:soft_edge_blur/soft_edge_blur.dart';
 //	CLASSI e ROUTE
 
 class RecSysMovieCard extends StatefulWidget {
+  final Feature feature;
   final Movie movie;
-  final bool? isSelected;
-  final VoidCallback? onTap;
+  final Map<String, dynamic>? nerdStats;
+  final bool? recommended;
 
   const RecSysMovieCard({
     super.key,
+    required this.feature,
     required this.movie,
-    this.isSelected,
-    this.onTap,
+    this.nerdStats,
+    this.recommended,
   });
 
   @override
@@ -55,7 +58,6 @@ class RecSysMovieCard extends StatefulWidget {
 class _RecSysMovieCardState extends State<RecSysMovieCard> {
   Uint8List? _moviePosterBytes;
   bool _isPosterLoading = true;
-  static const double _scaleReductionFactor = 0.02;
 
   @override
   void initState() {
@@ -111,6 +113,38 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
     context.push('/movie/${widget.movie.idMovie}', extra: widget.movie);
   }
 
+  void _showNerdStats() {
+    final nerdStatsInfo = widget.nerdStats != null
+        ? """movie_rating: ${widget.nerdStats!["movie_rating"]}
+          seen: ${widget.nerdStats!["seen"]}
+          softmax_probability: ${widget.nerdStats!["softmax_prob"]}"""
+        : "";
+
+    final message =
+        """
+      ### TITLE ###
+
+      ${widget.movie.title ?? ''}
+
+      ### FEATURE ###
+
+      ${widget.feature}
+
+      ### NERD STATS ###
+
+      $nerdStatsInfo
+    """;
+
+    showDialog(
+      context: context,
+      builder: (context) => RecSysAlertDialog(
+        topIcon: Icons.query_stats,
+        alertTitle: 'Statistiche per nerd',
+        alertMessage: message,
+      ),
+    );
+  }
+
   List<Widget> _buildMovieInfo() {
     List<Widget> ret = List.empty(growable: true);
 
@@ -153,8 +187,21 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
   }
 
   Widget _buildFadingChipsRow() {
+    final allFeatures = <String>[
+      ...widget.movie.actors ?? [],
+      ...widget.movie.composers ?? [],
+      ...widget.movie.directors ?? [],
+      ...widget.movie.genres ?? [],
+      ...widget.movie.producers ?? [],
+      ...widget.movie.productionCompanies ?? [],
+      ...widget.movie.subjects ?? [],
+      ...widget.movie.writers ?? [],
+    ];
+    allFeatures.shuffle(Random());
+    final chips = allFeatures.take(10).toList();
+
     return SizedBox(
-      height: 30,
+      height: 34,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return ShaderMask(
@@ -177,14 +224,14 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
               physics: const BouncingScrollPhysics(),
               child: Row(
                 spacing: 5,
-                children: widget.movie.subjects!.map((subject) {
+                children: chips.map((feature) {
                   return Chip(
                     label: Text(
-                      subject,
+                      feature,
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w100,
-                        fontSize: 11,
+                        fontSize: 11.5,
                       ),
                     ),
                     backgroundColor: Theme.of(context).colorScheme.tertiary,
@@ -217,7 +264,7 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
                     return const Center(child: CircularProgressIndicator());
                   if (_moviePosterBytes == null)
                     return const Placeholder();
-                  else {
+                  else
                     return SoftEdgeBlur(
                       edges: [
                         EdgeBlur(
@@ -241,7 +288,6 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
                         fit: BoxFit.cover,
                       ),
                     );
-                  }
                 },
               ),
             ),
@@ -267,23 +313,82 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
               textDirection: TextDirection.rtl,
               top: 12,
               start: 12,
-              child: IconButton(
-                onPressed: _showDetails,
-                constraints: BoxConstraints(
-                  maxHeight: 34,
-                  maxWidth: 34,
-                  minWidth: 34,
-                  minHeight: 34,
-                ),
-                padding: EdgeInsets.all(0.0),
-                style: IconButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.tertiary,
-                ),
-                icon: const Icon(
-                  Icons.info_outline,
-                  color: Colors.black,
-                  size: 24,
-                ),
+              width: 350 - 12 * 2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                spacing: 8,
+                children: [
+                  if (widget.recommended ?? false)
+                    Chip(
+                      label: Text(
+                        "Scelto per te",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w100,
+                          fontSize: 11.5,
+                        ),
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
+                      materialTapTargetSize: MaterialTapTargetSize.padded,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
+                  if (widget.nerdStats?["seen"] as bool? ?? false)
+                    Chip(
+                      label: Text(
+                        "Già visto",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w100,
+                          fontSize: 11.5,
+                        ),
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
+                      materialTapTargetSize: MaterialTapTargetSize.padded,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
+                  Spacer(),
+                  if (widget.nerdStats != null)
+                    IconButton(
+                      onPressed: _showNerdStats,
+                      constraints: BoxConstraints(
+                        maxHeight: 34,
+                        maxWidth: 34,
+                        minWidth: 34,
+                        minHeight: 34,
+                      ),
+                      padding: EdgeInsets.all(0.0),
+                      style: IconButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.tertiary,
+                      ),
+                      icon: const Icon(
+                        Icons.query_stats,
+                        color: Colors.black,
+                        size: 24,
+                      ),
+                    ),
+                  IconButton(
+                    onPressed: _showDetails,
+                    constraints: BoxConstraints(
+                      maxHeight: 34,
+                      maxWidth: 34,
+                      minWidth: 34,
+                      minHeight: 34,
+                    ),
+                    padding: EdgeInsets.all(0.0),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
+                    ),
+                    icon: const Icon(
+                      Icons.info_outline,
+                      color: Colors.black,
+                      size: 24,
+                    ),
+                  ),
+                ],
               ),
             ),
             Positioned(
@@ -308,27 +413,14 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap ?? () {},
-      child: AnimatedScale(
-        scale: widget.isSelected ?? false ? (1.0 - _scaleReductionFactor) : 1.0,
-        duration: const Duration(milliseconds: 700),
-        curve: Curves.easeInOut,
-        child: Material(
-          elevation: 4,
-          shape: RoundedSuperellipseBorder(
-            borderRadius: BorderRadius.circular(24),
-            side: widget.isSelected ?? false
-                ? BorderSide(
-                    color: Theme.of(context).colorScheme.primary,
-                    width: 5,
-                  )
-                : BorderSide.none,
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: _buildCard(),
-        ),
+    return Material(
+      elevation: 4,
+      shape: RoundedSuperellipseBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: BorderSide.none,
       ),
+      clipBehavior: Clip.antiAlias,
+      child: _buildCard(),
     );
   }
 }

@@ -33,8 +33,6 @@ enum SyncState { synced, notSynced, offline, error }
 
 enum HomeRouteAction { openSettings, logout }
 
-enum MovieRouteAction { showNerdStats }
-
 const int maxColumns = 5;
 
 //	############################################################################

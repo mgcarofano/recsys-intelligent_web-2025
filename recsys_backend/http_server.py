@@ -31,8 +31,8 @@ user_id = ""
 top_features_list = []
 
 # Matrice sparsa contenente la rappresentazione vettoriale di un film secondo le sue features.
-movie_features_matrix = load_npz(MOVIE_SIMILARIITY_MATRIX_PATH)
-M, _ = movie_features_matrix.shape
+movie_features_matrix = load_npz(MOVIE_FEATURE_MATRIX_PATH)
+M, F = movie_features_matrix.shape
 
 # Dataframe che mette in relazione l'id di un film con l'indice all'interno della matrice movie/features.
 movie_index_df = pd.read_csv(MOVIE_INDEX_PATH, dtype=int)
@@ -42,7 +42,7 @@ movie_id_to_index = dict(zip(
 ))
 
 # Dataframe di features identificate da 3 elementi (id, category, name).
-feature_index = pd.read_csv(FEATURE_INDEX_PATH)
+feature_index_df = pd.read_csv(FEATURE_INDEX_PATH)
 
 # Dataframe contenente tutti i rating assegnati dagli utenti ai film della lista "existing_movies.csv"
 real_ratings_df = pd.read_csv(EXISTING_RATINGS_PATH)
@@ -96,7 +96,7 @@ def extract_user_top_features(feature_means):
 
 	# Non usiamo 'rating' qui, ma usiamo 'idx' per accedere sia al DataFrame che a feature_means
 	for idx in top_indices:
-		row = feature_index.iloc[idx]
+		row = feature_index_df.iloc[idx]
 
 		# Prende il valore di rating (media) per la feature all'indice 'idx'
 		feature_rating_value = feature_means[idx]
@@ -331,6 +331,69 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				return
 
 				# end if '/get-recommendations'
+			
+			elif urlparse(self.path).path.endswith('/get-movies'):
+				params = dict(parse_qsl(urlparse(self.path).query))
+				selected_id = params['id']
+				selected_type = ""
+
+				if 'type' in params.keys():
+					selected_type = params['type']
+					if selected_type not in ['feature']:
+						self.send_response(400, 'Query non disponibile.') # BAD REQUEST
+						self._send_cors_headers()
+						self.send_header('Content-type', 'text/plain')
+						self.end_headers()
+						return
+
+				if not selected_id or not selected_id.isdigit():
+					self.send_response(400, 'ID non valido.') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+				
+				if not Path.exists(MOVIE_FEATURE_MATRIX_PATH):
+					self.send_response(500, 'Matrice non trovata sul server.') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+
+				selected_id = int(selected_id)
+
+				if selected_id < 0 or selected_id >= F:
+					self.send_response(400, 'ID non valido.') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+				
+				global movie_index_df, movie_features_matrix
+				
+				feature_column = movie_features_matrix[:, selected_id].toarray().ravel()
+				related_matrix_ids = np.where(feature_column > 0)[0]
+				related_movie_ids = movie_index_df.loc[
+					movie_index_df['matrix_id'].isin(related_matrix_ids), 'movie_id'
+				].astype(str).tolist()
+
+				if not related_movie_ids:
+					self.send_response(404, f'Nessun movie trovato per la feature "{selected_id}"') # NOT FOUND
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+
+				output = json.dumps(related_movie_ids)
+
+				self.send_response(200)
+				self._send_cors_headers()
+				self.send_header('Content-type', 'application/json')
+				self.end_headers()
+				self.wfile.write(output.encode(encoding='utf_8'))
+				return
+
+				# end if '/get-movies'
 
 			elif urlparse(self.path).path.endswith('/download-movie-poster'):
 				selected_id = dict(parse_qsl(urlparse(self.path).query))['id']

@@ -3,7 +3,7 @@
 	movie_model.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	...
+	La classe Movie rappresenta un film, con i suoi metadati principali (es. titolo, descrizione, attori, ...) e viene utilizzata per memorizzare e gestire le informazioni sui film presenti nel database dell'applicazione di raccomandazione.
 
 */
 
@@ -22,7 +22,7 @@ import 'package:knowledge_recsys/services/base_client.dart';
 //	############################################################################
 //	ALTRI METODI
 
-Future<List<Movie>> fetchMoviesFromIds(List<String> ids) async {
+Future<List<Movie>> fetchMoviesFromIds(List<String> ids, bool ordered) async {
   final ret = ids.toSet().map((id) async {
     String? movieInfo = await BaseClient.instance
         .getMovieInfo(idMovie: id)
@@ -50,7 +50,10 @@ Future<List<Movie>> fetchMoviesFromIds(List<String> ids) async {
     );
   }).toList();
 
-  return (await Future.wait(ret)).whereType<Movie>().toList();
+  final movies = (await Future.wait(ret)).whereType<Movie>().toList();
+  if (ordered) movies.sort((a, b) => (a.title ?? "").compareTo(b.title ?? ""));
+
+  return movies;
 }
 
 //	############################################################################

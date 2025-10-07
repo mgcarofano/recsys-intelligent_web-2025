@@ -4,12 +4,13 @@
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
 	La classe HomeRoute rappresenta la schermata principale dell'applicazione,
-  dove l'utente può visualizzare le principali raccomandazioni di film e serie
-  TV che il sistema ha generato, in base ai metadati dei film presenti nel
-  database e alle preferenze dell'utente stesso. Inoltre, da questa schermata
-  l'utente può accedere alle altre funzionalità dell'applicazione, come la
-  visualizzazione dei dettagli di un film, la gestione del profilo utente e le
-  impostazioni dell'applicazione.
+  dove l'utente può visualizzare le principali raccomandazioni di film che il
+  sistema ha generato, in base ai metadati dei film presenti nel database e
+  alle preferenze dell'utente stesso. Inoltre, da questa schermata
+  l'utente può accedere alle altre funzionalità dell'applicazione, come:
+  - la visualizzazione dei dettagli di un film,
+  - la visualizzazione delle statistiche dei caroselli,
+  - la gestone delle impostazioni dell'applicazione.
 
 */
 
@@ -22,6 +23,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/model/carousel_model.dart';
+import 'package:knowledge_recsys/model/feature_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
 import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
@@ -47,7 +49,6 @@ class HomeRoute extends StatefulWidget {
 
 class _HomeRouteState extends State<HomeRoute> {
   late Future<List<Carousel>> movieRecommendations;
-  final expanded = List.filled(3, false);
 
   @override
   void initState() {
@@ -83,17 +84,13 @@ class _HomeRouteState extends State<HomeRoute> {
     return Future.wait(
       dataMap.entries.map((entry) async {
         final featureData = entry.value as Map<String, dynamic>;
-
-        final featureName = featureData["feature_name"] as String;
-        final featureRating = featureData["feature_rating"] as double;
-        final category = featureData["category"] as String;
-
         final movieEntries = List<dynamic>.from(featureData["movies"] ?? []);
         // debugPrint("$movieEntries");
 
         final allIds = movieEntries
             .map((movieEntry) => movieEntry["movie_id"].toString())
             .toList();
+
         final extras = Map<String, Map<String, dynamic>>.fromEntries(
           movieEntries.map((movieData) {
             return MapEntry(movieData["movie_id"].toString(), {
@@ -105,12 +102,15 @@ class _HomeRouteState extends State<HomeRoute> {
         );
         // debugPrint("$extras");
 
-        final movies = await fetchMoviesFromIds(allIds.take(5).toList());
+        final movies = await fetchMoviesFromIds(allIds, false);
 
         return Carousel(
-          category: category,
-          featureName: featureName,
-          featureRating: featureRating,
+          feature: Feature(
+            featureId: entry.key,
+            category: featureData["category"] as String,
+            name: featureData["feature_name"] as String,
+            rating: featureData["feature_rating"] as double,
+          ),
           allIds: allIds,
           movies: movies,
           nerdStats: extras,
@@ -137,6 +137,11 @@ class _HomeRouteState extends State<HomeRoute> {
         title: 'Knowledge-based Recommender System',
         alignment: Alignment.topLeft,
         actions: [
+          IconButton(
+            onPressed: () => handleAppBarClick(HomeRouteAction.openSettings),
+            icon: const Icon(Icons.settings),
+            tooltip: 'Impostazioni',
+          ),
           IconButton(
             onPressed: () => handleAppBarClick(HomeRouteAction.logout),
             icon: const Icon(Icons.logout),
