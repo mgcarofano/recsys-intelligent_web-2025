@@ -22,7 +22,7 @@ import 'package:knowledge_recsys/services/base_client.dart';
 //	############################################################################
 //	ALTRI METODI
 
-Future<List<Movie>> fetchMoviesFromIds(List<String> ids, bool ordered) async {
+Future<List<Movie>> fetchMoviesFromIds(List<String> ids) async {
   final ret = ids.toSet().map((id) async {
     String? movieInfo = await BaseClient.instance
         .getMovieInfo(idMovie: id)
@@ -50,10 +50,7 @@ Future<List<Movie>> fetchMoviesFromIds(List<String> ids, bool ordered) async {
     );
   }).toList();
 
-  final movies = (await Future.wait(ret)).whereType<Movie>().toList();
-  if (ordered) movies.sort((a, b) => (a.title ?? "").compareTo(b.title ?? ""));
-
-  return movies;
+  return (await Future.wait(ret)).whereType<Movie>().toList();
 }
 
 //	############################################################################

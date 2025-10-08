@@ -13,12 +13,9 @@
 //	############################################################################
 //	LIBRERIE
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:knowledge_recsys/model/carousel_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
-import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_loading_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_movie_card.dart';
@@ -35,12 +32,10 @@ import 'package:knowledge_recsys/view/widgets/recsys_movie_card.dart';
 class RecSysCarousel extends StatefulWidget {
   final Carousel carousel;
   final double height;
-  final int columns;
 
   const RecSysCarousel({
     required this.carousel,
     required this.height,
-    required this.columns,
     super.key,
   });
 
@@ -128,12 +123,12 @@ class _RecSysCarouselState extends State<RecSysCarousel> {
     );
   }
 
-  Widget _buildCarouselMoviesList(Carousel c, double h, int columns) {
+  Widget _buildCarouselMoviesList(Carousel c, double h) {
     return SizedBox(
       height: h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: min(c.movies.length, maxColumns),
+        itemCount: c.movies.length,
         separatorBuilder: (_, __) => const SizedBox(width: 32),
         itemBuilder: (context, i) {
           final m = c.movies[i];
@@ -160,7 +155,6 @@ class _RecSysCarouselState extends State<RecSysCarousel> {
           _buildCarouselMoviesList(
             widget.carousel.copyWith(movies: displayedMovies),
             widget.height,
-            widget.columns,
           ),
         const Divider(),
       ],

@@ -21,6 +21,7 @@ enum CheckTypes {
   emptyValue,
   notValidPatternEmail,
   notValidPatternAddress,
+  notValidRangeNumber,
   validValue,
 }
 
@@ -45,6 +46,22 @@ abstract class Validators {
     }
 
     return isEmailValid;
+  }
+
+  static CheckTypes validateInteger(String integer) {
+    var isIntegerValid = isEmptyValue(integer);
+
+    if (isIntegerValid == CheckTypes.validValue) {
+      final number = int.tryParse(integer);
+      if (number == null)
+        isIntegerValid = CheckTypes.emptyValue;
+      else if (number <= 0)
+        isIntegerValid = CheckTypes.notValidRangeNumber;
+      else
+        isIntegerValid = CheckTypes.validValue;
+    }
+
+    return isIntegerValid;
   }
 
   static validateAddress(String address) {

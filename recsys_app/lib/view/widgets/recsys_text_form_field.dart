@@ -31,6 +31,7 @@ class RecSysTextFormField extends StatefulWidget {
   final FormFieldValidator? validator;
   final FormFieldSetter? onSaved;
 
+  final String? tooltip;
   final IconData? prefixIcon;
   final String labelText;
   final int? maxLength;
@@ -45,6 +46,7 @@ class RecSysTextFormField extends StatefulWidget {
     this.validator,
     this.onSaved,
     required this.controller,
+    this.tooltip,
     this.prefixIcon,
     required this.labelText,
     this.isObscured = false,
@@ -73,27 +75,30 @@ class _RecSysTextFormFieldState extends State<RecSysTextFormField> {
       border: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
-      // floatingLabelStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-      //   color: Theme.of(context).colorScheme.onPrimary,
-      // ),
+      floatingLabelStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+        color: Theme.of(context).colorScheme.inverseSurface,
+      ),
       labelText: widget.labelText,
-      floatingLabelBehavior: FloatingLabelBehavior.never,
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
       errorMaxLines: 3,
     );
 
-    return TextFormField(
-      enabled: true,
-      autocorrect: false,
-      obscureText: widget.isObscured,
-      textAlign: TextAlign.start,
-      maxLength: widget.maxLength,
-      cursorHeight: 15,
-      validator: widget.validator ?? (value) => null,
-      onSaved: widget.onSaved,
-      controller: widget.controller,
-      cursorColor: Theme.of(context).colorScheme.primary,
-      decoration: fieldDecoration,
-      textInputAction: widget.textInputAction ?? TextInputAction.none,
+    return Tooltip(
+      message: widget.tooltip ?? "",
+      child: TextFormField(
+        enabled: true,
+        autocorrect: false,
+        obscureText: widget.isObscured,
+        textAlign: TextAlign.start,
+        maxLength: widget.maxLength,
+        cursorHeight: 15,
+        validator: widget.validator ?? (value) => null,
+        onSaved: widget.onSaved,
+        controller: widget.controller,
+        cursorColor: Theme.of(context).colorScheme.primary,
+        decoration: fieldDecoration,
+        textInputAction: widget.textInputAction ?? TextInputAction.none,
+      ),
     );
   }
 }

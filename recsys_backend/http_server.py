@@ -3,7 +3,10 @@
 	http_server.py \n
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	Implementa il server HTTP e il motore di raccomandazione dei film. Gestisce le richieste del client tramite API REST (GET/POST), calcola le raccomandazioni personalizzate in base alle feature dei film e i ratings dell'utente loggato e restituisce i risultati in formato JSON.
+	Implementa il server HTTP e il motore di raccomandazione dei film.
+	Gestisce le richieste del client tramite API REST (GET/POST), calcola le
+	raccomandazioni personalizzate in base alle feature dei film e i ratings
+	dell'utente loggato e restituisce i risultati in formato JSON.
 
 """
 
@@ -16,7 +19,6 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qsl
 import json
 
-import csv
 import numpy as np
 import pandas as pd
 from scipy.sparse import load_npz
@@ -30,9 +32,8 @@ user_id = ""
 # Lista di features, caratterizzate da (id, category, name, average_rating), a cui sono collegati i movies, caratterizzati da (movieId, rating, seen_bool), che includono tale feature.
 top_features_list = []
 
-# Matrice sparsa contenente la rappresentazione vettoriale di un film secondo le sue features.
-movie_features_matrix = load_npz(MOVIE_FEATURE_MATRIX_PATH)
-M, F = movie_features_matrix.shape
+#	########################################################################	#
+#	DATAFRAMES
 
 # Dataframe che mette in relazione l'id di un film con l'indice all'interno della matrice movie/features.
 movie_index_df = pd.read_csv(MOVIE_INDEX_PATH, dtype=int)
@@ -41,18 +42,29 @@ movie_id_to_index = dict(zip(
 	movie_index_df['matrix_id']
 ))
 
-# Dataframe di features identificate da 3 elementi (id, category, name).
-feature_index_df = pd.read_csv(FEATURE_INDEX_PATH)
+# Dataframe contenente i titoli di tutti i film della lista "existing_movies.csv".
+movie_titles_df = pd.read_csv(EXISTING_MOVIES_PATH)
+
+# Dataframe contenente le descrizioni (abstract) dei film della lista "existing_movies.csv".
+movie_abstracts_df = pd.read_csv(MOVIES_ABSTRACT_PATH)
 
 # Dataframe contenente tutti i rating assegnati dagli utenti ai film della lista "existing_movies.csv"
 real_ratings_df = pd.read_csv(EXISTING_RATINGS_PATH)
+
+# Dataframe di features identificate da 3 elementi (id, category, name).
+feature_index_df = pd.read_csv(FEATURE_INDEX_PATH)
+
+#	########################################################################	#
+#	MATRIX
+
+# Matrice sparsa contenente la rappresentazione vettoriale di un film secondo le sue features.
+movie_features_matrix = load_npz(MOVIE_FEATURE_MATRIX_PATH)
+M, F = movie_features_matrix.shape
 
 #	########################################################################	#
 #	ALTRE FUNZIONI
 
 def load_user_ratings():
-
-	global user_id
 
 	# print("2a")
 	real = real_ratings_df[real_ratings_df["userId"] == int(user_id)][["movieId", "rating"]]
@@ -66,7 +78,7 @@ def load_user_ratings():
 
 	# end
 
-def compute_feature_means(ratings):
+def compute_feature_means(ratings, min_support: int):
     
 	# print("4")
 	sum_per_feature = movie_features_matrix.T.dot(ratings)
@@ -80,19 +92,17 @@ def compute_feature_means(ratings):
 	)
 
 	# Filtra le feature che hanno un numero di occorrenze sufficiente rispetto alla soglia minima di supporto.
-	mask = count_per_feature >= MIN_SUPPORT
+	mask = count_per_feature >= min_support
 
 	# print("5b")
 	return means * mask
 
 	# end
 
-def extract_user_top_features(feature_means):
-
-	global top_features_list
+def extract_user_top_features(feature_means, top_features: int):
 
 	# 5. ordinare il vettore 1xF dei rating sulle features
-	top_indices = np.argsort(-feature_means)[:TOP_FEATURES] # ordina in desc, prende TOP_FEATURES
+	top_indices = np.argsort(-feature_means)[:top_features] # ordina in desc, prende TOP_FEATURES
 
 	# Non usiamo 'rating' qui, ma usiamo 'idx' per accedere sia al DataFrame che a feature_means
 	for idx in top_indices:
@@ -111,8 +121,6 @@ def extract_user_top_features(feature_means):
 	# end
 
 def attach_movies_to_features(real_ratings, comp_ratings):
-
-	global top_features_list
 
 	# print("6")
 	for f in top_features_list:
@@ -135,13 +143,21 @@ def attach_movies_to_features(real_ratings, comp_ratings):
 	
 	# end
 
-def extract_user_preferences():
+def extract_user_preferences(min_support: int, top_features: int):
 
 	#	################################################################	#
 	#	INIZIALIZZAZIONE DELLE VARIABILI
 
-	global top_features_list, user_id
 	top_features_list.clear()
+
+	if isinstance(min_support, int) and min_support <= 0:
+		min_support = MIN_SUPPORT
+	
+	if isinstance(top_features, int) and top_features <= 0:
+		top_features = TOP_FEATURES
+	
+	if not isinstance(user_id, str) or not user_id.isdigit():
+		raise ValueError('ID utente non valido')
 
 	#	################################################################	#
 	#	ESTRAZIONE DEI RATINGS PER L'UTENTE
@@ -169,7 +185,7 @@ def extract_user_preferences():
 	#	CALCOLO RATING MEDIO DELLE FEATURES
 	#	Il tempo di esecuzione è proporzionale al numero di elementi non-nulli nella matrice sparsa, cioè O(NNZ).
 
-	feature_means = compute_feature_means(movie_ratings)
+	feature_means = compute_feature_means(movie_ratings, min_support)
 
 	# print("Feature means:", feature_means.shape)
 	# print("Movie ratings:", movie_ratings.shape)
@@ -178,7 +194,7 @@ def extract_user_preferences():
 	#	################################################################	#
 	#	ESTRAZIONE DELLE TOP FEATURES DELL'UTENTE
 
-	extract_user_top_features(feature_means)
+	extract_user_top_features(feature_means, top_features)
 
 	#	################################################################	#
 	#	ASSOCIAZIONE DEI MOVIE ALLE FEATURES ESTRATTE
@@ -202,8 +218,8 @@ def extract_user_preferences():
 	# end
 
 def mab_softmax_predictions(
-		temperature : float = 0.5,
-		k : int = MOVIE_RECOMMENDATIONS
+		temperature : float,
+		k : int
 	):
 	"""
 	Esegue MAB softmax prediction per le top features.
@@ -216,6 +232,9 @@ def mab_softmax_predictions(
 		predictions: dizionario feature_id -> lista di predizioni [(movieId, rating, seen_bool, prob)]
 	"""
 
+	if isinstance(k, int) and k < 0:
+		k = MOVIE_RECOMMENDATIONS
+
 	predictions = {}
 	min_k = k
 
@@ -224,7 +243,7 @@ def mab_softmax_predictions(
 		if not movies:
 			continue
 
-		if k <= 0:
+		if k == 0:
 			min_k = len(movies)
 
 		# estrai solo i rating
@@ -280,6 +299,11 @@ class RecSys_HTTPServer:
 
 class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
+	# Parametri del sistema di raccomandazione
+	min_support = MIN_SUPPORT
+	movie_recommendations = MOVIE_RECOMMENDATIONS
+	top_features = TOP_FEATURES
+
 	def _send_cors_headers(self):
 		self.send_header('Access-Control-Allow-Origin', '*')
 		self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
@@ -300,15 +324,36 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 	def do_GET(self):
 
+		# Dataframes
+		global movie_index_df, movie_id_to_index, movie_titles_df, movie_abstracts_df
+		global real_ratings_df
+		global feature_index_df
+
+		# Matrix
+		global movie_features_matrix, M, F
+
 		try:
 
 			if urlparse(self.path).path.endswith('/get-users'):
-				with open(EXISTING_RATINGS_PATH, newline='', encoding='utf-8') as f:
-					next(f)
-					reader = csv.DictReader(f, fieldnames=['userId'])
-					user_ids = {row['userId'] for row in reader if row['userId'].isdigit()}
 
-				output = json.dumps(sorted(list(user_ids)))
+				output = json.dumps(real_ratings_df['userId'].unique().astype(str).tolist())
+
+				self.send_response(200) # OK
+				self._send_cors_headers()
+				self.send_header('Content-type', 'application/json')
+				self.end_headers()
+				self.wfile.write(output.encode(encoding='utf_8'))
+				return
+
+				# end if '/get-users'
+
+			if urlparse(self.path).path.endswith('/get-params'):
+
+				output = json.dumps({
+					"minSupport": RecSys_RequestHandler.min_support,
+					"movieRecommendations": RecSys_RequestHandler.movie_recommendations,
+					"topFeatures": RecSys_RequestHandler.top_features
+				})
 
 				self.send_response(200) # OK
 				self._send_cors_headers()
@@ -320,7 +365,12 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				# end if '/get-users'
 
 			if urlparse(self.path).path.endswith('/get-recommendations'):
-				recs = mab_softmax_predictions()
+				
+				recs = mab_softmax_predictions(
+					temperature=0.5,
+					k=RecSys_RequestHandler.movie_recommendations
+				)
+				
 				output = json.dumps(recs)
 
 				self.send_response(200) # OK
@@ -335,26 +385,11 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 			elif urlparse(self.path).path.endswith('/get-movies'):
 				params = dict(parse_qsl(urlparse(self.path).query))
 				selected_id = params['id']
-				selected_type = ""
+				selected_type = params['type']
+				selected_order = ""
 
-				if 'type' in params.keys():
-					selected_type = params['type']
-					if selected_type not in ['feature']:
-						self.send_response(400, 'Query non disponibile.') # BAD REQUEST
-						self._send_cors_headers()
-						self.send_header('Content-type', 'text/plain')
-						self.end_headers()
-						return
-
-				if not selected_id or not selected_id.isdigit():
+				if not selected_id or not selected_id.isdigit() or not 0 <= int(selected_id) < F:
 					self.send_response(400, 'ID non valido.') # BAD REQUEST
-					self._send_cors_headers()
-					self.send_header('Content-type', 'text/plain')
-					self.end_headers()
-					return
-				
-				if not Path.exists(MOVIE_FEATURE_MATRIX_PATH):
-					self.send_response(500, 'Matrice non trovata sul server.') # BAD REQUEST
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
@@ -362,20 +397,42 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 				selected_id = int(selected_id)
 
-				if selected_id < 0 or selected_id >= F:
-					self.send_response(400, 'ID non valido.') # BAD REQUEST
+				if not selected_type or selected_type not in ['feature']:
+					self.send_response(400, 'Query non disponibile.') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+					
+				if 'order' in params.keys():
+					selected_order = params['order'].title()
+					if selected_order not in ['True', 'False']:
+						self.send_response(400, 'Query non disponibile.') # BAD REQUEST
+						self._send_cors_headers()
+						self.send_header('Content-type', 'text/plain')
+						self.end_headers()
+						return
+					selected_order = eval(selected_order)
+				
+				if not Path.exists(MOVIE_FEATURE_MATRIX_PATH):
+					self.send_response(500, 'Matrice non trovata sul server.') # BAD REQUEST
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
 				
-				global movie_index_df, movie_features_matrix
-				
 				feature_column = movie_features_matrix[:, selected_id].toarray().ravel()
 				related_matrix_ids = np.where(feature_column > 0)[0]
 				related_movie_ids = movie_index_df.loc[
 					movie_index_df['matrix_id'].isin(related_matrix_ids), 'movie_id'
-				].astype(str).tolist()
+				]
+
+				if selected_order:
+					related_movie_ids = movie_titles_df.loc[
+						movie_titles_df['movieID'].isin(related_movie_ids.tolist())
+					].sort_values(by='movie_name')['movieID'].astype(str).tolist()
+				else:
+					related_movie_ids = related_movie_ids.astype(str).tolist()
 
 				if not related_movie_ids:
 					self.send_response(404, f'Nessun movie trovato per la feature "{selected_id}"') # NOT FOUND
@@ -442,8 +499,17 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 						self.end_headers()
 						return
 
-				if not selected_id:
-					self.send_response(400, 'Impossibile eseguire tale richiesta.') # BAD REQUEST
+				if not selected_id or not selected_id.isdigit():
+					self.send_response(400, 'ID non valido.') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+				
+				movie_id = movie_id_to_index.get(int(selected_id))
+				
+				if not movie_id or (not 0 <= movie_id < M):
+					self.send_response(400, 'ID non valido.') # BAD REQUEST
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
@@ -451,34 +517,21 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 				results = {}
 
-				for key in CATEGORIES:
-					if selected_type != "" and selected_type != key:
-						continue
-						
-					if key == 'title':
-						path = EXISTING_MOVIES_PATH
-					elif key == 'description':
-						path = MOVIES_ABSTRACT_PATH
-					else:
-						path = CATEGORIES_PATH_MAPPING[key]
+				# Recupero 'title' e 'description' direttamente dai file CSV.
+				title_row = movie_titles_df.loc[movie_titles_df['movieID'] == int(selected_id)]
+				desc_row = movie_abstracts_df.loc[movie_abstracts_df['movieId'] == int(selected_id)]
+				results['title'] = title_row['movie_name'].dropna().astype(str).tolist()
+				results['description'] = desc_row['value'].dropna().astype(str).tolist()
 
-					with open(path, newline='', encoding='utf-8') as f:
-						collecting = False
-						info_values = []
-						reader = csv.DictReader(f, fieldnames=['movieId', 'value'])
+				# Recupero tutte le altre features dalla matrice 'movie_features_matrix'.
+				movie_column = movie_features_matrix[movie_id, :].toarray().ravel()
+				related_matrix_ids = np.where(movie_column > 0)[0]
+				related_features_df = feature_index_df.loc[
+					feature_index_df['feature_id'].isin(related_matrix_ids)
+				]
 
-						for row in reader:
-							if row['movieId'] == selected_id:
-								collecting = True
-								info_values.append(row['value'])
-							elif collecting:
-								break
-
-						if info_values:
-							results[key] = info_values
-
-					if selected_type != "" and selected_type == key:
-						break
+				for category, group in related_features_df.groupby('category'):
+					results[category] = sorted(group['feature'].dropna().astype(str).tolist())
 
 				if not results:
 					self.send_response(404, f'Informazione "{selected_type}" non trovata per movie "{selected_id}"') # NOT FOUND
@@ -512,10 +565,13 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 			self._send_cors_headers()
 			self.send_header('Content-type', 'text/plain')
 			self.end_headers()
+			return
 
 		# end
 
 	def do_POST(self):
+
+		global user_id
 
 		try:
 
@@ -541,17 +597,56 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.end_headers()
 					return
 
-				global user_id
 				user_id = data
-				extract_user_preferences()
+				extract_user_preferences(
+					RecSys_RequestHandler.min_support,
+					RecSys_RequestHandler.top_features
+				)
 
 				self.send_response(201, f'Utente <{data}> loggato con successo!') # CREATED
 				self._send_cors_headers()
 				self.end_headers()
-				# print(str(self.user_prefs))
 				return
 
 				# end if '/login-user'
+			
+			if urlparse(self.path).path.endswith('/update-params'):
+				ctype = self.headers.get('Content-Type')
+				content_len = int(self.headers.get('Content-Length', 0))
+
+				if not ctype == 'application/json':
+					self.send_response(400, 'Il "content-type" non è application/json.') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+
+				body = self.rfile.read(content_len).decode('utf-8')
+				data = json.loads(body)
+				# print(data)
+
+				if not data:
+					self.send_response(400, 'Payload non corretto') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+			
+				RecSys_RequestHandler.min_support = data['minSupport']
+				RecSys_RequestHandler.movie_recommendations = data['movieRecommendations']
+				RecSys_RequestHandler.top_features = data['topFeatures']
+
+				extract_user_preferences(
+					RecSys_RequestHandler.min_support,
+					RecSys_RequestHandler.top_features
+				)
+
+				self.send_response(201, f'Parametri aggiornati con successo!') # CREATED
+				self._send_cors_headers()
+				self.end_headers()
+				return
+			
+				# end if '/update-params'
 
 			else:
 				self.send_response(404, 'Impossibile eseguire tale richiesta.') # NOT FOUND

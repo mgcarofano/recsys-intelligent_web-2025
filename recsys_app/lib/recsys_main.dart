@@ -31,7 +31,7 @@ import 'package:knowledge_recsys/theme.dart';
 
 enum SyncState { synced, notSynced, offline, error }
 
-enum HomeRouteAction { openSettings, logout }
+enum HomeRouteAction { userRatings, openSettings, logout }
 
 const int maxColumns = 5;
 

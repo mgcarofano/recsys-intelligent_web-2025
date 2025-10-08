@@ -17,6 +17,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/model/feature_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
+import 'package:knowledge_recsys/view/routes/ratings_route.dart';
 
 import 'package:knowledge_recsys/view/screens/error_screen.dart';
 import 'package:knowledge_recsys/view/routes/login_route.dart';
@@ -86,6 +87,11 @@ class AppRouter {
 
             return ErrorScreen();
           },
+        ),
+        GoRoute(
+          name: 'RATINGS',
+          path: '/ratings',
+          builder: (context, state) => const RatingsRoute(),
         ),
         GoRoute(
           name: 'SETTINGS',

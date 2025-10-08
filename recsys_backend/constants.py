@@ -24,7 +24,7 @@ TIMEOUT = 30
 #	########################################################################	#
 #	PARAMETRI DEL SISTEMA DI RACCOMANDAZIONE
 
-# Minimo numero di film in cui appare una certa feature per poter essere considerata raccomandabile.
+# Minimo numero di film a supporto di una feature per poter essere raccomandata.
 MIN_SUPPORT = 20
 
 # Numero di film raccomandati per ogni feature.

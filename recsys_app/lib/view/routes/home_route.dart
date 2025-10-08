@@ -102,7 +102,7 @@ class _HomeRouteState extends State<HomeRoute> {
         );
         // debugPrint("$extras");
 
-        final movies = await fetchMoviesFromIds(allIds, false);
+        final movies = await fetchMoviesFromIds(allIds);
 
         return Carousel(
           feature: Feature(
@@ -123,9 +123,16 @@ class _HomeRouteState extends State<HomeRoute> {
   Widget build(BuildContext context) {
     handleAppBarClick(HomeRouteAction action) async {
       switch (action) {
+        case HomeRouteAction.userRatings:
+          if (!mounted) return;
+          context.push('/ratings');
         case HomeRouteAction.openSettings:
           if (!mounted) return;
-          context.push('/settings');
+          final shouldReload = await context.push('/settings');
+          if (shouldReload == true && mounted)
+            setState(() {
+              movieRecommendations = _getMovieRecommendations();
+            });
         case HomeRouteAction.logout:
           if (!mounted) return;
           context.go('/login');
@@ -137,6 +144,11 @@ class _HomeRouteState extends State<HomeRoute> {
         title: 'Knowledge-based Recommender System',
         alignment: Alignment.topLeft,
         actions: [
+          IconButton(
+            onPressed: () => handleAppBarClick(HomeRouteAction.userRatings),
+            icon: const Icon(Icons.account_circle),
+            tooltip: 'Le tue valutazioni',
+          ),
           IconButton(
             onPressed: () => handleAppBarClick(HomeRouteAction.openSettings),
             icon: const Icon(Icons.settings),
@@ -165,31 +177,22 @@ class _HomeRouteState extends State<HomeRoute> {
                   return RecSysLoadingDialog(alertMessage: 'Caricamento...');
                 case ConnectionState.done:
                   return LayoutBuilder(
-                    builder: (context, constraints) {
-                      final double cardWidth = 350;
-                      final int columns = (constraints.maxWidth / cardWidth)
-                          .floor()
-                          .clamp(1, maxColumns);
-
-                      return SingleChildScrollView(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          spacing: 20.0,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(
-                            carouselSnapshot.data!.length,
-                            (index) {
-                              final carousel = carouselSnapshot.data![index];
-                              return RecSysCarousel(
-                                carousel: carousel,
-                                height: constraints.maxHeight * 0.4,
-                                columns: columns,
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    },
+                    builder: (context, constraints) => SingleChildScrollView(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        spacing: 20.0,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List.generate(carouselSnapshot.data!.length, (
+                          index,
+                        ) {
+                          final carousel = carouselSnapshot.data![index];
+                          return RecSysCarousel(
+                            carousel: carousel,
+                            height: constraints.maxHeight * 0.4,
+                          );
+                        }),
+                      ),
+                    ),
                   );
               }
             },

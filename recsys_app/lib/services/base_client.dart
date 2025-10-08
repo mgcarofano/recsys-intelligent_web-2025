@@ -121,18 +121,26 @@ class BaseClient {
 
   Future<dynamic> getUsers() async => _getRequest('/get-users');
 
+  Future<dynamic> getParams() async => _getRequest('/get-params');
+
   Future<dynamic> getMovieRecommendations() async =>
       _getRequest('/get-recommendations');
 
-  Future<dynamic> getMovieInfo({required String idMovie}) async =>
-      _getRequest('/get-movie-info', {'id': idMovie});
+  Future<dynamic> getMovieInfo({required String idMovie, String? type}) async =>
+      _getRequest('/get-movie-info', {'id': idMovie, 'type': type ?? ""});
 
   // Si può anche specificare la categoria da recuperare.
   // Future<dynamic> getMovieTitle({required String idMovie}) async =>
   //     _getRequest('/get-movie-info', {'id': idMovie, 'type': 'title'});
 
-  Future<dynamic> getMoviesFromFeature({required String featureId}) async =>
-      _getRequest('/get-movies', {'type': 'feature', 'id': featureId});
+  Future<dynamic> getMoviesFromFeature({
+    required String featureId,
+    bool? order,
+  }) async => _getRequest('/get-movies', {
+    'id': featureId,
+    'type': 'feature',
+    'order': order ?? false,
+  });
 
   Future<dynamic> downloadMoviePoster({required String idMovie}) async {
     try {
@@ -218,6 +226,16 @@ class BaseClient {
 
   Future<dynamic> loginUser({required String userId}) async =>
       _postRequest('/login-user', {'userId': userId});
+
+  Future<dynamic> updateParams({
+    int? minSupport,
+    int? movieRecommendations,
+    int? topFeatures,
+  }) async => _postRequest('/update-params', {
+    "minSupport": minSupport,
+    "movieRecommendations": movieRecommendations,
+    "topFeatures": topFeatures,
+  });
 }
 
 //	############################################################################
