@@ -79,7 +79,7 @@ def load_user_ratings():
 	# end
 
 def compute_feature_means(ratings, min_support: int):
-    
+
 	# print("4")
 	sum_per_feature = movie_features_matrix.T.dot(ratings)
 	count_per_feature = movie_features_matrix.T.dot(np.ones(M, dtype=float))
@@ -140,7 +140,7 @@ def attach_movies_to_features(real_ratings, comp_ratings):
 				movies.append((m_id, comp_ratings[m_id], False))
 
 		f["movies"] = movies
-	
+
 	# end
 
 def extract_user_preferences(min_support: int, top_features: int):
@@ -152,10 +152,10 @@ def extract_user_preferences(min_support: int, top_features: int):
 
 	if isinstance(min_support, int) and min_support <= 0:
 		min_support = MIN_SUPPORT
-	
+
 	if isinstance(top_features, int) and top_features <= 0:
 		top_features = TOP_FEATURES
-	
+
 	if not isinstance(user_id, str) or not user_id.isdigit():
 		raise ValueError('ID utente non valido')
 
@@ -190,7 +190,7 @@ def extract_user_preferences(min_support: int, top_features: int):
 	# print("Feature means:", feature_means.shape)
 	# print("Movie ratings:", movie_ratings.shape)
 	# print("OK: feature and movie ratings extracted!")
-	
+
 	#	################################################################	#
 	#	ESTRAZIONE DELLE TOP FEATURES DELL'UTENTE
 
@@ -214,62 +214,65 @@ def extract_user_preferences(min_support: int, top_features: int):
 	# 	print(f"\nFeature: {f['name']} (id={f['id']}, cat={f['category']})")
 	# 	for m in f["movies"][:10]:  # stampane max 10 per leggibilità
 	# 		print(f"  MovieId={m[0]}, Rating={m[1]}, Seen={m[2]}")
-	
+
 	# end
 
-def mab_softmax_predictions(
-		temperature : float,
-		k : int
-	):
-	"""
-	Esegue MAB softmax prediction per le top features.
+def mab_softmax_predictions(temperature: float, k: int):
+    """
+    Esegue MAB softmax prediction solo su film non visti (seen == False).
 
-	Args:
-		temperature: parametro tau della softmax.
-		k: numero di film da estrarre per feature.
+    Args:
+        temperature: parametro tau della softmax.
+        k: numero di film da estrarre per feature.
 
-	Returns:
-		predictions: dizionario feature_id -> lista di predizioni [(movieId, rating, seen_bool, prob)]
-	"""
+    Returns:
+        predictions: dizionario feature_id -> lista di predizioni [(movieId, rating, seen_bool, prob)]
+    """
 
-	if isinstance(k, int) and k < 0:
-		k = MOVIE_RECOMMENDATIONS
+    if isinstance(k, int) and k < 0:
+        k = MOVIE_RECOMMENDATIONS
 
-	predictions = {}
-	min_k = k
+    predictions = {}
+    min_k = k
 
-	for f in top_features_list:
-		movies = f.get("movies", [])
-		if not movies:
-			continue
+    for f in top_features_list:
+        movies = f.get("movies", [])
+        if not movies:
+            continue
 
-		if k == 0:
-			min_k = len(movies)
+        # Considera solo i film non visti
+        unseen_movies = [m for m in movies if not m[2]]
+        if not unseen_movies:
+            continue
 
-		# estrai solo i rating
-		ratings = np.array([m[1] for m in movies], dtype=float)
+        if k == 0:
+            min_k = len(unseen_movies)
 
-		# softmax con temperatura tau
-		probs = np.exp(ratings / temperature)
-		probs /= np.sum(probs)
+        # Estrai solo i rating
+        ratings = np.array([m[1] for m in unseen_movies], dtype=float)
 
-		# campiona k film in base alle probabilità
-		sample_size = min(min_k, len(movies))
-		chosen_idx = np.random.choice(len(movies), size=sample_size, replace=False, p=probs)
+        # Calcola softmax con temperatura tau
+        probs = np.exp(ratings / temperature)
+        probs /= np.sum(probs)
 
-		predictions[f["id"]] = {
-			"category": f["category"],
-			"feature_name": f["name"],
-			"feature_rating": f["rating"],
-			"movies": [{
-				"movie_id": movies[idx][0],
-				"movie_rating": movies[idx][1],
-				"seen": movies[idx][2],
-				"softmax_prob": probs[idx]
-			} for idx in chosen_idx]
-		}
+        # Campiona k film in base alle probabilità
+        sample_size = min(min_k, len(unseen_movies))
+        chosen_idx = np.random.choice(len(unseen_movies), size=sample_size, replace=False, p=probs)
 
-	return predictions
+        predictions[f["id"]] = {
+            "category": f["category"],
+            "feature_name": f["name"],
+            "feature_rating": f["rating"],
+            "movies": [{
+                "movie_id": unseen_movies[idx][0],
+                "movie_rating": unseen_movies[idx][1],
+                "seen": unseen_movies[idx][2],
+                "softmax_prob": probs[idx]
+            } for idx in chosen_idx]
+        }
+
+    return predictions
+
 
 	# end
 
@@ -365,12 +368,12 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				# end if '/get-users'
 
 			if urlparse(self.path).path.endswith('/get-recommendations'):
-				
+
 				recs = mab_softmax_predictions(
 					temperature=0.5,
 					k=RecSys_RequestHandler.movie_recommendations
 				)
-				
+
 				output = json.dumps(recs)
 
 				self.send_response(200) # OK
@@ -381,7 +384,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				return
 
 				# end if '/get-recommendations'
-			
+
 			elif urlparse(self.path).path.endswith('/get-movies'):
 				params = dict(parse_qsl(urlparse(self.path).query))
 				selected_id = params['id']
@@ -403,7 +406,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
-					
+
 				if 'order' in params.keys():
 					selected_order = params['order'].title()
 					if selected_order not in ['True', 'False']:
@@ -413,14 +416,14 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 						self.end_headers()
 						return
 					selected_order = eval(selected_order)
-				
+
 				if not Path.exists(MOVIE_FEATURE_MATRIX_PATH):
 					self.send_response(500, 'Matrice non trovata sul server.') # BAD REQUEST
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
-				
+
 				feature_column = movie_features_matrix[:, selected_id].toarray().ravel()
 				related_matrix_ids = np.where(feature_column > 0)[0]
 				related_movie_ids = movie_index_df.loc[
@@ -505,9 +508,9 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
-				
+
 				movie_id = movie_id_to_index.get(int(selected_id))
-				
+
 				if not movie_id or (not 0 <= movie_id < M):
 					self.send_response(400, 'ID non valido.') # BAD REQUEST
 					self._send_cors_headers()
@@ -609,7 +612,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				return
 
 				# end if '/login-user'
-			
+
 			if urlparse(self.path).path.endswith('/update-params'):
 				ctype = self.headers.get('Content-Type')
 				content_len = int(self.headers.get('Content-Length', 0))
@@ -631,7 +634,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
-			
+
 				RecSys_RequestHandler.min_support = data['minSupport']
 				RecSys_RequestHandler.movie_recommendations = data['movieRecommendations']
 				RecSys_RequestHandler.top_features = data['topFeatures']
@@ -645,7 +648,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 				self._send_cors_headers()
 				self.end_headers()
 				return
-			
+
 				# end if '/update-params'
 
 			else:
