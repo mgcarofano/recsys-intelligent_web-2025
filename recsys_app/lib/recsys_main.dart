@@ -38,8 +38,8 @@ const int maxColumns = 5;
 //	############################################################################
 //	ALTRI METODI
 
-List<dynamic> toList(String data) {
-  return json.decode(data).cast<String>().toList();
+List<T> toList<T>(String data) {
+  return json.decode(data).cast<T>().toList();
 }
 
 Map<String, dynamic> toMap(String data) {
@@ -49,6 +49,21 @@ Map<String, dynamic> toMap(String data) {
 T? safeFirst<T>(List<T>? list) {
   if (list == null || list.isEmpty) return null;
   return list.first;
+}
+
+MaterialColor getRatingColor(double rating) {
+  if (rating >= 0.0 && rating <= 1.0)
+    return Colors.red;
+  else if (rating > 1.0 && rating <= 2.0)
+    return Colors.orange;
+  else if (rating > 2.0 && rating <= 3.0)
+    return Colors.amber;
+  else if (rating > 3.0 && rating <= 4.0)
+    return Colors.lime;
+  else if (rating > 4.0 && rating <= 5.0)
+    return Colors.green;
+  else
+    return Colors.amber;
 }
 
 //	############################################################################

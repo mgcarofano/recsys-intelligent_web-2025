@@ -17,13 +17,12 @@
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/model/feature_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
-import 'package:knowledge_recsys/view/routes/ratings_route.dart';
 
 import 'package:knowledge_recsys/view/screens/error_screen.dart';
 import 'package:knowledge_recsys/view/routes/login_route.dart';
 import 'package:knowledge_recsys/view/routes/home_route.dart';
-import 'package:knowledge_recsys/view/routes/movie_route.dart';
-import 'package:knowledge_recsys/view/routes/feature_route.dart';
+import 'package:knowledge_recsys/view/routes/movie_info_route.dart';
+import 'package:knowledge_recsys/view/routes/movie_query_route.dart';
 import 'package:knowledge_recsys/view/routes/settings_route.dart';
 
 //	############################################################################
@@ -56,7 +55,11 @@ class AppRouter {
         GoRoute(
           name: 'HOME',
           path: '/home',
-          builder: (context, state) => const HomeRoute(),
+          builder: (context, state) {
+            final extra = state.extra;
+            if (extra is String) return HomeRoute(userId: extra);
+            return ErrorScreen();
+          },
         ),
         GoRoute(
           name: 'MOVIE',
@@ -79,9 +82,9 @@ class AppRouter {
                 extra['recommendedIds'] ?? [],
               );
 
-              return FeatureRoute(
-                feature: feature,
-                recommendedIds: recommendedIds,
+              return MovieQueryRoute(
+                queryType: 'feature',
+                extras: {'feature': feature, 'recommendedIds': recommendedIds},
               );
             }
 
@@ -91,7 +94,15 @@ class AppRouter {
         GoRoute(
           name: 'RATINGS',
           path: '/ratings',
-          builder: (context, state) => const RatingsRoute(),
+          builder: (context, state) {
+            final extra = state.extra;
+            if (extra is String)
+              return MovieQueryRoute(
+                queryType: 'ratings',
+                extras: {'userId': extra},
+              );
+            return ErrorScreen();
+          },
         ),
         GoRoute(
           name: 'SETTINGS',

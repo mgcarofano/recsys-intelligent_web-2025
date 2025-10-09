@@ -1,15 +1,16 @@
 /*
 
-	feature_route.dart
+	movie_query_route.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	La classe FeatureRoute rappresenta la schermata che mostra tutti i film
-  associati a una specifica feature selezionata dall'utente.
-  Questa schermata viene raggiunta quando l'utente clicca su una feature
-  in uno dei caroselli della schermata principale (HomeRoute).
-  La FeatureRoute visualizza una lista di film che condividono la stessa
-  caratteristica, permettendo all'utente di esplorare e scoprire nuovi
-  contenuti basati sui suoi interessi.
+	La classe MovieQueryRoute rappresenta la schermata che mostra tutti i film
+  associati a una specifica query selezionata dall'utente.
+  Questa schermata viene raggiunta quando:
+  - l'utente clicca "Mostra tutto" in uno dei caroselli della HomeRoute.
+  - l'utente clicca il pulsante "Le tue valutazioni"
+  nella AppBar della HomeRoute.
+  La schermata filtra i film presenti sul server in base alla query
+  selezionata, e li mostra in una griglia scrollabile.
 
 */
 
@@ -20,6 +21,8 @@
 //	LIBRERIE
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:knowledge_recsys/view/widgets/recsys_alert_dialog.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:knowledge_recsys/model/feature_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
@@ -38,19 +41,26 @@ import 'package:knowledge_recsys/view/widgets/recsys_movie_card.dart';
 //	############################################################################
 //	CLASSI e ROUTE
 
-class FeatureRoute extends StatefulWidget {
-  final Feature feature;
-  final List<String>? recommendedIds;
+class MovieQueryRoute extends StatefulWidget {
+  final String queryType;
+  final Map<String, dynamic> extras;
 
-  const FeatureRoute({super.key, required this.feature, this.recommendedIds});
+  const MovieQueryRoute({
+    super.key,
+    required this.queryType,
+    required this.extras,
+  });
 
   @override
-  State<FeatureRoute> createState() => _FeatureRouteState();
+  State<MovieQueryRoute> createState() => _MovieQueryRouteState();
 }
 
-class _FeatureRouteState extends State<FeatureRoute> {
+class _MovieQueryRouteState extends State<MovieQueryRoute> {
   final List<Movie> _movies = [];
   final List<String> _movieIds = [];
+
+  // Per limitare quanti film vengono scaricati e renderizzati per volta.
+  final int _pageSize = 10;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -60,8 +70,8 @@ class _FeatureRouteState extends State<FeatureRoute> {
 
   int _page = 0;
 
-  // Per limitare quanti film vengono scaricati e renderizzati per volta.
-  final int _pageSize = maxColumns;
+  // Per modificare l'ordinamento dei risultati.
+  String _selectedOrder = 'title';
 
   @override
   void initState() {
@@ -78,11 +88,22 @@ class _FeatureRouteState extends State<FeatureRoute> {
   }
 
   Future<void> _fetchIdsAndFirstBatch() async {
+    setState(() => _loadingIds = true);
+
     try {
-      var data = await BaseClient.instance.getMoviesFromFeature(
-        featureId: widget.feature.featureId,
-        order: true,
-      );
+      String? data;
+      if (widget.queryType == 'feature') {
+        data = await BaseClient.instance.getMoviesFromFeature(
+          featureId: (widget.extras['feature'] as Feature).featureId,
+          order: _selectedOrder,
+        );
+      } else if (widget.queryType == 'ratings') {
+        data = await BaseClient.instance.getMoviesFromRatings(
+          userId: widget.extras['userId'] as String,
+          order: _selectedOrder,
+        );
+      }
+
       // debugPrint("$data");
       if (data == null) {
         setState(() {
@@ -92,9 +113,12 @@ class _FeatureRouteState extends State<FeatureRoute> {
         return;
       }
 
-      _movieIds.addAll(toList(data) as List<String>);
+      _movieIds.addAll(toList<String>(data));
       if (_movieIds.isEmpty) {
-        setState(() => _loadingIds = false);
+        setState(() {
+          _loadingIds = false;
+          _allLoaded = true;
+        });
         return;
       }
 
@@ -220,13 +244,106 @@ class _FeatureRouteState extends State<FeatureRoute> {
     );
   }
 
+  String _getTitle() {
+    if (widget.queryType == 'feature')
+      return (widget.extras['feature'] as Feature).name;
+    else if (widget.queryType == 'ratings')
+      return 'Le tue valutazioni';
+    else
+      return '';
+  }
+
+  Widget _buildMoviesGrid(int numMovies, int columns) {
+    return Expanded(
+      child: GridView.builder(
+        controller: _scrollController,
+        physics: _loadingMore
+            ? const NeverScrollableScrollPhysics()
+            : const AlwaysScrollableScrollPhysics(),
+        itemCount: numMovies + (_loadingMore ? columns : 0),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: columns,
+          mainAxisSpacing: 32,
+          crossAxisSpacing: 32,
+          childAspectRatio: 1,
+        ),
+        itemBuilder: (context, i) {
+          if (i < _movies.length) {
+            final m = _movies[i];
+
+            bool recommended = false;
+            if (widget.queryType == 'feature')
+              recommended = (widget.extras['recommendedIds'] as List<String>)
+                  .contains(m.idMovie);
+
+            return RecSysMovieCard(
+              key: ValueKey(m.idMovie),
+              movie: m,
+              recommended: recommended,
+            );
+          } else {
+            return _buildPlaceholderCard();
+          }
+        },
+      ),
+    );
+  }
+
+  void _showSortOptions() {
+    String tempOrder = _selectedOrder;
+
+    showDialog(
+      context: context,
+      builder: (context) => RecSysAlertDialog(
+        topIcon: Icons.sort,
+        alertTitle: 'Ordina i risultati',
+        alertContent: StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RadioListTile<String>(
+                  title: const Text('Per titolo'),
+                  value: 'title',
+                  groupValue: tempOrder,
+                  onChanged: (value) => setState(() => tempOrder = value!),
+                ),
+                RadioListTile<String>(
+                  title: const Text('Per valutazione'),
+                  value: 'rating',
+                  groupValue: tempOrder,
+                  onChanged: (value) => setState(() => tempOrder = value!),
+                ),
+              ],
+            );
+          },
+        ),
+        confirmText: "Applica",
+        onPressConfirm: () async {
+          if (!mounted) return;
+          if (context.canPop()) context.pop();
+          if (tempOrder != _selectedOrder) {
+            setState(() {
+              _selectedOrder = tempOrder;
+              _movies.clear();
+              _movieIds.clear();
+              _loadingIds = true;
+              _loadingMore = false;
+              _allLoaded = false;
+              _page = 0;
+            });
+
+            await _fetchIdsAndFirstBatch();
+          }
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: RecSysAppBar(
-        title: widget.feature.name,
-        alignment: Alignment.topLeft,
-      ),
+      appBar: RecSysAppBar(title: _getTitle(), alignment: Alignment.topLeft),
       resizeToAvoidBottomInset: false,
       body: _loadingIds
           ? const RecSysLoadingDialog(alertMessage: 'Caricamento...')
@@ -244,44 +361,31 @@ class _FeatureRouteState extends State<FeatureRoute> {
                     spacing: 20.0,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "${_movieIds.length} film trovati",
-                        style: Theme.of(context).textTheme.headlineMedium,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Expanded(
-                        child: GridView.builder(
-                          controller: _scrollController,
-                          physics: _loadingMore
-                              ? const NeverScrollableScrollPhysics()
-                              : const AlwaysScrollableScrollPhysics(),
-                          itemCount: numMovies + (_loadingMore ? columns : 0),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: columns,
-                                mainAxisSpacing: 32,
-                                crossAxisSpacing: 32,
-                                childAspectRatio: 1,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Tooltip(
+                              message: "${_movieIds.length} film trovati",
+                              child: Text(
+                                "${_movieIds.length} film trovati",
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.headlineMedium,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                          itemBuilder: (context, i) {
-                            if (i < _movies.length) {
-                              final m = _movies[i];
-                              return RecSysMovieCard(
-                                key: ValueKey(m.idMovie),
-                                feature: widget.feature,
-                                movie: m,
-                                recommended:
-                                    widget.recommendedIds?.contains(
-                                      m.idMovie,
-                                    ) ??
-                                    false,
-                              );
-                            } else {
-                              return _buildPlaceholderCard();
-                            }
-                          },
-                        ),
+                            ),
+                          ),
+                          TextButton.icon(
+                            icon: Icon(Icons.sort),
+                            onPressed: _showSortOptions,
+                            label: Text(
+                              "Ordina",
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                          ),
+                        ],
                       ),
+                      _buildMoviesGrid(numMovies, columns),
                       if (_loadingMore)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12.0),

@@ -51,12 +51,34 @@ class HomeRoute extends StatefulWidget {
 
 class _HomeRouteState extends State<HomeRoute> {
   late Future<List<Carousel>> movieRecommendations;
+  // final List<Carousel> _carousels = [];
+  // final List<Map<String, dynamic>> _carouselData = [];
+
+  // // Per limitare quanti caroselli vengono scaricati e renderizzati per volta.
+  // final int _pageSize = 3;
+
+  // final ScrollController _scrollController = ScrollController();
+
+  // bool _loadingIds = true;
+  // bool _loadingMore = false;
+  // bool _allLoaded = false;
+
+  // int _page = 0;
 
   @override
   void initState() {
     super.initState();
     movieRecommendations = _getMovieRecommendations();
+    // _scrollController.addListener(_onScroll);
+    // _fetchIdsAndFirstBatch();
   }
+
+  // @override
+  // void dispose() {
+  //   _scrollController.removeListener(_onScroll);
+  //   _scrollController.dispose();
+  //   super.dispose();
+  // }
 
   Future<List<Carousel>> _getMovieRecommendations() async {
     var data = await BaseClient.instance.getMovieRecommendations().catchError((
@@ -121,6 +143,126 @@ class _HomeRouteState extends State<HomeRoute> {
     );
   }
 
+  // Future<void> _fetchIdsAndFirstBatch() async {
+  //   setState(() => _loadingIds = true);
+
+  //   try {
+  //     final data = await BaseClient.instance.getMovieRecommendations();
+
+  //     // debugPrint("$data");
+  //     if (data == null) {
+  //       setState(() {
+  //         _loadingIds = false;
+  //         _allLoaded = true;
+  //       });
+  //       return;
+  //     }
+
+  //     _carouselData.addAll(toList<Map<String, dynamic>>(data as String));
+  //     // debugPrint("_carouselData: $_carouselData");
+  //     if (_carouselData.isEmpty) {
+  //       setState(() {
+  //         _loadingIds = false;
+  //         _allLoaded = true;
+  //       });
+  //       return;
+  //     }
+
+  //     setState(() => _loadingIds = false);
+  //     await _loadNextBatch();
+  //     return;
+  //   } catch (err) {
+  //     // debugPrint('\n--- ERRORE ---\n$err\n-----\n');
+  //     if (!mounted) return;
+  //     ScaffoldMessenger.of(context)
+  //       ..hideCurrentSnackBar()
+  //       ..showSnackBar(
+  //         SnackBar(
+  //           behavior: SnackBarBehavior.floating,
+  //           content: Text(err.toString()),
+  //           duration: const Duration(seconds: 3),
+  //           backgroundColor: Theme.of(context).colorScheme.error,
+  //         ),
+  //       );
+  //     return;
+  //   }
+  // }
+
+  // Future<void> _loadNextBatch() async {
+  //   if (_loadingMore || _allLoaded || _carouselData.isEmpty) return;
+  //   setState(() => _loadingMore = true);
+
+  //   final start = _page * _pageSize;
+  //   final end = (_page * _pageSize + _pageSize).clamp(0, _carouselData.length);
+
+  //   if (start >= end) {
+  //     setState(() {
+  //       _loadingMore = false;
+  //       _allLoaded = true;
+  //     });
+  //     return;
+  //   }
+
+  //   final batchData = _carouselData.sublist(start, end);
+  //   // debugPrint("$batchData");
+  //   // debugPrint("${batchData.length}");
+
+  //   try {
+  //     List<Carousel> temp = List<Carousel>.empty(growable: true);
+  //     for (final item in _carouselData) {
+  //       final movieIds = (item['movies'] as List)
+  //           .map((m) => m['movie_id'].toString())
+  //           .toList();
+  //       final movies = await fetchMoviesFromIds(movieIds);
+
+  //       temp.add(
+  //         Carousel(
+  //           feature: Feature(
+  //             featureId: item['feature_id'] as String,
+  //             category: item["category"] as String,
+  //             name: item["feature_name"] as String,
+  //             rating: item["feature_rating"] as double,
+  //           ),
+  //           allIds: movieIds,
+  //           movies: movies,
+  //           nerdStats: {}, // TODO: risolvere extras
+  //         ),
+  //       );
+  //     }
+
+  //     setState(() {
+  //       _carousels.addAll(temp);
+  //       _page++;
+  //       if (end >= _carouselData.length) _allLoaded = true;
+  //       _loadingMore = false;
+  //     });
+  //   } catch (err) {
+  //     // debugPrint('\n--- ERRORE ---\n$err\n-----\n');
+  //     if (!mounted) return;
+  //     setState(() => _loadingMore = false);
+  //     ScaffoldMessenger.of(context)
+  //       ..hideCurrentSnackBar()
+  //       ..showSnackBar(
+  //         SnackBar(
+  //           behavior: SnackBarBehavior.floating,
+  //           content: Text(err.toString()),
+  //           duration: const Duration(seconds: 3),
+  //           backgroundColor: Theme.of(context).colorScheme.error,
+  //         ),
+  //       );
+  //     return;
+  //   }
+  // }
+
+  // void _onScroll() {
+  //   if (!_scrollController.hasClients || _loadingMore || _allLoaded) return;
+  //   final threshold = 300.0;
+  //   if (_scrollController.position.pixels + threshold >=
+  //       _scrollController.position.maxScrollExtent) {
+  //     _loadNextBatch();
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     handleAppBarClick(HomeRouteAction action) async {
@@ -164,6 +306,37 @@ class _HomeRouteState extends State<HomeRoute> {
         ],
       ),
       resizeToAvoidBottomInset: false,
+      // body: _loadingIds
+      //     ? const RecSysLoadingDialog(alertMessage: 'Caricamento...')
+      //     : RefreshIndicator(
+      //         onRefresh: () async {
+      //           _carousels.clear();
+      //           _page = 0;
+      //           _allLoaded = false;
+      //           await _fetchIdsAndFirstBatch();
+      //         },
+      //         child: LayoutBuilder(
+      //           builder: (context, constraints) {
+      //             return LayoutBuilder(
+      //               builder: (context, constraints) => SingleChildScrollView(
+      //                 controller: _scrollController,
+      //                 padding: const EdgeInsets.all(20.0),
+      //                 child: Column(
+      //                   spacing: 20.0,
+      //                   crossAxisAlignment: CrossAxisAlignment.start,
+      //                   children: List.generate(_carousels.length, (index) {
+      //                     final carousel = _carousels[index];
+      //                     return RecSysCarousel(
+      //                       carousel: carousel,
+      //                       height: constraints.maxHeight * 0.4,
+      //                     );
+      //                   }),
+      //                 ),
+      //               ),
+      //             );
+      //           },
+      //         ),
+      //       ),
       body: FutureBuilder<List<Carousel>>(
         initialData: List<Carousel>.empty(growable: true),
         future: movieRecommendations,

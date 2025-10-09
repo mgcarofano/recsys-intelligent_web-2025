@@ -16,6 +16,7 @@
 import 'package:flutter/material.dart';
 import 'package:knowledge_recsys/model/carousel_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
+import 'package:knowledge_recsys/view/widgets/recsys_alert_dialog.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_loading_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_movie_card.dart';
@@ -66,6 +67,18 @@ class _RecSysCarouselState extends State<RecSysCarousel> {
     );
   }
 
+  void _showFeatureInfo() {
+    final feature = widget.carousel.feature;
+    showDialog(
+      context: context,
+      builder: (context) => RecSysAlertDialog(
+        topIcon: Icons.query_stats,
+        alertTitle: 'Statistiche per nerd',
+        alertContent: feature.toTable(),
+      ),
+    );
+  }
+
   String _buildCategoryTitle({
     required String category,
     required List<String> params,
@@ -99,6 +112,7 @@ class _RecSysCarouselState extends State<RecSysCarousel> {
     );
 
     return Row(
+      spacing: 8.0,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
@@ -119,6 +133,14 @@ class _RecSysCarouselState extends State<RecSysCarousel> {
             style: Theme.of(context).textTheme.headlineSmall,
           ),
         ),
+        TextButton.icon(
+          onPressed: _showFeatureInfo,
+          icon: Icon(Icons.info_outline),
+          label: Text(
+            "Altre info",
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+        ),
       ],
     );
   }
@@ -132,11 +154,7 @@ class _RecSysCarouselState extends State<RecSysCarousel> {
         separatorBuilder: (_, __) => const SizedBox(width: 32),
         itemBuilder: (context, i) {
           final m = c.movies[i];
-          return RecSysMovieCard(
-            feature: c.feature,
-            nerdStats: c.nerdStats[m.idMovie],
-            movie: m,
-          );
+          return RecSysMovieCard(movie: m, nerdStats: c.nerdStats[m.idMovie]);
         },
       ),
     );

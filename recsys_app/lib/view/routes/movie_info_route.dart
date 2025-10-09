@@ -1,9 +1,11 @@
 /*
 
-	movie_route.dart
+	movie_info_route.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	La classe MovieRoute rappresenta la schermata dei dettagli di un film, dove l'utente può visualizzare tutti i metadati (e.g. titolo, descrizione, anno di uscita, ...) del film selezionato.
+	La classe MovieRoute rappresenta la schermata dei dettagli di un film,
+  dove l'utente può visualizzare tutti i metadati (e.g. titolo, descrizione,
+  e altre caratteristiche) del film selezionato.
 
 */
 

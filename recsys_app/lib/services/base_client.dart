@@ -135,11 +135,20 @@ class BaseClient {
 
   Future<dynamic> getMoviesFromFeature({
     required String featureId,
-    bool? order,
+    String? order,
   }) async => _getRequest('/get-movies', {
-    'id': featureId,
     'type': 'feature',
-    'order': order ?? false,
+    'id': featureId,
+    if (order != null) 'order': order,
+  });
+
+  Future<dynamic> getMoviesFromRatings({
+    required String userId,
+    String? order,
+  }) async => _getRequest('/get-movies', {
+    'type': 'ratings',
+    'id': userId,
+    if (order != null) 'order': order,
   });
 
   Future<dynamic> downloadMoviePoster({required String idMovie}) async {

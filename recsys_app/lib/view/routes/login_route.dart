@@ -71,7 +71,7 @@ class _LoginRouteState extends State<LoginRoute> {
       // debugPrint("$data");
       if (data == null) return;
 
-      final userList = toList(data);
+      final userList = toList<String>(data);
 
       if (userList.contains(userID)) {
         BaseClient.instance

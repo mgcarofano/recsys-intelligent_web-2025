@@ -29,7 +29,7 @@ import 'package:go_router/go_router.dart';
 class RecSysAlertDialog extends StatelessWidget {
   final IconData topIcon;
   final String alertTitle;
-  final String alertMessage;
+  final Widget alertContent;
 
   final VoidCallback? onPressCancel;
   final String? cancelText;
@@ -41,7 +41,7 @@ class RecSysAlertDialog extends StatelessWidget {
     super.key,
     required this.topIcon,
     required this.alertTitle,
-    required this.alertMessage,
+    required this.alertContent,
     this.onPressCancel,
     this.cancelText,
     this.onPressConfirm,
@@ -53,9 +53,7 @@ class RecSysAlertDialog extends StatelessWidget {
     return AlertDialog(
       icon: Icon(topIcon, size: 25.0, color: Colors.grey.shade50),
       title: Center(child: Text(alertTitle)),
-      content: SingleChildScrollView(
-        child: SelectableText(alertMessage, textAlign: TextAlign.center),
-      ),
+      content: SingleChildScrollView(child: alertContent),
       actions: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(

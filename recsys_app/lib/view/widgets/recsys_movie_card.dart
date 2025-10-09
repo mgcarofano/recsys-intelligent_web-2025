@@ -16,14 +16,14 @@
 //	############################################################################
 //	LIBRERIE
 
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/cache/poster_cache.dart';
-import 'package:knowledge_recsys/model/feature_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
+import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_alert_dialog.dart';
 import 'package:soft_edge_blur/soft_edge_blur.dart';
@@ -38,14 +38,12 @@ import 'package:soft_edge_blur/soft_edge_blur.dart';
 //	CLASSI e ROUTE
 
 class RecSysMovieCard extends StatefulWidget {
-  final Feature feature;
   final Movie movie;
   final Map<String, dynamic>? nerdStats;
   final bool? recommended;
 
   const RecSysMovieCard({
     super.key,
-    required this.feature,
     required this.movie,
     this.nerdStats,
     this.recommended,
@@ -114,33 +112,49 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
   }
 
   void _showNerdStats() {
-    final nerdStatsInfo = widget.nerdStats != null
-        ? """movie_rating: ${widget.nerdStats!["movie_rating"]}
-          seen: ${widget.nerdStats!["seen"]}
-          softmax_probability: ${widget.nerdStats!["softmax_prob"]}"""
-        : "";
+    final infoRows = [
+      DataRow(
+        cells: [
+          const DataCell(Text('ID')),
+          DataCell(SelectableText(widget.movie.idMovie)),
+        ],
+      ),
+      DataRow(
+        cells: [
+          const DataCell(Text('Titolo')),
+          DataCell(SelectableText(widget.movie.title ?? '')),
+        ],
+      ),
+    ];
 
-    final message =
-        """
-      ### TITLE ###
+    if (widget.nerdStats != null) {
+      // final seen = widget.nerdStats!["seen"] as bool ? 'Si' : 'No';
 
-      ${widget.movie.title ?? ''}
+      final prob =
+          "${(widget.nerdStats!["softmax_prob"] * 100).toStringAsFixed(4)}%";
 
-      ### FEATURE ###
-
-      ${widget.feature}
-
-      ### NERD STATS ###
-
-      $nerdStatsInfo
-    """;
+      infoRows.add(
+        DataRow(
+          cells: [
+            const DataCell(Text('Probabilità softmax')),
+            DataCell(SelectableText(prob)),
+          ],
+        ),
+      );
+    }
 
     showDialog(
       context: context,
       builder: (context) => RecSysAlertDialog(
         topIcon: Icons.query_stats,
         alertTitle: 'Statistiche per nerd',
-        alertMessage: message,
+        alertContent: DataTable(
+          columns: const [
+            DataColumn(label: Text('Campo')),
+            DataColumn(label: Text('Valore')),
+          ],
+          rows: infoRows,
+        ),
       ),
     );
   }
@@ -167,7 +181,8 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
 
     if (widget.movie.description != null &&
         widget.movie.description!.isNotEmpty) {
-      ret.add(
+      ret.addAll([
+        SizedBox(height: 12.0),
         Text(
           widget.movie.description!,
           style: Theme.of(
@@ -176,238 +191,130 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
         ),
+      ]);
+    }
+
+    if (widget.movie.seen != null && widget.movie.rating != null) {
+      final ratingType = widget.movie.seen! ? 'reale' : 'predetto';
+      final rating = widget.movie.rating!;
+      final ratingColor = getRatingColor(rating);
+
+      ret.add(
+        Center(
+          child: Tooltip(
+            message: "Rating $ratingType: ${rating.toStringAsFixed(2)}",
+            child: RatingBarIndicator(
+              rating: rating,
+              itemCount: 5,
+              unratedColor: ratingColor.withAlpha(50),
+              itemBuilder: (context, _) =>
+                  Icon(Icons.horizontal_rule_rounded, color: ratingColor),
+            ),
+          ),
+        ),
       );
     }
 
-    if (widget.movie.subjects != null && widget.movie.subjects!.isNotEmpty) {
-      ret.add(_buildFadingChipsRow());
-    }
+    // if (widget.movie.subjects != null && widget.movie.subjects!.isNotEmpty) {
+    //   ret.add(_buildFadingChipsRow());
+    // }
 
     return ret;
   }
 
-  Widget _buildFadingChipsRow() {
-    final allFeatures = <String>[
-      ...widget.movie.actors ?? [],
-      ...widget.movie.composers ?? [],
-      ...widget.movie.directors ?? [],
-      ...widget.movie.genres ?? [],
-      ...widget.movie.producers ?? [],
-      ...widget.movie.productionCompanies ?? [],
-      ...widget.movie.subjects ?? [],
-      ...widget.movie.writers ?? [],
-    ];
-    allFeatures.shuffle(Random());
-    final chips = allFeatures.take(10).toList();
+  // Widget _buildFadingChipsRow() {
+  //   final allFeatures = <String>[
+  //     ...widget.movie.actors ?? [],
+  //     ...widget.movie.composers ?? [],
+  //     ...widget.movie.directors ?? [],
+  //     ...widget.movie.genres ?? [],
+  //     ...widget.movie.producers ?? [],
+  //     ...widget.movie.productionCompanies ?? [],
+  //     ...widget.movie.subjects ?? [],
+  //     ...widget.movie.writers ?? [],
+  //   ];
+  //   allFeatures.shuffle(Random());
+  //   final chips = allFeatures.take(10).toList();
+  //
+  //   return SizedBox(
+  //     height: 34,
+  //     child: LayoutBuilder(
+  //       builder: (context, constraints) {
+  //         return ShaderMask(
+  //           shaderCallback: (rect) {
+  //             return LinearGradient(
+  //               begin: Alignment.centerLeft,
+  //               end: Alignment.centerRight,
+  //               colors: [
+  //                 Colors.transparent,
+  //                 Colors.white,
+  //                 Colors.white,
+  //                 Colors.transparent,
+  //               ],
+  //               stops: [0.0, 0.1, 0.9, 1.0],
+  //             ).createShader(Rect.fromLTWH(0, 0, rect.width, rect.height));
+  //           },
+  //           blendMode: BlendMode.dstIn,
+  //           child: SingleChildScrollView(
+  //             scrollDirection: Axis.horizontal,
+  //             physics: const BouncingScrollPhysics(),
+  //             child: Row(
+  //               spacing: 5,
+  //               children: chips.map((feature) {
+  //                 return Chip(
+  //                   label: Text(
+  //                     feature,
+  //                     style: TextStyle(
+  //                       color: Colors.black,
+  //                       fontWeight: FontWeight.w100,
+  //                       fontSize: 11.5,
+  //                     ),
+  //                   ),
+  //                   backgroundColor: Theme.of(context).colorScheme.tertiary,
+  //                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  //                   shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(20.0),
+  //                   ),
+  //                 );
+  //               }).toList(),
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
-    return SizedBox(
-      height: 34,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return ShaderMask(
-            shaderCallback: (rect) {
-              return LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [
-                  Colors.transparent,
-                  Colors.white,
-                  Colors.white,
-                  Colors.transparent,
-                ],
-                stops: [0.0, 0.1, 0.9, 1.0],
-              ).createShader(Rect.fromLTWH(0, 0, rect.width, rect.height));
-            },
-            blendMode: BlendMode.dstIn,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              child: Row(
-                spacing: 5,
-                children: chips.map((feature) {
-                  return Chip(
-                    label: Text(
-                      feature,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w100,
-                        fontSize: 11.5,
-                      ),
-                    ),
-                    backgroundColor: Theme.of(context).colorScheme.tertiary,
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          );
-        },
+  Widget _buildChip(String message) {
+    return Chip(
+      label: Text(
+        message,
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.w100,
+          fontSize: 11.5,
+        ),
       ),
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
+      materialTapTargetSize: MaterialTapTargetSize.padded,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
     );
   }
 
-  Widget _buildCard() {
-    return SizedBox(
-      width: 350,
-      height: 280,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  if (_isPosterLoading)
-                    return const Center(child: CircularProgressIndicator());
-                  if (_moviePosterBytes == null)
-                    return const Placeholder();
-                  else
-                    return SoftEdgeBlur(
-                      edges: [
-                        EdgeBlur(
-                          type: EdgeType.bottomEdge,
-                          size: 200,
-                          sigma: 15,
-                          controlPoints: [
-                            ControlPoint(
-                              position: 0.5,
-                              type: ControlPointType.visible,
-                            ),
-                            ControlPoint(
-                              position: 1.0,
-                              type: ControlPointType.transparent,
-                            ),
-                          ],
-                        ),
-                      ],
-                      child: Image.memory(
-                        _moviePosterBytes!,
-                        fit: BoxFit.cover,
-                      ),
-                    );
-                },
-              ),
-            ),
-            Positioned.fill(
-              child: Container(
-                decoration: const BoxDecoration(
-                  backgroundBlendMode: BlendMode.darken,
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black26,
-                      Colors.black87,
-                      Colors.black,
-                    ],
-                    stops: [0.0, 0.6, 0.8, 1.0],
-                  ),
-                ),
-              ),
-            ),
-            Positioned.directional(
-              textDirection: TextDirection.rtl,
-              top: 12,
-              start: 12,
-              width: 350 - 12 * 2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                spacing: 8,
-                children: [
-                  if (widget.recommended ?? false)
-                    Chip(
-                      label: Text(
-                        "Scelto per te",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w100,
-                          fontSize: 11.5,
-                        ),
-                      ),
-                      backgroundColor: Theme.of(context).colorScheme.tertiary,
-                      materialTapTargetSize: MaterialTapTargetSize.padded,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    ),
-                  if (widget.nerdStats?["seen"] as bool? ?? false)
-                    Chip(
-                      label: Text(
-                        "Già visto",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w100,
-                          fontSize: 11.5,
-                        ),
-                      ),
-                      backgroundColor: Theme.of(context).colorScheme.tertiary,
-                      materialTapTargetSize: MaterialTapTargetSize.padded,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    ),
-                  Spacer(),
-                  if (widget.nerdStats != null)
-                    IconButton(
-                      onPressed: _showNerdStats,
-                      constraints: BoxConstraints(
-                        maxHeight: 34,
-                        maxWidth: 34,
-                        minWidth: 34,
-                        minHeight: 34,
-                      ),
-                      padding: EdgeInsets.all(0.0),
-                      style: IconButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.tertiary,
-                      ),
-                      icon: const Icon(
-                        Icons.query_stats,
-                        color: Colors.black,
-                        size: 24,
-                      ),
-                    ),
-                  IconButton(
-                    onPressed: _showDetails,
-                    constraints: BoxConstraints(
-                      maxHeight: 34,
-                      maxWidth: 34,
-                      minWidth: 34,
-                      minHeight: 34,
-                    ),
-                    padding: EdgeInsets.all(0.0),
-                    style: IconButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.tertiary,
-                    ),
-                    icon: const Icon(
-                      Icons.info_outline,
-                      color: Colors.black,
-                      size: 24,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  spacing: 12.0,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _buildMovieInfo(),
-                ),
-              ),
-            ),
-          ],
-        ),
+  Widget _buildButton(VoidCallback onPressed, IconData icon) {
+    return IconButton(
+      onPressed: onPressed,
+      constraints: BoxConstraints(
+        maxHeight: 34,
+        maxWidth: 34,
+        minWidth: 34,
+        minHeight: 34,
       ),
+      padding: EdgeInsets.all(0.0),
+      style: IconButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
+      ),
+      icon: Icon(icon, color: Colors.black, size: 24),
     );
   }
 
@@ -420,7 +327,110 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
         side: BorderSide.none,
       ),
       clipBehavior: Clip.antiAlias,
-      child: _buildCard(),
+      child: SizedBox(
+        width: 350,
+        height: 280,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    if (_isPosterLoading)
+                      return const Center(child: CircularProgressIndicator());
+                    if (_moviePosterBytes == null)
+                      return const Placeholder();
+                    else
+                      return SoftEdgeBlur(
+                        edges: [
+                          EdgeBlur(
+                            type: EdgeType.bottomEdge,
+                            size: 200,
+                            sigma: 15,
+                            controlPoints: [
+                              ControlPoint(
+                                position: 0.5,
+                                type: ControlPointType.visible,
+                              ),
+                              ControlPoint(
+                                position: 1.0,
+                                type: ControlPointType.transparent,
+                              ),
+                            ],
+                          ),
+                        ],
+                        child: Image.memory(
+                          _moviePosterBytes!,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                  },
+                ),
+              ),
+              Positioned.fill(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    backgroundBlendMode: BlendMode.darken,
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black26,
+                        Colors.black87,
+                        Colors.black,
+                      ],
+                      stops: [0.0, 0.6, 0.8, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+              Positioned.directional(
+                textDirection: TextDirection.ltr,
+                top: 12,
+                start: 12,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  spacing: 8,
+                  children: [
+                    if (widget.recommended ?? false)
+                      _buildChip("Scelto per te"),
+                    if (widget.movie.seen ?? false) _buildChip("Già visto"),
+                  ],
+                ),
+              ),
+              Positioned.directional(
+                textDirection: TextDirection.rtl,
+                top: 12,
+                start: 12,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  spacing: 8,
+                  children: [
+                    if (widget.nerdStats != null)
+                      _buildButton(_showNerdStats, Icons.query_stats),
+                    _buildButton(_showDetails, Icons.info_outline),
+                  ],
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _buildMovieInfo(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

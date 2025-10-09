@@ -35,8 +35,10 @@ Future<List<Movie>> fetchMoviesFromIds(List<String> ids) async {
 
     return Movie(
       idMovie: id,
+
       title: t ?? "",
       description: d ?? "",
+
       actors: List<String>.from(movieMap['actors'] ?? []),
       composers: List<String>.from(movieMap['composers'] ?? []),
       directors: List<String>.from(movieMap['directors'] ?? []),
@@ -47,6 +49,9 @@ Future<List<Movie>> fetchMoviesFromIds(List<String> ids) async {
       ),
       subjects: List<String>.from(movieMap['subjects'] ?? []),
       writers: List<String>.from(movieMap['writers'] ?? []),
+
+      seen: movieMap['seen'],
+      rating: movieMap['rating'],
     );
   }).toList();
 
@@ -57,9 +62,14 @@ Future<List<Movie>> fetchMoviesFromIds(List<String> ids) async {
 //	CLASSI e ROUTE
 
 class Movie {
+  // Identificativo
   final String idMovie;
+
+  // Caratteristiche principali
   final String? title;
   final String? description;
+
+  // Altre caratteristiche
   final List<String>? actors;
   final List<String>? composers;
   final List<String>? directors;
@@ -68,6 +78,10 @@ class Movie {
   final List<String>? productionCompanies;
   final List<String>? subjects;
   final List<String>? writers;
+
+  // Rating
+  final bool? seen;
+  final double? rating;
 
   Movie({
     required this.idMovie,
@@ -81,6 +95,8 @@ class Movie {
     this.productionCompanies,
     this.subjects,
     this.writers,
+    this.seen,
+    this.rating,
   });
 
   @override
@@ -97,6 +113,8 @@ class Movie {
       productionCompanies: ${productionCompanies ?? ''},
       subjects: ${subjects ?? ''},
       writers: ${writers ?? ''},
+      seen: ${(seen ?? false) ? 'Si' : 'No'},
+      rating: ${rating ?? ''}
     }''';
   }
 }
