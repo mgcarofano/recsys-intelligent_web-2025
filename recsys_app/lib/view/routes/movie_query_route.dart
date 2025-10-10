@@ -159,9 +159,13 @@ class _MovieQueryRouteState extends State<MovieQueryRoute> {
     }
 
     final batchIds = _movieIds.sublist(start, end);
+    final recommendedIds =
+        widget.extras['recommendedIds'] as Map<String, double?>?;
 
     try {
-      final batchMovies = await fetchMoviesFromIds(batchIds);
+      final batchMovies = await fetchMoviesFromData({
+        for (var idMovie in batchIds) idMovie: recommendedIds?[idMovie],
+      });
 
       setState(() {
         _movies.addAll(batchMovies);
@@ -270,17 +274,7 @@ class _MovieQueryRouteState extends State<MovieQueryRoute> {
         itemBuilder: (context, i) {
           if (i < _movies.length) {
             final m = _movies[i];
-
-            bool recommended = false;
-            if (widget.queryType == 'feature')
-              recommended = (widget.extras['recommendedIds'] as List<String>)
-                  .contains(m.idMovie);
-
-            return RecSysMovieCard(
-              key: ValueKey(m.idMovie),
-              movie: m,
-              recommended: recommended,
-            );
+            return RecSysMovieCard(key: ValueKey(m.idMovie), movie: m);
           } else {
             return _buildPlaceholderCard();
           }

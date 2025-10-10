@@ -29,21 +29,14 @@ class Carousel {
   final Feature feature;
   final List<String> allIds;
   final List<Movie> movies;
-  final Map<String, Map<String, dynamic>> nerdStats;
 
-  Carousel({
-    required this.feature,
-    required this.allIds,
-    required this.movies,
-    required this.nerdStats,
-  });
+  Carousel({required this.feature, required this.allIds, required this.movies});
 
   Carousel copyWith({List<Movie>? movies}) {
     return Carousel(
       feature: feature,
       allIds: allIds,
       movies: movies ?? this.movies,
-      nerdStats: nerdStats,
     );
   }
 
@@ -51,7 +44,6 @@ class Carousel {
   String toString() {
     return '''Carousel{
       feature: $feature,
-      nerdStats: $nerdStats,
       allIds: $allIds
     }''';
   }

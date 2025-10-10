@@ -3,7 +3,10 @@
 	movie_model.dart
 	by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-	La classe Movie rappresenta un film, con i suoi metadati principali (es. titolo, descrizione, attori, ...) e viene utilizzata per memorizzare e gestire le informazioni sui film presenti nel database dell'applicazione di raccomandazione.
+	La classe Movie rappresenta un film, con i suoi metadati principali
+  (es. titolo, descrizione, attori, ...) e viene utilizzata per memorizzare
+  e gestire le informazioni sui film presenti nel database dell'applicazione
+  di raccomandazione.
 
 */
 
@@ -13,6 +16,7 @@
 //	############################################################################
 //	LIBRERIE
 
+import 'package:flutter/material.dart';
 import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
 
@@ -22,22 +26,38 @@ import 'package:knowledge_recsys/services/base_client.dart';
 //	############################################################################
 //	ALTRI METODI
 
-Future<List<Movie>> fetchMoviesFromIds(List<String> ids) async {
-  final ret = ids.toSet().map((id) async {
+Future<List<Movie>> fetchMoviesFromData(Map<String, dynamic> data) async {
+  final ret = data.entries.map((item) async {
+    debugPrint("${(item.key).runtimeType}, ${(item.key)}");
+    debugPrint("${(item.value).runtimeType}, ${(item.value)}");
+
     String? movieInfo = await BaseClient.instance
-        .getMovieInfo(idMovie: id)
+        .getMovieInfo(idMovie: item.key)
         .catchError((_) => null);
 
     Map<String, dynamic> movieMap = toMap(movieInfo ?? '{}');
 
-    final t = safeFirst(movieMap['title']);
-    final d = safeFirst(movieMap['description']);
+    final t = safeFirst(movieMap['title']) ?? "";
+    final d = safeFirst(movieMap['description']) ?? "";
+
+    bool? s;
+    double? r;
+    double? sp;
+    if (item.value != null) {
+      if (item.value is Map<String, dynamic>) {
+        s = item.value['seen'];
+        r = item.value['movie_rating'];
+        sp = item.value['softmax_prob'];
+      } else if (item.value is double?) {
+        sp = item.value;
+      }
+    }
 
     return Movie(
-      idMovie: id,
+      idMovie: item.key,
 
-      title: t ?? "",
-      description: d ?? "",
+      title: t,
+      description: d,
 
       actors: List<String>.from(movieMap['actors'] ?? []),
       composers: List<String>.from(movieMap['composers'] ?? []),
@@ -50,8 +70,9 @@ Future<List<Movie>> fetchMoviesFromIds(List<String> ids) async {
       subjects: List<String>.from(movieMap['subjects'] ?? []),
       writers: List<String>.from(movieMap['writers'] ?? []),
 
-      seen: movieMap['seen'],
-      rating: movieMap['rating'],
+      seen: s ?? movieMap['seen'],
+      rating: r ?? movieMap['rating'],
+      softmaxProb: sp,
     );
   }).toList();
 
@@ -79,9 +100,10 @@ class Movie {
   final List<String>? subjects;
   final List<String>? writers;
 
-  // Rating
+  // Statistiche per nerd
   final bool? seen;
   final double? rating;
+  final double? softmaxProb;
 
   Movie({
     required this.idMovie,
@@ -97,6 +119,7 @@ class Movie {
     this.writers,
     this.seen,
     this.rating,
+    this.softmaxProb,
   });
 
   @override
@@ -114,7 +137,8 @@ class Movie {
       subjects: ${subjects ?? ''},
       writers: ${writers ?? ''},
       seen: ${(seen ?? false) ? 'Si' : 'No'},
-      rating: ${rating ?? ''}
+      rating: ${rating ?? ''},
+      softmaxProb: ${softmaxProb ?? ''}
     }''';
   }
 }

@@ -50,6 +50,7 @@ movie_abstracts_df = pd.read_csv(MOVIES_ABSTRACT_PATH)
 
 # Dataframe contenente tutti i rating assegnati dagli utenti ai film della lista "existing_movies.csv"
 real_ratings_df = pd.read_csv(EXISTING_RATINGS_PATH)
+U = real_ratings_df['userId'].unique().shape[0]
 
 # Dataframe di features identificate da 3 elementi (id, category, name).
 feature_index_df = pd.read_csv(FEATURE_INDEX_PATH)
@@ -60,6 +61,13 @@ feature_index_df = pd.read_csv(FEATURE_INDEX_PATH)
 # Matrice sparsa contenente la rappresentazione vettoriale di un film secondo le sue features.
 movie_features_matrix = load_npz(MOVIE_FEATURE_MATRIX_PATH)
 M, F = movie_features_matrix.shape
+
+#	########################################################################	#
+#	DICT
+
+real_ratings = {}
+comp_ratings = {}
+all_ratings = {}
 
 #	########################################################################	#
 #	ALTRE FUNZIONI
@@ -148,6 +156,9 @@ def extract_user_preferences(min_support: int, top_features: int):
 	#	################################################################	#
 	#	INIZIALIZZAZIONE DELLE VARIABILI
 
+	global real_ratings
+	global comp_ratings
+	global all_ratings
 	top_features_list.clear()
 
 	if isinstance(min_support, int) and min_support <= 0:
@@ -204,7 +215,7 @@ def extract_user_preferences(min_support: int, top_features: int):
 	#	################################################################	#
 	#	STAMPA FINALE
 
-	# Usiamo un contatore 'i' solo per stampare la posizione di debug, sebbene il campo 'rating' sia ora il rating
+	# # Usiamo un contatore 'i' solo per stampare la posizione di debug, sebbene il campo 'rating' sia ora il rating
 	# print("\nTop Features:")
 	# for i, f in enumerate(top_features_list, start=1):
 	# 	print(f"Position {i}: [{f['category']}] {f['name']} (id={f['id']}, rating/rank={f['rating']:.2f})")
@@ -217,62 +228,70 @@ def extract_user_preferences(min_support: int, top_features: int):
 
 	# end
 
-def mab_softmax_predictions(temperature: float, k: int):
-    """
-    Esegue MAB softmax prediction solo su film non visti (seen == False).
+def mab_softmax_predictions(
+		temperature : float,
+		k : int
+	):
+	"""
+	Esegue MAB softmax prediction solo su film non visti (seen == False).
 
-    Args:
-        temperature: parametro tau della softmax.
-        k: numero di film da estrarre per feature.
+	Args:
+		temperature: parametro tau della softmax.
+		k: numero di film da estrarre per feature.
 
-    Returns:
-        predictions: dizionario feature_id -> lista di predizioni [(movieId, rating, seen_bool, prob)]
-    """
+	Returns:
+		predictions: dizionario feature_id -> lista di predizioni [(movieId, rating, seen_bool, prob)]
+	"""
 
-    if isinstance(k, int) and k < 0:
-        k = MOVIE_RECOMMENDATIONS
+	if isinstance(k, int) and k < 0:
+		k = MOVIE_RECOMMENDATIONS
 
-    predictions = {}
-    min_k = k
+	predictions = []
+	# predictions = {}
+	min_k = k
 
-    for f in top_features_list:
-        movies = f.get("movies", [])
-        if not movies:
-            continue
+	for f in top_features_list:
+		movies = f.get("movies", [])
 
-        # Considera solo i film non visti
-        unseen_movies = [m for m in movies if not m[2]]
-        if not unseen_movies:
-            continue
+		if not movies:
+			continue
 
-        if k == 0:
-            min_k = len(unseen_movies)
+		# Considera solo i film non visti
+		movies = [m for m in movies if not m[2]]
+		if not movies:
+			continue
 
-        # Estrai solo i rating
-        ratings = np.array([m[1] for m in unseen_movies], dtype=float)
+		if k == 0:
+			min_k = len(movies)
 
-        # Calcola softmax con temperatura tau
-        probs = np.exp(ratings / temperature)
-        probs /= np.sum(probs)
+		# Estrai solo i rating
+		ratings = np.array([m[1] for m in movies], dtype=float)
 
-        # Campiona k film in base alle probabilità
-        sample_size = min(min_k, len(unseen_movies))
-        chosen_idx = np.random.choice(len(unseen_movies), size=sample_size, replace=False, p=probs)
+		# Calcola softmax con temperatura tau
+		probs = np.exp(ratings / temperature)
+		probs /= np.sum(probs)
 
-        predictions[f["id"]] = {
-            "category": f["category"],
-            "feature_name": f["name"],
-            "feature_rating": f["rating"],
-            "movies": [{
-                "movie_id": unseen_movies[idx][0],
-                "movie_rating": unseen_movies[idx][1],
-                "seen": unseen_movies[idx][2],
-                "softmax_prob": probs[idx]
-            } for idx in chosen_idx]
-        }
+		# Campiona k film in base alle probabilità
+		sample_size = min(min_k, len(movies))
+		chosen_idx = np.random.choice(len(movies), size=sample_size, replace=False, p=probs)
 
-    return predictions
+		predictions.append({
+		# predictions[f["id"]] = {
+			"feature_id": f["id"],
+			"category": f["category"],
+			"feature_name": f["name"],
+			"feature_rating": f["rating"],
+			"movies": {
+				movies[idx][0]: {
+					"movie_rating": movies[idx][1],
+					"seen": movies[idx][2],
+					"softmax_prob": probs[idx]
+				}
+			for idx in chosen_idx}
+		# }
+		})
 
+	return predictions
 
 	# end
 
@@ -328,12 +347,22 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
 
 		# Dataframes
-		global movie_index_df, movie_id_to_index, movie_titles_df, movie_abstracts_df
+		global movie_index_df
+		global movie_id_to_index
+		global movie_titles_df
+		global movie_abstracts_df
 		global real_ratings_df
 		global feature_index_df
 
 		# Matrix
-		global movie_features_matrix, M, F
+		global movie_features_matrix
+		global M
+		global F
+
+		# Dict
+		global real_ratings
+		global comp_ratings
+		global all_ratings
 
 		try:
 
@@ -387,11 +416,11 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 			elif urlparse(self.path).path.endswith('/get-movies'):
 				params = dict(parse_qsl(urlparse(self.path).query))
-				selected_id = params['id']
 				selected_type = params['type']
+				selected_id = params['id']
 				selected_order = ""
 
-				if not selected_id or not selected_id.isdigit() or not 0 <= int(selected_id) < F:
+				if not selected_id or not selected_id.isdigit():
 					self.send_response(400, 'ID non valido.') # BAD REQUEST
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
@@ -400,22 +429,30 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 				selected_id = int(selected_id)
 
-				if not selected_type or selected_type not in ['feature']:
+				if not selected_type or selected_type not in ['feature', 'ratings']:
 					self.send_response(400, 'Query non disponibile.') # BAD REQUEST
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
+				else:
+					if selected_type == 'feature' and not 0 <= selected_id < F or \
+					selected_type == 'ratings' and not 1 <= selected_id <= U:
+						msg = f"ID non valido per la query '{selected_type}'."
+						self.send_response(400, msg) # BAD REQUEST
+						self._send_cors_headers()
+						self.send_header('Content-type', 'text/plain')
+						self.end_headers()
+						return
 
 				if 'order' in params.keys():
-					selected_order = params['order'].title()
-					if selected_order not in ['True', 'False']:
+					selected_order = params['order']
+					if selected_order not in ['title', 'rating']:
 						self.send_response(400, 'Query non disponibile.') # BAD REQUEST
 						self._send_cors_headers()
 						self.send_header('Content-type', 'text/plain')
 						self.end_headers()
 						return
-					selected_order = eval(selected_order)
 
 				if not Path.exists(MOVIE_FEATURE_MATRIX_PATH):
 					self.send_response(500, 'Matrice non trovata sul server.') # BAD REQUEST
@@ -424,21 +461,31 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.end_headers()
 					return
 
-				feature_column = movie_features_matrix[:, selected_id].toarray().ravel()
-				related_matrix_ids = np.where(feature_column > 0)[0]
-				related_movie_ids = movie_index_df.loc[
-					movie_index_df['matrix_id'].isin(related_matrix_ids), 'movie_id'
-				]
+				if selected_type == 'feature':
+					feature_column = movie_features_matrix[:, selected_id].toarray().ravel()
+					related_matrix_ids = np.where(feature_column > 0)[0]
+					related_movie_ids = movie_index_df.loc[
+						movie_index_df['matrix_id'].isin(related_matrix_ids), 'movie_id'
+					]
+				elif selected_type == 'ratings':
+					related_movie_ids = real_ratings_df.loc[
+						real_ratings_df['userId'] == selected_id
+					]['movieId']
 
-				if selected_order:
+				if selected_order == 'title':
 					related_movie_ids = movie_titles_df.loc[
-						movie_titles_df['movieID'].isin(related_movie_ids.tolist())
+						movie_titles_df['movieID'].isin(related_movie_ids)
 					].sort_values(by='movie_name')['movieID'].astype(str).tolist()
-				else:
-					related_movie_ids = related_movie_ids.astype(str).tolist()
+				elif selected_order == 'rating':
+					related_movie_ids = sorted(
+						related_movie_ids,
+						key = lambda movie_id: all_ratings.get(int(movie_id), 0),
+						reverse = True
+					)
+					related_movie_ids = [str(mid) for mid in related_movie_ids]
 
 				if not related_movie_ids:
-					self.send_response(404, f'Nessun movie trovato per la feature "{selected_id}"') # NOT FOUND
+					self.send_response(404, f'Nessun movie trovato.') # NOT FOUND
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
@@ -495,7 +542,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 				if 'type' in params.keys():
 					selected_type = params['type']
-					if selected_type not in CATEGORIES:
+					if selected_type not in CATEGORIES + ['rating']:
 						self.send_response(400, 'Informazione non disponibile.') # BAD REQUEST
 						self._send_cors_headers()
 						self.send_header('Content-type', 'text/plain')
@@ -518,23 +565,54 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.end_headers()
 					return
 
+				matrix_id = movie_id_to_index.get(int(selected_id))
+				
+				if matrix_id is None:
+					self.send_response(400, f'ID non valido.') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+				
+				if not 0 <= matrix_id < M:
+					self.send_response(400, f'ID non valido.') # BAD REQUEST
+					self._send_cors_headers()
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+					return
+
 				results = {}
 
 				# Recupero 'title' e 'description' direttamente dai file CSV.
-				title_row = movie_titles_df.loc[movie_titles_df['movieID'] == int(selected_id)]
-				desc_row = movie_abstracts_df.loc[movie_abstracts_df['movieId'] == int(selected_id)]
-				results['title'] = title_row['movie_name'].dropna().astype(str).tolist()
-				results['description'] = desc_row['value'].dropna().astype(str).tolist()
+				if selected_type == "" or selected_type == 'title':
+					title_row = movie_titles_df.loc[movie_titles_df['movieID'] == int(selected_id)]
+					results['title'] = title_row['movie_name'].dropna().astype(str).tolist()
+
+				if selected_type == "" or selected_type == 'description':
+					desc_row = movie_abstracts_df.loc[movie_abstracts_df['movieId'] == int(selected_id)]
+					results['description'] = desc_row['value'].dropna().astype(str).tolist()
 
 				# Recupero tutte le altre features dalla matrice 'movie_features_matrix'.
-				movie_column = movie_features_matrix[movie_id, :].toarray().ravel()
-				related_matrix_ids = np.where(movie_column > 0)[0]
-				related_features_df = feature_index_df.loc[
-					feature_index_df['feature_id'].isin(related_matrix_ids)
-				]
+				if selected_type == "" or selected_type in CATEGORIES_PATH_MAPPING.keys():
+					movie_column = movie_features_matrix[matrix_id, :].toarray().ravel()
+					related_matrix_ids = np.where(movie_column > 0)[0]
+					related_features_df = feature_index_df.loc[
+						feature_index_df['feature_id'].isin(related_matrix_ids)
+					]
 
-				for category, group in related_features_df.groupby('category'):
-					results[category] = sorted(group['feature'].dropna().astype(str).tolist())
+					for category, group in related_features_df.groupby('category'):
+						if selected_type == "" or selected_type == category:
+							results[category] = sorted(group['feature'].dropna().astype(str).tolist())
+						if selected_type == category:
+							break
+				
+				# Recupero il rating dal dict 'all_ratings'.
+				if selected_type == "" or selected_type == 'rating':
+					if int(selected_id) in real_ratings:
+						results['seen'] = True
+					elif int(selected_id) in comp_ratings:
+						results['seen'] = False
+					results['rating'] = all_ratings[int(selected_id)]
 
 				if not results:
 					self.send_response(404, f'Informazione "{selected_type}" non trovata per movie "{selected_id}"') # NOT FOUND
@@ -574,6 +652,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 	def do_POST(self):
 
+		# Variabili globali
 		global user_id
 
 		try:
@@ -676,7 +755,6 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
 	RecSys_HTTPServer()
-	# end
 
 #	########################################################################	#
 #	RIFERIMENTI

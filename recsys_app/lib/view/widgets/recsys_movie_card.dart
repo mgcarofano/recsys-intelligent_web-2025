@@ -39,15 +39,8 @@ import 'package:soft_edge_blur/soft_edge_blur.dart';
 
 class RecSysMovieCard extends StatefulWidget {
   final Movie movie;
-  final Map<String, dynamic>? nerdStats;
-  final bool? recommended;
 
-  const RecSysMovieCard({
-    super.key,
-    required this.movie,
-    this.nerdStats,
-    this.recommended,
-  });
+  const RecSysMovieCard({super.key, required this.movie});
 
   @override
   State<RecSysMovieCard> createState() => _RecSysMovieCardState();
@@ -125,14 +118,18 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
           DataCell(SelectableText(widget.movie.title ?? '')),
         ],
       ),
+      DataRow(
+        cells: [
+          const DataCell(Text('Scelto per te')),
+          DataCell(
+            SelectableText((widget.movie.softmaxProb != null) ? 'Si' : 'No'),
+          ),
+        ],
+      ),
     ];
 
-    if (widget.nerdStats != null) {
-      // final seen = widget.nerdStats!["seen"] as bool ? 'Si' : 'No';
-
-      final prob =
-          "${(widget.nerdStats!["softmax_prob"] * 100).toStringAsFixed(4)}%";
-
+    if (widget.movie.softmaxProb != null) {
+      final prob = "${(widget.movie.softmaxProb! * 100).toStringAsFixed(4)}%";
       infoRows.add(
         DataRow(
           cells: [
@@ -394,7 +391,7 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   spacing: 8,
                   children: [
-                    if (widget.recommended ?? false)
+                    if (widget.movie.softmaxProb != null)
                       _buildChip("Scelto per te"),
                     if (widget.movie.seen ?? false) _buildChip("Già visto"),
                   ],
@@ -408,8 +405,7 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   spacing: 8,
                   children: [
-                    if (widget.nerdStats != null)
-                      _buildButton(_showNerdStats, Icons.query_stats),
+                    _buildButton(_showNerdStats, Icons.query_stats),
                     _buildButton(_showDetails, Icons.info_outline),
                   ],
                 ),

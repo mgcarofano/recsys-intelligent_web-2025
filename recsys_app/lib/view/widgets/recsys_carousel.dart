@@ -45,25 +45,27 @@ class RecSysCarousel extends StatefulWidget {
 }
 
 class _RecSysCarouselState extends State<RecSysCarousel> {
-  late List<Movie> displayedMovies;
+  late List<Movie> recommendedMovies;
   bool loading = false;
 
   @override
   void initState() {
     super.initState();
-    displayedMovies = widget.carousel.movies;
+    recommendedMovies = widget.carousel.movies;
   }
 
   Future<void> _loadAllMovies() async {
     final feature = widget.carousel.feature;
-    final List<String> recommendedIds = displayedMovies
-        .map((m) => m.idMovie)
-        .toList();
 
     if (!mounted) return;
     context.push(
       '/feature/${feature.featureId}',
-      extra: {'feature': feature, 'recommendedIds': recommendedIds},
+      extra: {
+        'feature': feature,
+        'recommendedIds': {
+          for (var m in recommendedMovies) m.idMovie: m.softmaxProb,
+        },
+      },
     );
   }
 
@@ -154,7 +156,7 @@ class _RecSysCarouselState extends State<RecSysCarousel> {
         separatorBuilder: (_, __) => const SizedBox(width: 32),
         itemBuilder: (context, i) {
           final m = c.movies[i];
-          return RecSysMovieCard(movie: m, nerdStats: c.nerdStats[m.idMovie]);
+          return RecSysMovieCard(movie: m);
         },
       ),
     );
@@ -171,7 +173,7 @@ class _RecSysCarouselState extends State<RecSysCarousel> {
           const RecSysLoadingDialog(alertMessage: 'Caricamento...')
         else
           _buildCarouselMoviesList(
-            widget.carousel.copyWith(movies: displayedMovies),
+            widget.carousel.copyWith(movies: recommendedMovies),
             widget.height,
           ),
         const Divider(),

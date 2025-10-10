@@ -50,20 +50,66 @@ class HomeRoute extends StatefulWidget {
 }
 
 class _HomeRouteState extends State<HomeRoute> {
-  late Future<List<Carousel>> movieRecommendations;
+  final List<Carousel> _carousels = [];
+  final List<Map<String, dynamic>> _carouselData = [];
+
+  // Per limitare quanti caroselli vengono scaricati e renderizzati per volta.
+  final int _pageSize = 3;
+
+  final ScrollController _scrollController = ScrollController();
+
+  bool _loadingIds = true;
+  bool _loadingMore = false;
+  bool _allLoaded = false;
+
+  int _page = 0;
 
   @override
   void initState() {
     super.initState();
-    movieRecommendations = _getMovieRecommendations();
+    // movieRecommendations = _getMovieRecommendations();
+    _scrollController.addListener(_onScroll);
+    _fetchIdsAndFirstBatch();
   }
 
-  Future<List<Carousel>> _getMovieRecommendations() async {
-    var data = await BaseClient.instance.getMovieRecommendations().catchError((
-      err,
-    ) {
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _fetchIdsAndFirstBatch() async {
+    setState(() => _loadingIds = true);
+
+    try {
+      final data = await BaseClient.instance.getMovieRecommendations();
+
+      // debugPrint("$data");
+      if (data == null) {
+        setState(() {
+          _loadingIds = false;
+          _allLoaded = true;
+        });
+        return;
+      }
+
+      _carouselData.addAll(toList<Map<String, dynamic>>(data as String));
+      // debugPrint("_carouselData: $_carouselData");
+      if (_carouselData.isEmpty) {
+        setState(() {
+          _loadingIds = false;
+          _allLoaded = true;
+        });
+        return;
+      }
+
+      setState(() => _loadingIds = false);
+      await _loadNextBatch();
+      return;
+    } catch (err) {
       // debugPrint('\n--- ERRORE ---\n$err\n-----\n');
-      if (!mounted) return null;
+      if (!mounted) return;
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
@@ -74,51 +120,86 @@ class _HomeRouteState extends State<HomeRoute> {
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
-      return null;
-    });
+      return;
+    }
+  }
 
-    // debugPrint("$data");
-    if (data == null) return List<Carousel>.empty(growable: true);
+  Future<void> _loadNextBatch() async {
+    if (_loadingMore || _allLoaded || _carouselData.isEmpty) return;
+    setState(() => _loadingMore = true);
 
-    final dataMap = toMap(data);
-    // debugPrint("$dataMap");
+    final start = _page * _pageSize;
+    final end = (_page * _pageSize + _pageSize).clamp(0, _carouselData.length);
 
-    return Future.wait(
-      dataMap.entries.map((entry) async {
-        final featureData = entry.value as Map<String, dynamic>;
-        final movieEntries = List<dynamic>.from(featureData["movies"] ?? []);
-        // debugPrint("$movieEntries");
+    if (start >= end) {
+      setState(() {
+        _loadingMore = false;
+        _allLoaded = true;
+      });
+      return;
+    }
 
-        final allIds = movieEntries
-            .map((movieEntry) => movieEntry["movie_id"].toString())
-            .toList();
+    final batchData = _carouselData.sublist(start, end);
+    // debugPrint("$batchData");
+    // debugPrint("${batchData.length}");
 
-        final extras = Map<String, Map<String, dynamic>>.fromEntries(
-          movieEntries.map((movieData) {
-            return MapEntry(movieData["movie_id"].toString(), {
-              // "movie_rating": movieData["movie_rating"],
-              // "seen": movieData["seen"],
-              "softmax_prob": movieData["softmax_prob"],
-            });
-          }),
-        );
-        // debugPrint("$extras");
+    try {
+      List<Carousel> temp = List<Carousel>.empty(growable: true);
+      for (final item in batchData) {
+        // debugPrint("### START ITERATION ###\n\n");
+        // debugPrint("$item");
+        final moviesMap = item['movies'] as Map<String, dynamic>;
+        // debugPrint("$moviesMap");
 
-        final movies = await fetchMoviesFromIds(allIds);
+        final movies = await fetchMoviesFromData(moviesMap);
 
-        return Carousel(
-          feature: Feature(
-            featureId: entry.key,
-            category: featureData["category"] as String,
-            name: featureData["feature_name"] as String,
-            rating: featureData["feature_rating"] as double,
+        temp.add(
+          Carousel(
+            feature: Feature(
+              featureId: item['feature_id'].toString(),
+              category: item["category"].toString(),
+              name: item["feature_name"].toString(),
+              rating: item["feature_rating"] as double,
+            ),
+            allIds: moviesMap.keys.toList(),
+            movies: movies,
           ),
-          allIds: allIds,
-          movies: movies,
-          nerdStats: extras,
         );
-      }),
-    );
+      }
+
+      // debugPrint("$temp");
+
+      setState(() {
+        _carousels.addAll(temp);
+        _page++;
+        if (end >= _carouselData.length) _allLoaded = true;
+        _loadingMore = false;
+      });
+    } catch (err) {
+      // debugPrint('\n--- ERRORE ---\n$err\n-----\n');
+      if (!mounted) return;
+      setState(() => _loadingMore = false);
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(err.toString()),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      return;
+    }
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients || _loadingMore || _allLoaded) return;
+    final threshold = 300.0;
+    if (_scrollController.position.pixels + threshold >=
+        _scrollController.position.maxScrollExtent) {
+      _loadNextBatch();
+    }
   }
 
   @override
@@ -133,7 +214,11 @@ class _HomeRouteState extends State<HomeRoute> {
           final shouldReload = await context.push('/settings');
           if (shouldReload == true && mounted)
             setState(() {
-              movieRecommendations = _getMovieRecommendations();
+              _carousels.clear();
+              _carouselData.clear();
+              _page = 0;
+              _allLoaded = false;
+              _fetchIdsAndFirstBatch();
             });
         case HomeRouteAction.logout:
           if (!mounted) return;
@@ -146,10 +231,19 @@ class _HomeRouteState extends State<HomeRoute> {
         title: 'Knowledge-based Recommender System',
         alignment: Alignment.topLeft,
         actions: [
-          IconButton(
-            onPressed: () => handleAppBarClick(HomeRouteAction.userRatings),
-            icon: const Icon(Icons.account_circle),
-            tooltip: 'Le tue valutazioni',
+          Tooltip(
+            message: 'Le tue valutazioni',
+            child: TextButton.icon(
+              label: Text(
+                'Utente n. ${widget.userId}',
+                style: Theme.of(
+                  context,
+                ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              onPressed: () => handleAppBarClick(HomeRouteAction.userRatings),
+              icon: const Icon(Icons.account_circle),
+              iconAlignment: IconAlignment.end,
+            ),
           ),
           IconButton(
             onPressed: () => handleAppBarClick(HomeRouteAction.openSettings),
@@ -164,30 +258,26 @@ class _HomeRouteState extends State<HomeRoute> {
         ],
       ),
       resizeToAvoidBottomInset: false,
-      body: FutureBuilder<List<Carousel>>(
-        initialData: List<Carousel>.empty(growable: true),
-        future: movieRecommendations,
-        builder:
-            (
-              BuildContext context,
-              AsyncSnapshot<List<Carousel>> carouselSnapshot,
-            ) {
-              switch (carouselSnapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                case ConnectionState.active:
-                  return RecSysLoadingDialog(alertMessage: 'Caricamento...');
-                case ConnectionState.done:
+      body: _loadingIds
+          ? const RecSysLoadingDialog(alertMessage: 'Caricamento...')
+          : RefreshIndicator(
+              onRefresh: () async {
+                _carousels.clear();
+                _page = 0;
+                _allLoaded = false;
+                await _fetchIdsAndFirstBatch();
+              },
+              child: LayoutBuilder(
+                builder: (context, constraints) {
                   return LayoutBuilder(
                     builder: (context, constraints) => SingleChildScrollView(
+                      controller: _scrollController,
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         spacing: 20.0,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List.generate(carouselSnapshot.data!.length, (
-                          index,
-                        ) {
-                          final carousel = carouselSnapshot.data![index];
+                        children: List.generate(_carousels.length, (index) {
+                          final carousel = _carousels[index];
                           return RecSysCarousel(
                             carousel: carousel,
                             height: constraints.maxHeight * 0.4,
@@ -196,9 +286,44 @@ class _HomeRouteState extends State<HomeRoute> {
                       ),
                     ),
                   );
-              }
-            },
-      ),
+                },
+              ),
+            ),
+      // body: FutureBuilder<List<Carousel>>(
+      //   initialData: List<Carousel>.empty(growable: true),
+      //   future: movieRecommendations,
+      //   builder:
+      //       (
+      //         BuildContext context,
+      //         AsyncSnapshot<List<Carousel>> carouselSnapshot,
+      //       ) {
+      //         switch (carouselSnapshot.connectionState) {
+      //           case ConnectionState.none:
+      //           case ConnectionState.waiting:
+      //           case ConnectionState.active:
+      //             return RecSysLoadingDialog(alertMessage: 'Caricamento...');
+      //           case ConnectionState.done:
+      //             return LayoutBuilder(
+      //               builder: (context, constraints) => SingleChildScrollView(
+      //                 padding: const EdgeInsets.all(20.0),
+      //                 child: Column(
+      //                   spacing: 20.0,
+      //                   crossAxisAlignment: CrossAxisAlignment.start,
+      //                   children: List.generate(carouselSnapshot.data!.length, (
+      //                     index,
+      //                   ) {
+      //                     final carousel = carouselSnapshot.data![index];
+      //                     return RecSysCarousel(
+      //                       carousel: carousel,
+      //                       height: constraints.maxHeight * 0.4,
+      //                     );
+      //                   }),
+      //                 ),
+      //               ),
+      //             );
+      //         }
+      //       },
+      // ),
     );
   }
 }

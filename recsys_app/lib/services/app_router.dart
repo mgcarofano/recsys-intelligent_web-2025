@@ -78,13 +78,13 @@ class AppRouter {
 
             if (extra is Map && extra['feature'] is Feature) {
               final feature = extra['feature'] as Feature;
-              final recommendedIds = List<String>.from(
-                extra['recommendedIds'] ?? [],
-              );
 
               return MovieQueryRoute(
                 queryType: 'feature',
-                extras: {'feature': feature, 'recommendedIds': recommendedIds},
+                extras: {
+                  'feature': feature,
+                  'recommendedIds': extra['recommendedIds'],
+                },
               );
             }
 
