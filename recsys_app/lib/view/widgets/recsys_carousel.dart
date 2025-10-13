@@ -156,7 +156,7 @@ class _RecSysCarouselState extends State<RecSysCarousel> {
         separatorBuilder: (_, __) => const SizedBox(width: 32),
         itemBuilder: (context, i) {
           final m = c.movies[i];
-          return RecSysMovieCard(movie: m);
+          return RecSysMovieCard(movie: m, recommendedChip: false);
         },
       ),
     );

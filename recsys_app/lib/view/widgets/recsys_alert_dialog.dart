@@ -31,6 +31,7 @@ class RecSysAlertDialog extends StatelessWidget {
   final String alertTitle;
   final Widget alertContent;
 
+  final bool? isCancelActive;
   final VoidCallback? onPressCancel;
   final String? cancelText;
 
@@ -42,6 +43,7 @@ class RecSysAlertDialog extends StatelessWidget {
     required this.topIcon,
     required this.alertTitle,
     required this.alertContent,
+    this.isCancelActive,
     this.onPressCancel,
     this.cancelText,
     this.onPressConfirm,
@@ -55,17 +57,18 @@ class RecSysAlertDialog extends StatelessWidget {
       title: Center(child: Text(alertTitle)),
       content: SingleChildScrollView(child: alertContent),
       actions: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+        if (isCancelActive ?? true)
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+              foregroundColor: Theme.of(context).colorScheme.inverseSurface,
             ),
-            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-            foregroundColor: Theme.of(context).colorScheme.inverseSurface,
+            onPressed: onPressCancel ?? () => context.pop(),
+            child: Text(cancelText ?? 'Annulla'),
           ),
-          onPressed: onPressCancel ?? () => context.pop(),
-          child: Text(cancelText ?? 'Annulla'),
-        ),
         if (onPressConfirm != null)
           ElevatedButton(
             style: ElevatedButton.styleFrom(

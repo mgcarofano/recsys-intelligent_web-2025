@@ -34,6 +34,7 @@ class RecSysAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Alignment alignment;
   final List<Widget>? actions;
   final VoidCallback? onTap;
+  final bool? isBackActive;
 
   const RecSysAppBar({
     super.key,
@@ -41,6 +42,7 @@ class RecSysAppBar extends StatefulWidget implements PreferredSizeWidget {
     required this.alignment,
     this.actions,
     this.onTap,
+    this.isBackActive,
   });
 
   @override
@@ -57,6 +59,7 @@ class _RecSysAppBarState extends State<RecSysAppBar> {
         child: Align(alignment: widget.alignment, child: Text(widget.title)),
       ),
       actions: widget.actions ?? [],
+      automaticallyImplyLeading: widget.isBackActive ?? true,
     );
   }
 }

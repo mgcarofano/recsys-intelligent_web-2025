@@ -31,6 +31,10 @@ import 'package:soft_edge_blur/soft_edge_blur.dart';
 //	############################################################################
 //	COSTANTI e VARIABILI
 
+const double cardWidth = 350.0;
+const double movieInfoPadding = 20.0;
+const int ratingCount = 5;
+
 //	############################################################################
 //	ALTRI METODI
 
@@ -39,8 +43,9 @@ import 'package:soft_edge_blur/soft_edge_blur.dart';
 
 class RecSysMovieCard extends StatefulWidget {
   final Movie movie;
+  final bool? recommendedChip;
 
-  const RecSysMovieCard({super.key, required this.movie});
+  const RecSysMovieCard({super.key, required this.movie, this.recommendedChip});
 
   @override
   State<RecSysMovieCard> createState() => _RecSysMovieCardState();
@@ -49,11 +54,17 @@ class RecSysMovieCard extends StatefulWidget {
 class _RecSysMovieCardState extends State<RecSysMovieCard> {
   Uint8List? _moviePosterBytes;
   bool _isPosterLoading = true;
+  bool _isHovered = false;
+  static const double _scaleFactor = 0.98;
+
+  bool recCheck = false;
 
   @override
   void initState() {
     super.initState();
     _initRawMoviePoster();
+    recCheck =
+        (widget.recommendedChip ?? true) && (widget.movie.softmaxProb != null);
   }
 
   Future<void> _initRawMoviePoster() async {
@@ -156,7 +167,61 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
     );
   }
 
-  List<Widget> _buildMovieInfo() {
+  List<Widget> _buildMoviePoster() {
+    return List<Widget>.from([
+      Positioned.fill(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (_isPosterLoading)
+              return const Center(child: CircularProgressIndicator());
+            if (_moviePosterBytes == null)
+              return const Placeholder();
+            else
+              return SoftEdgeBlur(
+                edges: [
+                  EdgeBlur(
+                    type: EdgeType.bottomEdge,
+                    size: 200,
+                    sigma: 15,
+                    controlPoints: [
+                      ControlPoint(
+                        position: 0.5,
+                        type: ControlPointType.visible,
+                      ),
+                      ControlPoint(
+                        position: 1.0,
+                        type: ControlPointType.transparent,
+                      ),
+                    ],
+                  ),
+                ],
+                child: Image.memory(_moviePosterBytes!, fit: BoxFit.cover),
+              );
+          },
+        ),
+      ),
+      Positioned.fill(
+        child: Container(
+          decoration: const BoxDecoration(
+            backgroundBlendMode: BlendMode.darken,
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.transparent,
+                Colors.black26,
+                Colors.black87,
+                Colors.black,
+              ],
+              stops: [0.0, 0.6, 0.8, 1.0],
+            ),
+          ),
+        ),
+      ),
+    ]);
+  }
+
+  List<Widget> _buildMovieInfo(double width) {
     List<Widget> ret = List.empty(growable: true);
 
     if (widget.movie.title != null && widget.movie.title!.isNotEmpty) {
@@ -192,9 +257,12 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
     }
 
     if (widget.movie.seen != null && widget.movie.rating != null) {
-      final ratingType = widget.movie.seen! ? 'reale' : 'predetto';
       final rating = widget.movie.rating!;
+      final ratingType = widget.movie.seen! ? 'reale' : 'predetto';
       final ratingColor = getRatingColor(rating);
+      final ratingSize =
+          ((width.isInfinite ? cardWidth : width) - movieInfoPadding * 2.5) /
+          ratingCount;
 
       ret.add(
         Center(
@@ -202,7 +270,8 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
             message: "Rating $ratingType: ${rating.toStringAsFixed(2)}",
             child: RatingBarIndicator(
               rating: rating,
-              itemCount: 5,
+              itemCount: ratingCount,
+              itemSize: ratingSize,
               unratedColor: ratingColor.withAlpha(50),
               itemBuilder: (context, _) =>
                   Icon(Icons.horizontal_rule_rounded, color: ratingColor),
@@ -212,75 +281,8 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
       );
     }
 
-    // if (widget.movie.subjects != null && widget.movie.subjects!.isNotEmpty) {
-    //   ret.add(_buildFadingChipsRow());
-    // }
-
     return ret;
   }
-
-  // Widget _buildFadingChipsRow() {
-  //   final allFeatures = <String>[
-  //     ...widget.movie.actors ?? [],
-  //     ...widget.movie.composers ?? [],
-  //     ...widget.movie.directors ?? [],
-  //     ...widget.movie.genres ?? [],
-  //     ...widget.movie.producers ?? [],
-  //     ...widget.movie.productionCompanies ?? [],
-  //     ...widget.movie.subjects ?? [],
-  //     ...widget.movie.writers ?? [],
-  //   ];
-  //   allFeatures.shuffle(Random());
-  //   final chips = allFeatures.take(10).toList();
-  //
-  //   return SizedBox(
-  //     height: 34,
-  //     child: LayoutBuilder(
-  //       builder: (context, constraints) {
-  //         return ShaderMask(
-  //           shaderCallback: (rect) {
-  //             return LinearGradient(
-  //               begin: Alignment.centerLeft,
-  //               end: Alignment.centerRight,
-  //               colors: [
-  //                 Colors.transparent,
-  //                 Colors.white,
-  //                 Colors.white,
-  //                 Colors.transparent,
-  //               ],
-  //               stops: [0.0, 0.1, 0.9, 1.0],
-  //             ).createShader(Rect.fromLTWH(0, 0, rect.width, rect.height));
-  //           },
-  //           blendMode: BlendMode.dstIn,
-  //           child: SingleChildScrollView(
-  //             scrollDirection: Axis.horizontal,
-  //             physics: const BouncingScrollPhysics(),
-  //             child: Row(
-  //               spacing: 5,
-  //               children: chips.map((feature) {
-  //                 return Chip(
-  //                   label: Text(
-  //                     feature,
-  //                     style: TextStyle(
-  //                       color: Colors.black,
-  //                       fontWeight: FontWeight.w100,
-  //                       fontSize: 11.5,
-  //                     ),
-  //                   ),
-  //                   backgroundColor: Theme.of(context).colorScheme.tertiary,
-  //                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-  //                   shape: RoundedRectangleBorder(
-  //                     borderRadius: BorderRadius.circular(20.0),
-  //                   ),
-  //                 );
-  //               }).toList(),
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
 
   Widget _buildChip(String message) {
     return Chip(
@@ -299,134 +301,107 @@ class _RecSysMovieCardState extends State<RecSysMovieCard> {
   }
 
   Widget _buildButton(VoidCallback onPressed, IconData icon) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark
+        ? Theme.of(context).colorScheme.tertiary
+        : Theme.of(context).colorScheme.primaryContainer;
+
     return IconButton(
       onPressed: onPressed,
-      constraints: BoxConstraints(
-        maxHeight: 34,
-        maxWidth: 34,
-        minWidth: 34,
-        minHeight: 34,
-      ),
-      padding: EdgeInsets.all(0.0),
-      style: IconButton.styleFrom(
-        backgroundColor: Theme.of(context).colorScheme.tertiary,
-      ),
-      icon: Icon(icon, color: Colors.black, size: 24),
+      padding: EdgeInsets.all(1.0),
+      style: IconButton.styleFrom(backgroundColor: bgColor),
+      icon: Icon(icon, color: Colors.black, size: 23),
     );
+  }
+
+  List<Widget> _buildCardOverlay(double width) {
+    return List<Widget>.from([
+      Positioned.directional(
+        textDirection: TextDirection.ltr,
+        top: 12,
+        start: 12,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          spacing: 8,
+          children: [
+            if (recCheck) _buildChip("Scelto per te"),
+            if (widget.movie.seen ?? false) _buildChip("Già visto"),
+          ],
+        ),
+      ),
+      Positioned.directional(
+        textDirection: TextDirection.rtl,
+        top: 12,
+        start: 12,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          spacing: 8,
+          children: [
+            _buildButton(_showNerdStats, Icons.query_stats),
+            _buildButton(_showDetails, Icons.info_outline),
+          ],
+        ),
+      ),
+      Positioned(
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: movieInfoPadding),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _buildMovieInfo(width),
+          ),
+        ),
+      ),
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 4,
-      shape: RoundedSuperellipseBorder(
-        borderRadius: BorderRadius.circular(24),
-        side: BorderSide.none,
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: SizedBox(
-        width: 350,
-        height: 280,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    if (_isPosterLoading)
-                      return const Center(child: CircularProgressIndicator());
-                    if (_moviePosterBytes == null)
-                      return const Placeholder();
-                    else
-                      return SoftEdgeBlur(
-                        edges: [
-                          EdgeBlur(
-                            type: EdgeType.bottomEdge,
-                            size: 200,
-                            sigma: 15,
-                            controlPoints: [
-                              ControlPoint(
-                                position: 0.5,
-                                type: ControlPointType.visible,
-                              ),
-                              ControlPoint(
-                                position: 1.0,
-                                type: ControlPointType.transparent,
-                              ),
-                            ],
-                          ),
-                        ],
-                        child: Image.memory(
-                          _moviePosterBytes!,
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                  },
-                ),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final sideColor = isDark
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.onTertiaryFixed;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        return MouseRegion(
+          onEnter: (_) => setState(() => _isHovered = true),
+          onExit: (_) => setState(() => _isHovered = false),
+          child: AnimatedScale(
+            scale: _isHovered ? _scaleFactor : 1.0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+            child: Material(
+              elevation: 4,
+              shape: RoundedSuperellipseBorder(
+                borderRadius: BorderRadius.circular(24),
+                side: _isHovered
+                    ? BorderSide(color: sideColor, width: 5)
+                    : BorderSide.none,
               ),
-              Positioned.fill(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    backgroundBlendMode: BlendMode.darken,
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black26,
-                        Colors.black87,
-                        Colors.black,
-                      ],
-                      stops: [0.0, 0.6, 0.8, 1.0],
-                    ),
+              clipBehavior: Clip.antiAlias,
+              child: SizedBox(
+                width: cardWidth,
+                height: 280,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(24),
+                  child: Stack(
+                    // L'operatore ... (spread) serve per espandere gli elementi di una lista dentro un’altra lista.
+                    children: [
+                      ..._buildMoviePoster(),
+                      ..._buildCardOverlay(width),
+                    ],
                   ),
                 ),
               ),
-              Positioned.directional(
-                textDirection: TextDirection.ltr,
-                top: 12,
-                start: 12,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  spacing: 8,
-                  children: [
-                    if (widget.movie.softmaxProb != null)
-                      _buildChip("Scelto per te"),
-                    if (widget.movie.seen ?? false) _buildChip("Già visto"),
-                  ],
-                ),
-              ),
-              Positioned.directional(
-                textDirection: TextDirection.rtl,
-                top: 12,
-                start: 12,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  spacing: 8,
-                  children: [
-                    _buildButton(_showNerdStats, Icons.query_stats),
-                    _buildButton(_showDetails, Icons.info_outline),
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _buildMovieInfo(),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -35,6 +35,8 @@ import 'package:knowledge_recsys/view/widgets/recsys_movie_card.dart';
 //	############################################################################
 //	COSTANTI e VARIABILI
 
+const String noResultMessage = 'Nessun film trovato!';
+
 //	############################################################################
 //	ALTRI METODI
 
@@ -110,6 +112,21 @@ class _MovieQueryRouteState extends State<MovieQueryRoute> {
           _loadingIds = false;
           _allLoaded = true;
         });
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) => RecSysAlertDialog(
+            topIcon: Icons.warning_amber_sharp,
+            alertTitle: 'Attenzione',
+            alertContent: Text(noResultMessage),
+            isCancelActive: false,
+            onPressConfirm: () {
+              if (!mounted) return;
+              if (context.canPop()) context.pop();
+            },
+            confirmText: 'Torna indietro',
+          ),
+        );
         return;
       }
 
@@ -119,6 +136,21 @@ class _MovieQueryRouteState extends State<MovieQueryRoute> {
           _loadingIds = false;
           _allLoaded = true;
         });
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) => RecSysAlertDialog(
+            topIcon: Icons.warning_amber_sharp,
+            alertTitle: 'Attenzione',
+            alertContent: Text(noResultMessage),
+            isCancelActive: false,
+            onPressConfirm: () {
+              if (!mounted) return;
+              if (context.canPop()) context.pop();
+            },
+            confirmText: 'Torna indietro',
+          ),
+        );
         return;
       }
 
@@ -192,9 +224,11 @@ class _MovieQueryRouteState extends State<MovieQueryRoute> {
   }
 
   void _onScroll() {
+    // Riprendi il caricamento quando mancano 300 pixel dal fondo.
+    final threshold = 300.0;
+
     if (!_scrollController.hasClients || _loadingMore || _allLoaded) return;
-    final threshold =
-        300.0; // quando mancano meno di 300px dal fondo, carica altro
+
     if (_scrollController.position.pixels + threshold >=
         _scrollController.position.maxScrollExtent) {
       _loadNextBatch();
@@ -348,6 +382,9 @@ class _MovieQueryRouteState extends State<MovieQueryRoute> {
                     .floor()
                     .clamp(1, maxColumns);
                 final numMovies = _movies.length;
+                final resultMessage = _movieIds.isEmpty
+                    ? "Nessun film trovato"
+                    : "${_movieIds.length} film trovati";
 
                 return Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -359,9 +396,9 @@ class _MovieQueryRouteState extends State<MovieQueryRoute> {
                         children: [
                           Expanded(
                             child: Tooltip(
-                              message: "${_movieIds.length} film trovati",
+                              message: resultMessage,
                               child: Text(
-                                "${_movieIds.length} film trovati",
+                                resultMessage,
                                 style: Theme.of(
                                   context,
                                 ).textTheme.headlineMedium,
@@ -369,14 +406,17 @@ class _MovieQueryRouteState extends State<MovieQueryRoute> {
                               ),
                             ),
                           ),
-                          TextButton.icon(
-                            icon: Icon(Icons.sort),
-                            onPressed: _showSortOptions,
-                            label: Text(
-                              "Ordina",
-                              style: Theme.of(context).textTheme.headlineSmall,
+                          if (_movieIds.isNotEmpty)
+                            TextButton.icon(
+                              icon: Icon(Icons.sort),
+                              onPressed: _showSortOptions,
+                              label: Text(
+                                "Ordina",
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.headlineSmall,
+                              ),
                             ),
-                          ),
                         ],
                       ),
                       _buildMoviesGrid(numMovies, columns),

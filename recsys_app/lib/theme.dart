@@ -51,6 +51,26 @@ TextTheme createTextTheme(
 //	############################################################################
 //	CLASSI e ROUTE
 
+class ThemeController extends InheritedWidget {
+  final VoidCallback toggleTheme;
+
+  const ThemeController({
+    super.key,
+    required this.toggleTheme,
+    required super.child,
+  });
+
+  static ThemeController of(BuildContext context) {
+    final result = context
+        .dependOnInheritedWidgetOfExactType<ThemeController>();
+    assert(result != null, 'ThemeController non trovato nel widget tree!');
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(ThemeController oldWidget) => false;
+}
+
 class MaterialTheme {
   final TextTheme textTheme;
 
@@ -59,51 +79,51 @@ class MaterialTheme {
   static ColorScheme lightScheme() {
     return const ColorScheme(
       brightness: Brightness.light,
-      primary: Color(0xff605690),
-      surfaceTint: Color(0xff605690),
+      primary: Color(0xff68548e),
+      surfaceTint: Color(0xff68548e),
       onPrimary: Color(0xffffffff),
-      primaryContainer: Color(0xffe6deff),
-      onPrimaryContainer: Color(0xff483f77),
-      secondary: Color(0xff605c71),
+      primaryContainer: Color(0xffebddff),
+      onPrimaryContainer: Color(0xff503d74),
+      secondary: Color(0xff635b70),
       onSecondary: Color(0xffffffff),
-      secondaryContainer: Color(0xffe6dff9),
-      onSecondaryContainer: Color(0xff484459),
-      tertiary: Color(0xff7c5263),
+      secondaryContainer: Color(0xffe9def8),
+      onSecondaryContainer: Color(0xff4b4358),
+      tertiary: Color(0xff7e525d),
       onTertiary: Color(0xffffffff),
-      tertiaryContainer: Color(0xffffd8e6),
-      onTertiaryContainer: Color(0xff623b4c),
+      tertiaryContainer: Color(0xffffd9e1),
+      onTertiaryContainer: Color(0xff643b46),
       error: Color(0xffba1a1a),
       onError: Color(0xffffffff),
       errorContainer: Color(0xffffdad6),
       onErrorContainer: Color(0xff93000a),
-      surface: Color(0xfffdf8ff),
-      onSurface: Color(0xff1c1b20),
-      onSurfaceVariant: Color(0xff48454e),
-      outline: Color(0xff79757f),
-      outlineVariant: Color(0xffc9c4d0),
+      surface: Color(0xfffef7ff),
+      onSurface: Color(0xff1d1b20),
+      onSurfaceVariant: Color(0xff49454e),
+      outline: Color(0xff7a757f),
+      outlineVariant: Color(0xffcbc4cf),
       shadow: Color(0xff000000),
       scrim: Color(0xff000000),
-      inverseSurface: Color(0xff312f36),
-      inversePrimary: Color(0xffcabeff),
-      primaryFixed: Color(0xffe6deff),
-      onPrimaryFixed: Color(0xff1c1149),
-      primaryFixedDim: Color(0xffcabeff),
-      onPrimaryFixedVariant: Color(0xff483f77),
-      secondaryFixed: Color(0xffe6dff9),
-      onSecondaryFixed: Color(0xff1c192b),
-      secondaryFixedDim: Color(0xffc9c3dc),
-      onSecondaryFixedVariant: Color(0xff484459),
-      tertiaryFixed: Color(0xffffd8e6),
-      onTertiaryFixed: Color(0xff301120),
-      tertiaryFixedDim: Color(0xffedb8cc),
-      onTertiaryFixedVariant: Color(0xff623b4c),
-      surfaceDim: Color(0xffddd8e0),
-      surfaceBright: Color(0xfffdf8ff),
+      inverseSurface: Color(0xff322f35),
+      inversePrimary: Color(0xffd3bcfd),
+      primaryFixed: Color(0xffebddff),
+      onPrimaryFixed: Color(0xff230f46),
+      primaryFixedDim: Color(0xffd3bcfd),
+      onPrimaryFixedVariant: Color(0xff503d74),
+      secondaryFixed: Color(0xffe9def8),
+      onSecondaryFixed: Color(0xff1f182b),
+      secondaryFixedDim: Color(0xffcdc2db),
+      onSecondaryFixedVariant: Color(0xff4b4358),
+      tertiaryFixed: Color(0xffffd9e1),
+      onTertiaryFixed: Color(0xff31101b),
+      tertiaryFixedDim: Color(0xfff0b7c5),
+      onTertiaryFixedVariant: Color(0xff643b46),
+      surfaceDim: Color(0xffded8e0),
+      surfaceBright: Color(0xfffef7ff),
       surfaceContainerLowest: Color(0xffffffff),
-      surfaceContainerLow: Color(0xfff7f2fa),
-      surfaceContainer: Color(0xfff1ecf4),
-      surfaceContainerHigh: Color(0xffebe6ee),
-      surfaceContainerHighest: Color(0xffe6e1e9),
+      surfaceContainerLow: Color(0xfff8f1fa),
+      surfaceContainer: Color(0xfff2ecf4),
+      surfaceContainerHigh: Color(0xffede6ee),
+      surfaceContainerHighest: Color(0xffe7e0e8),
     );
   }
 
@@ -437,7 +457,7 @@ class ColorFamily {
 }
 
 extension SuccessColorScheme on ColorScheme {
-  Color get success => const Color(0xFF4CAF50); // verde "success"
+  Color get success => const Color(0xFF4CAF50);
   Color get successContainer => const Color(0xFFC8E6C9);
   Color get onSuccess => const Color(0xFFFFFFFF);
   Color get onSuccessContainer => const Color(0xFF1B5E20);

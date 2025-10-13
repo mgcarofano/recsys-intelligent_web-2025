@@ -75,7 +75,6 @@ class _SettingsRouteState extends State<SettingsRoute> {
     });
 
     final Map<String, dynamic> paramsMap = toMap(data ?? '{}');
-    // debugPrint("$paramsMap");
 
     try {
       minSupportController.text = paramsMap['minSupport'].toString();

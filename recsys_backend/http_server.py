@@ -109,22 +109,25 @@ def compute_feature_means(ratings, min_support: int):
 
 def extract_user_top_features(feature_means, top_features: int):
 
-	# 5. ordinare il vettore 1xF dei rating sulle features
-	top_indices = np.argsort(-feature_means)[:top_features] # ordina in desc, prende TOP_FEATURES
+	# Controllo che esista almeno una feature di interesse.
+	if (feature_means.sum() > 0.0):
 
-	# Non usiamo 'rating' qui, ma usiamo 'idx' per accedere sia al DataFrame che a feature_means
-	for idx in top_indices:
-		row = feature_index_df.iloc[idx]
+		# 5. ordinare il vettore 1xF dei rating sulle features
+		top_indices = np.argsort(-feature_means)[:top_features] # ordina in desc, prende TOP_FEATURES
 
-		# Prende il valore di rating (media) per la feature all'indice 'idx'
-		feature_rating_value = feature_means[idx]
+		# Non usiamo 'rating' qui, ma usiamo 'idx' per accedere sia al DataFrame che a feature_means
+		for idx in top_indices:
+			row = feature_index_df.iloc[idx]
 
-		top_features_list.append({
-			"id": int(row["feature_id"]),
-			"category": row["category"],
-			"name": row["feature"],
-			"rating": float(feature_rating_value) # Inseriamo il valore del rating (float) nel campo 'rating', come richiesto
-		})
+			# Prende il valore di rating (media) per la feature all'indice 'idx'
+			feature_rating_value = feature_means[idx]
+
+			top_features_list.append({
+				"id": int(row["feature_id"]),
+				"category": row["category"],
+				"name": row["feature"],
+				"rating": float(feature_rating_value) # Inseriamo il valore del rating (float) nel campo 'rating', come richiesto
+			})
 
 	# end
 
@@ -453,13 +456,6 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 						self.send_header('Content-type', 'text/plain')
 						self.end_headers()
 						return
-
-				if not Path.exists(MOVIE_FEATURE_MATRIX_PATH):
-					self.send_response(500, 'Matrice non trovata sul server.') # BAD REQUEST
-					self._send_cors_headers()
-					self.send_header('Content-type', 'text/plain')
-					self.end_headers()
-					return
 
 				if selected_type == 'feature':
 					feature_column = movie_features_matrix[:, selected_id].toarray().ravel()

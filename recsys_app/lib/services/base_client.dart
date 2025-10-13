@@ -17,9 +17,6 @@
 
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-
-// import 'package:knowledge_recsys/recsys_main.dart';
 
 //	############################################################################
 //	COSTANTI E VARIABILI
@@ -44,7 +41,6 @@ class BaseClient {
   BaseClient._privateConstructor();
   static final BaseClient instance = BaseClient._privateConstructor();
   static Dio? _client;
-  // static SyncState _isSynced = SyncState.notSynced;
   static String errorMessage = '';
 
   static const serverProtocol = 'http';
@@ -58,10 +54,6 @@ class BaseClient {
   }
 
   Dio get client => _client ??= _initClient();
-
-  // SyncState get isSynced {
-  //   return _isSynced;
-  // }
 
   Dio _initClient() {
     var options = BaseOptions(
@@ -200,8 +192,6 @@ class BaseClient {
         data: data ?? {},
         options: Options(method: 'POST'),
       );
-
-      debugPrint(response.data);
 
       if (response.statusCode != 201) {
         throw FormatException(

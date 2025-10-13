@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:knowledge_recsys/services/app_router.dart';
+import 'package:knowledge_recsys/services/session_manager.dart';
 import 'package:knowledge_recsys/theme.dart';
 
 //	############################################################################
@@ -31,7 +32,7 @@ import 'package:knowledge_recsys/theme.dart';
 
 enum SyncState { synced, notSynced, offline, error }
 
-enum HomeRouteAction { userRatings, openSettings, logout }
+enum HomeRouteAction { userRatings, switchTheme, openSettings, logout }
 
 const int maxColumns = 5;
 
@@ -72,6 +73,7 @@ MaterialColor getRatingColor(double rating) {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final router = await AppRouter.instance.router;
+  await SessionManager.init();
 
   // debugPaintSizeEnabled = true;
   runApp(RecSysApp(router: router));
@@ -80,23 +82,41 @@ void main() async {
 //	############################################################################
 //	CLASSI E ROUTE
 
-class RecSysApp extends StatelessWidget {
+class RecSysApp extends StatefulWidget {
   final GoRouter router;
 
   const RecSysApp({super.key, required this.router});
 
   @override
-  Widget build(BuildContext context) {
-    final brightness = View.of(context).platformDispatcher.platformBrightness;
-    TextTheme textTheme = createTextTheme(context, "DM Sans", "Oswald");
-    MaterialTheme theme = MaterialTheme(textTheme);
+  State<RecSysApp> createState() => _RecSysAppState();
+}
 
-    return MaterialApp.router(
-      title: 'Knowledge-based Recommender System',
-      routerConfig: router,
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      theme: brightness == Brightness.light ? theme.light() : theme.dark(),
+class _RecSysAppState extends State<RecSysApp> {
+  ThemeMode _themeMode = ThemeMode.system;
+
+  void _toggleTheme() {
+    setState(() {
+      _themeMode = _themeMode == ThemeMode.dark
+          ? ThemeMode.light
+          : ThemeMode.dark;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = createTextTheme(context, "DM Sans", "Oswald");
+    final materialTheme = MaterialTheme(textTheme);
+
+    return ThemeController(
+      toggleTheme: _toggleTheme,
+      child: MaterialApp.router(
+        title: 'Knowledge-based Recommender System',
+        routerConfig: widget.router,
+        debugShowCheckedModeBanner: false,
+        themeMode: _themeMode,
+        theme: materialTheme.light(),
+        darkTheme: materialTheme.dark(),
+      ),
     );
   }
 }

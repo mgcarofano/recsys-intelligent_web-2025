@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
+import 'package:knowledge_recsys/services/session_manager.dart';
 import 'package:knowledge_recsys/services/validators.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_app_bar.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_text_form_field.dart';
@@ -77,8 +78,11 @@ class _LoginRouteState extends State<LoginRoute> {
         BaseClient.instance
             .loginUser(userId: userID)
             .then((_) {
+              SessionManager.login(userID);
               if (!mounted) return;
-              context.go('/home', extra: userID);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context.go('/home/$userID');
+              });
             })
             .catchError((err) {
               // debugPrint('\n--- ERRORE ---\n$err\n-----\n');
@@ -165,7 +169,7 @@ class _LoginRouteState extends State<LoginRoute> {
                       prefixIcon: Icons.person,
                       labelText: 'ID utente *',
                       textInputAction: TextInputAction.done,
-                    ), // User ID
+                    ),
                     ElevatedButton(
                       onPressed: _onSubmit,
                       style: ElevatedButton.styleFrom(

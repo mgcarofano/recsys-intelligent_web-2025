@@ -16,7 +16,6 @@
 //	############################################################################
 //	LIBRERIE
 
-import 'package:flutter/material.dart';
 import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
 
@@ -28,8 +27,8 @@ import 'package:knowledge_recsys/services/base_client.dart';
 
 Future<List<Movie>> fetchMoviesFromData(Map<String, dynamic> data) async {
   final ret = data.entries.map((item) async {
-    debugPrint("${(item.key).runtimeType}, ${(item.key)}");
-    debugPrint("${(item.value).runtimeType}, ${(item.value)}");
+    // debugPrint("${(item.key).runtimeType}, ${(item.key)}");
+    // debugPrint("${(item.value).runtimeType}, ${(item.value)}");
 
     String? movieInfo = await BaseClient.instance
         .getMovieInfo(idMovie: item.key)

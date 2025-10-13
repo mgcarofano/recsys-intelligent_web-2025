@@ -17,6 +17,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/model/feature_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
+import 'package:knowledge_recsys/services/session_manager.dart';
 
 import 'package:knowledge_recsys/view/screens/error_screen.dart';
 import 'package:knowledge_recsys/view/routes/login_route.dart';
@@ -45,6 +46,24 @@ class AppRouter {
   Future<GoRouter> _initRouter() async {
     return GoRouter(
       initialLocation: '/login',
+      redirect: (context, state) {
+        final isLoggingIn = state.matchedLocation == '/login';
+        final isHome = state.matchedLocation.startsWith('/home');
+        // debugPrint("isLoggingIn: $isLoggingIn, isHome: $isHome, userId: ${SessionManager.isLoggedIn}");
+
+        // Se l'utente non è loggato e tenta di accedere alla home.
+        if (!SessionManager.isLoggedIn && isHome) {
+          return '/login';
+        }
+
+        // Se è loggato e tenta di accedere al login.
+        if (SessionManager.isLoggedIn && isLoggingIn) {
+          return '/home/${SessionManager.userId}';
+        }
+
+        // Nessun redirect necessario
+        return null;
+      },
       routerNeglect: true,
       routes: [
         GoRoute(
@@ -54,11 +73,22 @@ class AppRouter {
         ),
         GoRoute(
           name: 'HOME',
-          path: '/home',
+          path: '/home/:id',
           builder: (context, state) {
-            final extra = state.extra;
-            if (extra is String) return HomeRoute(userId: extra);
-            return ErrorScreen();
+            final id = state.pathParameters['id'];
+
+            // Caso 1: ID non valido.
+            if (id == null || id.isEmpty)
+              return ErrorScreen(errorMessage: "ID utente non valido");
+
+            // Caso 2: utente non loggato.
+            if (!SessionManager.isLoggedIn) return const LoginRoute();
+
+            // Caso 3: ID diverso da quello salvato.
+            if (id != SessionManager.userId)
+              return ErrorScreen(errorMessage: "ID utente non valido");
+
+            return HomeRoute(userId: id);
           },
         ),
         GoRoute(
@@ -66,8 +96,18 @@ class AppRouter {
           path: '/movie/:id',
           builder: (context, state) {
             final extra = state.extra;
+
             if (extra is Movie) return MovieRoute(movie: extra);
-            return ErrorScreen();
+
+            return ErrorScreen(
+              errorMessage:
+                  'Impossibile caricare la pagina "Informazioni film".',
+              onPressed: () {
+                if (!context.mounted) return;
+                if (context.canPop()) context.pop();
+              },
+              buttonText: 'Torna indietro',
+            );
           },
         ),
         GoRoute(
@@ -88,7 +128,14 @@ class AppRouter {
               );
             }
 
-            return ErrorScreen();
+            return ErrorScreen(
+              errorMessage: 'Impossibile caricare la pagina "Mostra tutto".',
+              onPressed: () {
+                if (!context.mounted) return;
+                if (context.canPop()) context.pop();
+              },
+              buttonText: 'Torna indietro',
+            );
           },
         ),
         GoRoute(
@@ -96,12 +143,19 @@ class AppRouter {
           path: '/ratings',
           builder: (context, state) {
             final extra = state.extra;
-            if (extra is String)
-              return MovieQueryRoute(
-                queryType: 'ratings',
-                extras: {'userId': extra},
-              );
-            return ErrorScreen();
+
+            if (extra is Map<String, dynamic>)
+              return MovieQueryRoute(queryType: 'ratings', extras: extra);
+
+            return ErrorScreen(
+              errorMessage:
+                  'Impossibile caricare la pagina "Le tue valutazioni".',
+              onPressed: () {
+                if (!context.mounted) return;
+                if (context.canPop()) context.pop();
+              },
+              buttonText: 'Torna indietro',
+            );
           },
         ),
         GoRoute(
