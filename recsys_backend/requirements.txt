@@ -6,3 +6,4 @@ SPARQLWrapper
 requests
 lxml
 tqdm
+lenskit
