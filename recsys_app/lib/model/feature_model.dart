@@ -16,6 +16,10 @@
 //	############################################################################
 //	LIBRERIE
 
+import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:knowledge_recsys/recsys_main.dart';
+
 //	############################################################################
 //	COSTANTI e VARIABILI
 
@@ -24,10 +28,6 @@
 
 //	############################################################################
 //	CLASSI e ROUTE
-
-import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:knowledge_recsys/recsys_main.dart';
 
 class Feature {
   final String featureId;

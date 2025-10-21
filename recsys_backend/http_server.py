@@ -26,48 +26,48 @@ from scipy.sparse import load_npz
 #	########################################################################	#
 #	VARIABILI GLOBALI
 
-# Identificativo dell'utente di cui si vogliono verificare le raccomandazioni.
 user_id = ""
+"""Identificativo dell'utente di cui si vogliono verificare le raccomandazioni."""
 
-# Lista di features, caratterizzate da (id, category, name, average_rating), a cui sono collegati i movies, caratterizzati da (movieId, rating, seen_bool), che includono tale feature.
 top_features_list = []
+"""Lista di features, caratterizzate da (id, category, name, average_rating), a cui sono collegati i movies, caratterizzati da (movieId, rating, seen_bool), che includono tale feature."""
+
+real_ratings = {}
+"""Dizionario contenente i rating reali assegnati dall'utente loggato."""
+
+comp_ratings = {}
+"""Dizionario contenente i rating complementari predetti dal sistema per l'utente loggato."""
+
+all_ratings = {}
+"""Dizionario unificato contenente tutti i rating (reali e complementari) per l'utente loggato."""
 
 #	########################################################################	#
 #	DATAFRAMES
 
-# Dataframe che mette in relazione l'id di un film con l'indice all'interno della matrice movie/features.
 movie_index_df = pd.read_csv(MOVIE_INDEX_PATH, dtype=int)
-movie_id_to_index = dict(zip(
-	movie_index_df['movie_id'],
-	movie_index_df['matrix_id']
-))
+"""Dataframe che mette in relazione l'id di un film con l'indice all'interno della matrice movie/features."""
 
-# Dataframe contenente i titoli di tutti i film della lista "existing_movies.csv".
 movie_titles_df = pd.read_csv(EXISTING_MOVIES_PATH)
+"""Dataframe contenente i titoli di tutti i film della lista "existing_movies.csv"."""
 
-# Dataframe contenente le descrizioni (abstract) dei film della lista "existing_movies.csv".
 movie_abstracts_df = pd.read_csv(MOVIES_ABSTRACT_PATH)
+"""Dataframe contenente le descrizioni (abstract) dei film della lista "existing_movies.csv"."""
 
-# Dataframe contenente tutti i rating assegnati dagli utenti ai film della lista "existing_movies.csv"
 real_ratings_df = pd.read_csv(EXISTING_RATINGS_PATH)
-U = real_ratings_df['userId'].unique().shape[0]
+"""Dataframe contenente tutti i rating assegnati dagli utenti ai film della lista "existing_movies.csv"."""
 
-# Dataframe di features identificate da 3 elementi (id, category, name).
 feature_index_df = pd.read_csv(FEATURE_INDEX_PATH)
+"""Dataframe di features identificate da 3 elementi (id, category, name)."""
+
+U = real_ratings_df['userId'].unique().shape[0]
 
 #	########################################################################	#
 #	MATRIX
 
-# Matrice sparsa contenente la rappresentazione vettoriale di un film secondo le sue features.
 movie_features_matrix = load_npz(MOVIE_FEATURE_MATRIX_PATH)
+"""Matrice sparsa contenente la rappresentazione vettoriale di un film secondo le sue features."""
+
 M, F = movie_features_matrix.shape
-
-#	########################################################################	#
-#	DICT
-
-real_ratings = {}
-comp_ratings = {}
-all_ratings = {}
 
 #	########################################################################	#
 #	ALTRE FUNZIONI
@@ -187,8 +187,11 @@ def extract_user_preferences(min_support: int, top_features: int):
 	# print("3b")
 	movie_ratings = np.zeros(M, dtype=float)
 	for movie_id, rating in all_ratings.items():
-		idx = movie_id_to_index.get(movie_id)
-		if idx is not None and 0 <= idx < M:
+
+		idx = movie_index_df.loc[movie_index_df['movie_id'] == movie_id, 'matrix_id']
+		idx = int(idx.iloc[0]) if not idx.empty else None
+
+		if idx and 0 <= idx < M:
 			movie_ratings[idx] = rating
 
 	# # Debug output
@@ -351,7 +354,6 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 
 		# Dataframes
 		global movie_index_df
-		global movie_id_to_index
 		global movie_titles_df
 		global movie_abstracts_df
 		global real_ratings_df
@@ -552,24 +554,16 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 					self.end_headers()
 					return
 
-				movie_id = movie_id_to_index.get(int(selected_id))
+				matrix_id = movie_index_df.loc[movie_index_df['movie_id'] == int(selected_id), 'matrix_id']
+				matrix_id = int(matrix_id.iloc[0]) if not matrix_id.empty else None
 
-				if not movie_id or (not 0 <= movie_id < M):
-					self.send_response(400, 'ID non valido.') # BAD REQUEST
-					self._send_cors_headers()
-					self.send_header('Content-type', 'text/plain')
-					self.end_headers()
-					return
-
-				matrix_id = movie_id_to_index.get(int(selected_id))
-				
 				if matrix_id is None:
 					self.send_response(400, f'ID non valido.') # BAD REQUEST
 					self._send_cors_headers()
 					self.send_header('Content-type', 'text/plain')
 					self.end_headers()
 					return
-				
+
 				if not 0 <= matrix_id < M:
 					self.send_response(400, f'ID non valido.') # BAD REQUEST
 					self._send_cors_headers()
@@ -601,7 +595,7 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 							results[category] = sorted(group['feature'].dropna().astype(str).tolist())
 						if selected_type == category:
 							break
-				
+
 				# Recupero il rating dal dict 'all_ratings'.
 				if selected_type == "" or selected_type == 'rating':
 					if int(selected_id) in real_ratings:

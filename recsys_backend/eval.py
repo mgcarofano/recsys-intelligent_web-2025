@@ -1,29 +1,42 @@
 """
-Sistema di Valutazione per la Predizione di Rating
-===================================================
-Confronta l'accuratezza (MAE, RMSE) di diversi algoritmi nella predizione
-dei rating nascosti nel set di test.
-L'algoritmo custom 'RatingPredictor' replica la logica di
-build_ratings_complemented.py con l'aggiunta di bias terms.
+
+    eval.py \n
+    by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
+
+    Questo file implementa un Sistema di Valutazione per la
+    Predizione di Rating. Confronta l'accuratezza (MAE, RMSE) di diversi
+    algoritmi nella predizione dei rating nascosti nel test set.
+    L'algoritmo custom 'RatingPredictor' replica la logica di
+    build_ratings_complemented.py con l'aggiunta di bias terms.
+
 """
+
+#   ########################################################################    #
+#   LIBRERIE
 
 import pandas as pd
 import numpy as np
-from pathlib import Path
 from scipy.sparse import load_npz
 from sklearn.metrics.pairwise import cosine_similarity
 from lenskit import crossfold as xf
 from lenskit import util
 from lenskit.algorithms import Recommender, als, item_knn as knn, user_knn as uknn
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+
+from pathlib import Path
+from constants import EXISTING_RATINGS_PATH, \
+    EXISTING_MOVIES_PATH, \
+    MOVIE_FEATURE_MATRIX_PATH
+
+#   ########################################################################    #
+#   COMANDI e MACRO
+
 import warnings
 warnings.filterwarnings('ignore')
 
-from constants import *
+#   ########################################################################    #
+#   LA CLASSE CosineSimilarityRecommender PER LA PREDIZIONE DEI RATING (con bias terms)
 
-# ========================================
-# CLASSE PER LA PREDIZIONE DEI RATING (CON BIAS TERMS)
-# ========================================
 class CosineSimilarityRecommender:
     """
     Questo recommender replica la logica di build_ratings_complemented.py
@@ -155,9 +168,9 @@ class CosineSimilarityRecommender:
 
         return pred
 
-# ========================================
-# FUNZIONI DI VALUTAZIONE (SOLO PREDIZIONI)
-# ========================================
+#   ########################################################################    #
+#   FUNZIONE DI VALUTAZIONE (SOLO PREDIZIONI)
+
 def evaluate_predictions(algo_name, algo, train, test):
     """
     Genera predizioni di rating per un algoritmo e le aggiunge al DataFrame di test.
@@ -190,9 +203,9 @@ def evaluate_predictions(algo_name, algo, train, test):
 
     return pd.DataFrame()
 
-# ========================================
-# FUNZIONE MAIN
-# ========================================
+#   ########################################################################    #
+#   FUNZIONE PRINCIPALE
+
 def main():
     """Pipeline di valutazione focalizzata su MAE e RMSE."""
 
@@ -200,7 +213,9 @@ def main():
     print("VALUTAZIONE ACCURATEZZA PREDIZIONE RATING (MAE, RMSE)")
     print("=" * 80)
 
-    # Caricamento dati
+    #   ####################################################################    #
+    #   1. CARICAMENTO DATI
+
     print("\n1. Caricamento dati...")
     try:
         ratings_raw = pd.read_csv(EXISTING_RATINGS_PATH)
@@ -213,7 +228,9 @@ def main():
     ratings = ratings_raw.rename(columns={'userId': 'user', 'movieId': 'item'})[['user', 'item', 'rating']]
     print(f"   ✓ {len(ratings)} rating, {ratings['user'].nunique()} utenti, {len(movies_df)} film")
 
-    # 2. Definizione degli algoritmi da valutare
+    #   ####################################################################    #
+    #   2. DEFINIZIONE DEGLI ALGORITMI DA VALUTARE
+
     print("\n2. Inizializzazione algoritmi...")
 
     # Crea due versioni del cosine similarity predictor: con e senza bias
@@ -229,7 +246,9 @@ def main():
     }
     print(f"   ✓ {len(algorithms)} algoritmi configurati per la predizione")
 
-    # cross validation
+    #   ####################################################################    #
+    #   3. CROSS VALIDATION
+
     print(f"\n3. Esecuzione valutazione...")
     all_preds = []
 
@@ -254,7 +273,9 @@ def main():
 
     all_preds_df = pd.concat(all_preds, ignore_index=True)
 
-    # Calcolo e visualizzazione delle metriche di errore
+    #   ####################################################################    #
+    #   4. CALCOLO E VISUALIZZAZIONE DELLE METRICHE DI ERRORE
+
     print("\n" + "=" * 80)
     print("RISULTATI - METRICHE DI ERRORE")
     print("=" * 80 + "\n")
@@ -281,19 +302,25 @@ def main():
     print(results)
 
     # Calcola il miglioramento
-    if 'CosineSimilarityPredictor (no bias)' in results.index and 'CosineSimilarityPredictor (with bias)' in results.index:
+    if 'CosineSimilarityPredictor (no bias)' in results.index \
+        and 'CosineSimilarityPredictor (with bias)' in results.index:
         mae_no_bias = results.loc['CosineSimilarityPredictor (no bias)', 'MAE']
         mae_with_bias = results.loc['CosineSimilarityPredictor (with bias)', 'MAE']
         improvement = ((mae_no_bias - mae_with_bias) / mae_no_bias) * 100
         print(f"\nMiglioramento con bias: {improvement:.2f}% riduzione del MAE")
+
+    #   ####################################################################    #
+    #   5. SALVATAGGIO DEI RISULTATI
 
     output_path = Path('./evaluation_results/prediction_error_evaluation.csv')
     output_path.parent.mkdir(parents=True, exist_ok=True)
     results.to_csv(output_path)
     print(f"\nRisultati salvati in: {output_path}")
 
-# ========================================
-# ENTRY POINT
-# ========================================
+    # end
+
+#   ########################################################################    #
+#   ENTRY POINT
+
 if __name__ == '__main__':
     main()

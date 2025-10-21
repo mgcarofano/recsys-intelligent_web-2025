@@ -15,7 +15,11 @@ from collections import defaultdict
 from tqdm import tqdm
 from scipy.sparse import lil_matrix, save_npz
 
-from constants import *
+from constants import EXISTING_MOVIES_PATH, \
+    MOVIE_FEATURE_MATRIX_PATH, \
+    FEATURE_INDEX_PATH, \
+    MOVIE_INDEX_PATH, \
+    CATEGORIES_PATH_MAPPING
 
 #   ########################################################################    #
 #   CARICA GLI ID DEI FILM

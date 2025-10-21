@@ -10,7 +10,7 @@
   l'utente può accedere alle altre funzionalità dell'applicazione, come:
   - la visualizzazione dei dettagli di un film,
   - la visualizzazione delle statistiche dei caroselli,
-  - la gestone delle impostazioni dell'applicazione.
+  - la gestione delle impostazioni dell'applicazione.
 
 */
 

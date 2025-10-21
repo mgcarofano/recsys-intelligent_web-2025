@@ -21,12 +21,13 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_router/go_router.dart';
+import 'package:soft_edge_blur/soft_edge_blur.dart';
+
 import 'package:knowledge_recsys/cache/poster_cache.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
 import 'package:knowledge_recsys/recsys_main.dart';
 import 'package:knowledge_recsys/services/base_client.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_alert_dialog.dart';
-import 'package:soft_edge_blur/soft_edge_blur.dart';
 
 //	############################################################################
 //	COSTANTI e VARIABILI

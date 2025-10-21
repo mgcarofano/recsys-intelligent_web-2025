@@ -1,5 +1,15 @@
+###
+#
+# pubspec.yaml
+# by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
+#
+# Questo file contiene le informazioni di configurazione del progetto Flutter, come il nome del progetto, la descrizione, le dipendenze e altre impostazioni rilevanti.
+#
+###
+
 name: knowledge_recsys
-description: "A new Flutter project."
+# description: "A new Flutter project."
+description: "Questa applicazione permette di comunicare con un motore di raccomandazione knowledge-based nel dominio dei film, estratti dal dataset MovieLens. L'utente può ricevere raccomandazioni personalizzate in base alle sue preferenze e interagire con il sistema per capire come vengono generate le raccomandazioni."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

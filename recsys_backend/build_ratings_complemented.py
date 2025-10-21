@@ -3,19 +3,26 @@
     build_ratings_complemented.py \n
     by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-    Questo script stima i ratings per i film che l'utente non ha ancora valutato. Siccome il motore di raccomandazione implementato è knowledge-based, il rating viene stimato utilizzando la similarità coseno tra i film basata sulle loro feature. I risultati sono salvati in file CSV separati per ogni utente.
+    Questo script stima i ratings per i film che l'utente non ha ancora
+    valutato. Siccome il motore di raccomandazione implementato è
+    knowledge-based, il rating viene stimato utilizzando la similarità
+    coseno tra i film basata sulle loro feature. I risultati sono salvati
+    in file CSV separati per ogni utente.
 
 """
 
 #   ########################################################################   #
 #   LIBRERIE
 
-from constants import *
-
 import pandas as pd
 import numpy as np
 from scipy.sparse import load_npz
 from sklearn.metrics.pairwise import cosine_similarity
+
+from pathlib import Path
+from constants import EXISTING_RATINGS_PATH, \
+    EXISTING_MOVIES_PATH, \
+    MOVIE_FEATURE_MATRIX_PATH
 
 #   ########################################################################   #
 #   CARICAMENTO DEI DATI NECESSARI

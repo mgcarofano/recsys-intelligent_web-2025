@@ -12,66 +12,76 @@ from pathlib import Path
 #	########################################################################	#
 #	CONFIGURAZIONE SERVER
 
-# Indirizzo su cui il server è in ascolto (0.0.0.0 = tutte le interfacce).
 ADDRESS = '0.0.0.0'
+"""Indirizzo su cui il server è in ascolto (0.0.0.0 = tutte le interfacce)."""
 
-# Porta di ascolto del server.
 PORT = 8000
+"""Porta di ascolto del server."""
 
-# Timeout massimo per le richieste HTTP (in secondi).
 TIMEOUT = 30
+"""Timeout massimo per le richieste HTTP (in secondi)."""
 
 #	########################################################################	#
 #	PARAMETRI DEL SISTEMA DI RACCOMANDAZIONE
 
-# Minimo numero di film a supporto di una feature per poter essere raccomandata.
 MIN_SUPPORT = 20
+"""Minimo numero di film a supporto di una feature per poter essere raccomandata."""
 
-# Numero di film raccomandati per ogni feature.
 MOVIE_RECOMMENDATIONS = 5
+"""Numero di film raccomandati per ogni feature."""
 
-# Numero di feature raccomandate all’utente.
 TOP_FEATURES = 5
+"""Numero di feature raccomandate all’utente."""
 
 #	########################################################################	#
 #	PERCORSI UTILI
 
-# Indica il percorso del file NPY contenente l'anteprima della matrice di similarità tra film.
-MOVIE_SIMILARIITY_PREVIEW_PATH = Path('./data/movie_cosine_similarity.npy')
-
-# Indica il percorso del file NPZ contenente la matrice di similarità tra film.
-MOVIE_SIMILARIITY_MATRIX_PATH = Path('./data/movie_cosine_similarity.npz')
-
-# Indica il percorso del file NPZ contenente la matrice sparsa film x feature.
-MOVIE_FEATURE_MATRIX_PATH = Path('./data/movie_vectors_sparse.npz')
-
-# Indica il percorso del file CSV contenente l'indice di tutte le feature disponibili.
-FEATURE_INDEX_PATH = Path('./data/feature_index.csv')
-
-# Indica il percorso del file CSV che mappa gli ID dei film con i loro indici nella matrice di similarità.
-MOVIE_INDEX_PATH = Path('./data/movie_index.csv')
-
-# Percorso della directory contenente i poster dei film.
 POSTER_DIR = Path('./data/movie_posters')
+"""Percorso della directory contenente i poster dei film."""
+POSTER_DIR.mkdir(parents=True, exist_ok=True)
 
-# Mappa che associa ad ogni file del dataset 'ml-latest-small' il relativo file CSV.
+MOVIE_SIMILARIITY_PREVIEW_PATH = Path('./data/movie_cosine_similarity.npy')
+"""Indica il percorso del file NPY contenente l'anteprima della matrice di similarità tra film."""
+
+MOVIE_SIMILARIITY_MATRIX_PATH = Path('./data/movie_cosine_similarity.npz')
+"""Indica il percorso del file NPZ contenente la matrice di similarità tra film."""
+
+MOVIE_FEATURE_MATRIX_PATH = Path('./data/movie_vectors_sparse.npz')
+"""Indica il percorso del file NPZ contenente la matrice sparsa film x feature."""
+
+FEATURE_INDEX_PATH = Path('./data/feature_index.csv')
+"""Indica il percorso del file CSV contenente l'indice di tutte le feature disponibili."""
+
+MOVIE_INDEX_PATH = Path('./data/movie_index.csv')
+"""Indica il percorso del file CSV che mappa gli ID dei film con i loro indici nella matrice di similarità."""
+
+ML_DATASET_DIR = Path('./data/ml-latest-small')
+"""Indica il percorso della directory del dataset 'ml-latest-small'."""
+
 ML_DATASET_PATH_MAPPING = {
     'links': Path('./data/ml-latest-small/links.csv'),
     'movies': Path('./data/ml-latest-small/movies.csv'),
     'ratings': Path('./data/ml-latest-small/ratings.csv'),
     'tags': Path('./data/ml-latest-small/tags.csv')
 }
+"""Mappa che associa ad ogni file del dataset 'ml-latest-small' il relativo file CSV."""
 
-# Indica il percorso del file CSV contenente i titoli dei film.
+#	########################################################################	#
+#	PERCORSI DEI FILE CSV DEI METADATI
+
+CSV_DIR = Path('./data/CSVs')
+"""Indica il percorso della directory contenente i file CSV dei metadati."""
+CSV_DIR.mkdir(parents=True, exist_ok=True)
+
 EXISTING_MOVIES_PATH = Path('./data/CSVs/existing_movies.csv')
+"""Indica il percorso del file CSV contenente i titoli dei film."""
 
-# Indica il percorso del file CSV contenente le valutazioni (ratings) dei film.
 EXISTING_RATINGS_PATH = Path('./data/CSVs/existing_ratings.csv')
+"""Indica il percorso del file CSV contenente le valutazioni (ratings) dei film."""
 
-# Indica il percorso del file CSV contenente le descrizioni (abstract) dei film.
 MOVIES_ABSTRACT_PATH = Path('./data/CSVs/movie_abstracts.csv')
+"""Indica il percorso del file CSV contenente le descrizioni (abstract) dei film."""
 
-# Mappa che associa ad ogni categoria di feature il relativo file CSV.
 CATEGORIES_PATH_MAPPING = {
 	'actors': Path('./data/CSVs/movie_actors.csv'),
 	'composers': Path('./data/CSVs/movie_composers.csv'),
@@ -82,6 +92,7 @@ CATEGORIES_PATH_MAPPING = {
 	'subjects': Path('./data/CSVs/movie_subjects.csv'),
 	'writers': Path('./data/CSVs/movie_writers.csv'),
 }
+"""Mappa che associa ad ogni categoria di feature il relativo file CSV."""
 
-# Lista di categorie delle feature.
 CATEGORIES = ['title', 'description'] + [cat for cat in CATEGORIES_PATH_MAPPING.keys()]
+"""Lista di categorie delle feature."""

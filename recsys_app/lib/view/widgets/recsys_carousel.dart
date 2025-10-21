@@ -14,11 +14,12 @@
 //	LIBRERIE
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:knowledge_recsys/model/carousel_model.dart';
 import 'package:knowledge_recsys/model/movie_model.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_alert_dialog.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_loading_dialog.dart';
-import 'package:go_router/go_router.dart';
 import 'package:knowledge_recsys/view/widgets/recsys_movie_card.dart';
 
 //	############################################################################

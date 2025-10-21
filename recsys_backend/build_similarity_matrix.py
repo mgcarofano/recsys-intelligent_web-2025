@@ -3,18 +3,25 @@
     build_similarity_matrix.py \n
     by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
 
-    Questo script calcola la matrice di similarità coseno tra i film basandosi sulla matrice sparsa film x feature, che descrive un film in termini delle sue features presenti (1) o assenti (0). Il risultato viene salvato in un nuovo file NPZ chiamato 'movie_similarity_matrix.npz' e in una versione di anteprima in formato NPY chiamato 'movie_similarity_preview.npy'.
+    Questo script calcola la matrice di similarità coseno tra i film
+    basandosi sulla matrice sparsa film x feature, che descrive un film
+    in termini delle sue features presenti (1) o assenti (0).
+    Il risultato viene salvato in un nuovo file NPZ chiamato
+    'movie_similarity_matrix.npz' e in una versione di anteprima in
+    formato NPY chiamato 'movie_similarity_preview.npy'.
 
 """
 
 #   ########################################################################    #
 #   LIBRERIE
 
-from constants import *
-
 import numpy as np
 from scipy.sparse import load_npz, save_npz, csr_matrix
 from sklearn.metrics.pairwise import cosine_similarity
+
+from constants import MOVIE_FEATURE_MATRIX_PATH, \
+    MOVIE_SIMILARIITY_MATRIX_PATH, \
+    MOVIE_SIMILARIITY_PREVIEW_PATH
 
 #   ########################################################################    #
 #   CARICAMENTO DELLA MATRICE SPARSA (film x feature)

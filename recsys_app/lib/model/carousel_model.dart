@@ -13,6 +13,9 @@
 //	############################################################################
 //	LIBRERIE
 
+import 'package:knowledge_recsys/model/feature_model.dart';
+import 'package:knowledge_recsys/model/movie_model.dart';
+
 //	############################################################################
 //	COSTANTI e VARIABILI
 
@@ -21,9 +24,6 @@
 
 //	############################################################################
 //	CLASSI e ROUTE
-
-import 'package:knowledge_recsys/model/feature_model.dart';
-import 'package:knowledge_recsys/model/movie_model.dart';
 
 class Carousel {
   final Feature feature;
