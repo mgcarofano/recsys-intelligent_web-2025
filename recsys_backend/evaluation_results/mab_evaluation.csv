@@ -1,2 +1,0 @@
-user_id,train_size,test_size,truth_size,n_recs,ndcg,recall,hit
-10,97,24,6,10,0.0,0.0,0
