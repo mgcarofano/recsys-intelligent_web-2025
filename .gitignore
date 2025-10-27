@@ -9,3 +9,4 @@ recsys_backend/data/ratings_complemented.csv
 recsys_backend/data/movie_cosine_similarity.npy
 recsys_backend/data/movie_cosine_similarity.npz
 /recsys_backend/__pycache__
+/recsys_backend/output

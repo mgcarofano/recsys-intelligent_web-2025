@@ -13,7 +13,8 @@
 #	########################################################################	#
 #	LIBRERIE
 
-from constants import *
+from datetime import datetime
+import os
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qsl
@@ -22,6 +23,33 @@ import json
 import numpy as np
 import pandas as pd
 from scipy.sparse import load_npz
+
+#	########################################################################	#
+#	COSTANTI
+
+# Parametri del server
+from constants import ADDRESS, \
+	PORT
+
+# Parametri del sistema di raccomandazione
+from constants import MIN_SUPPORT, \
+	MOVIE_RECOMMENDATIONS, \
+	TOP_FEATURES
+
+# Identificativi e path dei file CSV del dataset
+from constants import CATEGORIES, \
+	CATEGORIES_PATH_MAPPING
+
+# Path di altri file CSV / NPZ
+from constants import EXISTING_MOVIES_PATH, \
+	EXISTING_RATINGS_PATH, \
+	FEATURE_INDEX_PATH, \
+	MOVIE_FEATURE_MATRIX_PATH, \
+	MOVIE_INDEX_PATH, \
+	MOVIES_ABSTRACT_PATH
+
+# Path dei poster
+from constants import POSTER_DIR
 
 #	########################################################################	#
 #	VARIABILI GLOBALI
@@ -253,7 +281,6 @@ def mab_softmax_predictions(
 		k = MOVIE_RECOMMENDATIONS
 
 	predictions = []
-	# predictions = {}
 	min_k = k
 
 	for f in top_features_list:
@@ -282,20 +309,36 @@ def mab_softmax_predictions(
 		chosen_idx = np.random.choice(len(movies), size=sample_size, replace=False, p=probs)
 
 		predictions.append({
-		# predictions[f["id"]] = {
 			"feature_id": f["id"],
 			"category": f["category"],
 			"feature_name": f["name"],
 			"feature_rating": f["rating"],
 			"movies": {
 				movies[idx][0]: {
+					"movie_name" : movie_titles_df.loc[movie_titles_df['movieID'] == movies[idx][0], 'movie_name'].iloc[0],
 					"movie_rating": movies[idx][1],
 					"seen": movies[idx][2],
 					"softmax_prob": probs[idx]
 				}
 			for idx in chosen_idx}
-		# }
 		})
+	
+	#	####################################################################	#
+	#	SALVATAGGIO DELLE PREDIZIONI
+	
+	global user_id
+	out_directory = "./output" + f"/user_{user_id}" + "/"
+	os.makedirs(out_directory, exist_ok=True)
+
+	timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
+	file_path = os.path.join(out_directory, f"predictions_{timestamp}.txt")
+
+	with open(file_path, "w", encoding="utf-8") as f:
+		for p in predictions:
+			f.write(f"{json.dumps(p, indent=2, ensure_ascii=False)}\n")
+			f.write(f"{'-' * 80}\n")
+	
+	print(f"Predictions salvate in: {file_path}")
 
 	return predictions
 
@@ -597,12 +640,13 @@ class RecSys_RequestHandler(BaseHTTPRequestHandler):
 							break
 
 				# Recupero il rating dal dict 'all_ratings'.
-				if selected_type == "" or selected_type == 'rating':
-					if int(selected_id) in real_ratings:
-						results['seen'] = True
-					elif int(selected_id) in comp_ratings:
-						results['seen'] = False
-					results['rating'] = all_ratings[int(selected_id)]
+				if real_ratings and comp_ratings:
+					if selected_type == "" or selected_type == 'rating':
+						if int(selected_id) in real_ratings:
+							results['seen'] = True
+						elif int(selected_id) in comp_ratings:
+							results['seen'] = False
+						results['rating'] = all_ratings[int(selected_id)]
 
 				if not results:
 					self.send_response(404, f'Informazione "{selected_type}" non trovata per movie "{selected_id}"') # NOT FOUND
