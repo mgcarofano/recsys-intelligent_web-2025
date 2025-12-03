@@ -1,12 +1,43 @@
+"""
+
+    dbpedia_scraper.py \n
+    by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
+
+    Questo script estrae metadati sui film dal dataset DBpedia utilizzando
+    i titoli dei film presenti nel dataset MovieLens 'ml-latest-small'.
+    I metadati estratti vengono salvati in file CSV separati per categoria
+    (e.g. attori, registi, generi, ...).
+
+"""
+
+#   ########################################################################    #
+#   LIBRERIE
+
 import re
-import os
+
 import csv
 from pandas import DataFrame
+
 from DBpediaLoader import DBpediaLoader
 from MovieLensDataLoader import MovieLensDataLoader
 
-# Funzione di utilità per normalizzare i titoli dei film
+from pathlib import Path
+from constants import MOVIES_ABSTRACT_PATH, \
+    CATEGORIES_PATH_MAPPING
+
+#   ########################################################################    #
+#   FUNZIONI
+
 def normalize_title(title):
+    """Normalizza il titolo di un film per l’uso con DBpedia.
+
+    Args:
+        title (str): Il titolo del film.
+
+    Returns:
+        str: Il titolo normalizzato.
+    """
+
     title = title.strip()
     title_clean = re.sub(r'\s*\(\d{4}\)', '', title).strip()
 
@@ -19,51 +50,41 @@ def normalize_title(title):
     # Sostituiamo gli spazi con underscore per formare URI compatibili con DBpedia
     return title_clean.replace(' ', '_')
 
+    # end
 
-# Caricamento del dataset MovieLens
-loader = MovieLensDataLoader(
-    '~/IW_Project/recsys-intelligent_web-2025/recsys_backend/data/ml-latest-small'
-)
-loader.load_datasets()
-combined_all: DataFrame = loader.merge_all()
-movies_df = loader.movies
-
-# Cartella per i poster
-poster_dir = os.path.expanduser(
-    "~/IW_Project/recsys-intelligent_web-2025/recsys_backend/data/CSVs/movie_posters"
-)
-os.makedirs(poster_dir, exist_ok=True)
-
-# Associazione categorie → file CSV di output
-category_to_csv = {
-    "actors": "movie_actors.csv",
-    "composers": "movie_composers.csv",
-    "directors": "movie_directors.csv",
-    "genres": "movie_genres.csv",
-    "producers": "movie_producers.csv",
-    "production_companies": "movie_production_companies.csv",
-    "subjects": "movie_subjects.csv",
-    "writers": "movie_writers.csv",
-    "abstract": "movie_abstracts.csv",
-}
-
-# Cartella per i CSV con i metadati
-csv_dir = os.path.expanduser(
-    "~/IW_Project/recsys-intelligent_web-2025/recsys_backend/data/CSVs/"
-)
-os.makedirs(csv_dir, exist_ok=True)
-
-
-# Funzione helper per aggiungere righe a un CSV
-# Crea il file con intestazione se non esiste
 def append_to_csv(filepath, rows, header=["movieId", "value"]):
-    file_exists = os.path.isfile(filepath)
+    """Aggiunge righe a un file CSV, creando il file con intestazione se non esiste.
+
+    Args:
+        filepath (str): Il percorso del file CSV.
+        rows (list[tuple]): Le righe da aggiungere.
+        header (list, optional): L'intestazione del CSV. Defaults to ["movieId", "value"].
+    
+    Returns:
+        None
+    """
+
+    # file_exists = os.path.isfile(filepath)
+    file_exists = Path(filepath).is_file()
     with open(filepath, mode='a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         if not file_exists:
             writer.writerow(header)
         writer.writerows(rows)
 
+    # end
+
+#   ########################################################################    #
+#   CARICAMENTO DEL DATASET MOVIELENS
+
+# loader = MovieLensDataLoader(ML_DATASET_DIR)
+loader = MovieLensDataLoader()
+loader.load_datasets()
+combined_all: DataFrame = loader.merge_all()
+movies_df = loader.movies
+
+#   ########################################################################    #
+#   ESTRAZIONE DEI METADATI DA DBPEDIA
 
 # Indice iniziale da cui partire (utile per debug o resume)
 start_index = 2699
@@ -107,11 +128,19 @@ for i, (_, row) in enumerate(movies_df.iloc[start_index:].iterrows()):
     data = explorer.get_results_dict()
 
     # Salvataggio dei risultati nelle rispettive categorie CSV
+    # for category, results_list in data.items():
+    #     if category in category_to_csv and results_list:
+    #         rows = [(movie_id, val) for val in results_list]
+    #         csv_path = os.path.join(csv_dir, category_to_csv[category])
+    #         append_to_csv(csv_path, rows)
     for category, results_list in data.items():
-        if category in category_to_csv and results_list:
+        if category == 'abstract' and results_list:
+            rows = [(movie_id, results_list[0])]
+            csv_path = MOVIES_ABSTRACT_PATH
+        elif category in CATEGORIES_PATH_MAPPING and results_list:
             rows = [(movie_id, val) for val in results_list]
-            csv_path = os.path.join(csv_dir, category_to_csv[category])
-            append_to_csv(csv_path, rows)
+            csv_path = CATEGORIES_PATH_MAPPING[category]
+        append_to_csv(csv_path, rows)
 
     # Sezione opzionale per il download dei poster
     # safe_title = re.sub(r'[<>:"/\\|?*]', '', title)

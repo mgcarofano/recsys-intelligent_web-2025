@@ -1,11 +1,34 @@
+"""
+
+    test_main.py \n
+    by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
+
+    Questo file permette di eseguire un semplice test per l'estrazione
+    dell'URL del poster di un film dalla sua pagina Wikipedia, e di
+    scaricare l'immagine localmente.
+
+"""
+
+#   ########################################################################    #
+#   LIBRERIE
+
 import requests
 from lxml import html
 
+#   ########################################################################    #
+#   FUNZIONI
+
 # Ottiene l'URL del poster da una pagina Wikipedia
-def get_wikipedia_poster_url(wiki_url):
+def get_wikipedia_poster_url(wiki_url) -> str | None:
+    """Estrae l'URL dell'immagine del poster da una pagina Wikipedia del film.
+
+    Args:
+        wiki_url (str): L'URL della pagina Wikipedia del film.
+    
+    Returns:
+        (str | None): L'URL dell'immagine del poster, o None se non trovato.
     """
-    Estrae l'URL dell'immagine del poster da una pagina Wikipedia del film.
-    """
+
     headers = {
         "User-Agent": "Mozilla/5.0 (compatible; example-bot/1.0; +https://example.com/bot)"
     }
@@ -38,12 +61,19 @@ def get_wikipedia_poster_url(wiki_url):
 
     return src
 
+    # end
 
-# === FUNZIONE: Scarica un'immagine da un URL locale ===
-def download_image(url, filename):
+def download_image(url, filename) -> None:
+    """Scarica l'immagine dall'URL e la salva localmente con il nome specificato.
+
+    Args:
+        url (str): L'URL dell'immagine da scaricare.
+        filename (str): Il nome del file in cui salvare l'immagine.
+    
+    Returns:
+        None
     """
-    Scarica l'immagine dall'URL e la salva localmente con il nome specificato.
-    """
+
     response = requests.get(url, stream=True)
     if response.status_code == 200:
         with open(filename, 'wb') as f:
@@ -52,9 +82,12 @@ def download_image(url, filename):
         print(f"Immagine salvata in {filename}!")
     else:
         print(f"Attenzione: è fallito il download dell'immagine: status code {response.status_code}")
+    
+    # end
 
+#   ########################################################################    #
+#   ESEMPIO DI UTILIZZO
 
-# === ESEMPIO DI UTILIZZO ===
 if __name__ == "__main__":
     wiki_url = "https://en.wikipedia.org/wiki/The_Dark_Knight_(film)"
     poster_url = get_wikipedia_poster_url(wiki_url)

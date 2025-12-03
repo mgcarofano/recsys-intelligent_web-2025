@@ -1,27 +1,35 @@
-import os
+"""
+
+    extract_genres.py \n
+    by MARIO GABRIELE CAROFANO and OLEKSANDR SOSOVSKYY.
+
+    Questo script estrae i generi dei film dal dataset originale
+    e li salva in un nuovo file CSV.
+
+"""
+
+#   ########################################################################    #
+#   LIBRERIE
+
 import csv
+from constants import ML_DATASET_PATH_MAPPING, \
+    CATEGORIES_PATH_MAPPING
 
-# === Definizione percorsi ===
-# File sorgente (movies.csv di MovieLens)
-input_csv = os.path.expanduser(
-    "~/IW_Project/recsys-intelligent_web-2025/ml-latest-small/movies.csv"
-)
+#   ########################################################################    #
+#   LETTURA E TRASFORMAZIONE DATI
 
-# Directory di output
-output_dir = os.path.expanduser("~/IW_Project/recsys-intelligent_web-2025/")
-os.makedirs(output_dir, exist_ok=True)
-
-# File di destinazione (tabella "film-genere")
-output_csv = os.path.join(output_dir, "movie_genres.csv")
-
-# === Lettura e trasformazione dati ===
 # Apriamo il CSV sorgente in lettura e quello di output in scrittura
-with open(input_csv, newline='', encoding='utf-8') as f_in, \
-        open(output_csv, 'w', newline='', encoding='utf-8') as f_out:
+with open(ML_DATASET_PATH_MAPPING['movies'], newline='', encoding='utf-8') as f_in, \
+        open(CATEGORIES_PATH_MAPPING['genres'], 'w', newline='', encoding='utf-8') as f_out:
 
-    reader = csv.DictReader(f_in)   # Legge riga per riga con i nomi delle colonne
-    writer = csv.writer(f_out)      # Scrittore CSV
-    writer.writerow(['movieId', 'genre'])  # Header del nuovo file
+    # Legge riga per riga con i nomi delle colonne.
+    reader = csv.DictReader(f_in)
+
+    # Prepara il writer per il file di output.
+    writer = csv.writer(f_out)
+
+    # Aggiungiamo l'intestazione nel nuovo file.
+    writer.writerow(['movieId', 'genre'])
 
     # Per ogni film nella tabella
     for row in reader:
@@ -33,5 +41,4 @@ with open(input_csv, newline='', encoding='utf-8') as f_in, \
         for genre in genres:
             writer.writerow([movie_id, genre])
 
-# === Output ===
-print(f"Creato file con lista dei generi: {output_csv}!")
+print(f"Creato file con lista dei generi: {CATEGORIES_PATH_MAPPING['genres']}!")

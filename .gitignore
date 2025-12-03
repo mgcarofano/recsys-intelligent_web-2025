@@ -10,3 +10,4 @@ recsys_backend/data/movie_cosine_similarity.npy
 recsys_backend/data/movie_cosine_similarity.npz
 /recsys_backend/__pycache__
 /recsys_backend/output
+recsys-intelligent_web-2025.zip
